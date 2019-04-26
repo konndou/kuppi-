@@ -228,6 +228,7 @@ bool PlayerGoal(void)
 		return false;
 	}
 	player1.jumpFlag = false;
+	player1.gFlag = true;
 	return true;
 }
 
@@ -311,15 +312,20 @@ void PlayerGoalDraw(void)
 	}
 
 	XY GoalPos = { 0, 32 * 11 };
-	if (player1.pos.y > SCREEN_SIZE_Y - GoalPos.y) {
-		player1.pos.y -= 1;
-	}
-	if (player1.pos.y == SCREEN_SIZE_Y - GoalPos.y) {
-		if (GoalPos.x < 50) {
-			player1.jumpFlag = true;
-			GoalPos.x++;
-			player1.pos.x = player1.pos.x + 1;
+
+	if (player1.gFlag == true) {
+		if(player1.pos.y - player1.sizeOffset.y >= SCREEN_SIZE_Y - GoalPos.y) {
+			player1.pos.y -= 1;
 		}
+	}
+
+	if (player1.pos.y - player1.sizeOffset.y < SCREEN_SIZE_Y - GoalPos.y) {
+		GoalPos.x++;
+		if (GoalPos.x < 40) {
+			player1.pos.x = player1.pos.x + GoalPos.x;
+		}
+		player1.jumpFlag = true;
+		player1.gFlag = false;
 	}
 	
 	
