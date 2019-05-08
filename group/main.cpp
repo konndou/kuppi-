@@ -25,8 +25,9 @@ int titleImage;
 int titleCnt;
 int pauseFlag;
 
-int haikeiImage[35];
+//ステージ
 
+int haikeiImage[35];
 int haikeiData[20][30] = {
 { 9, 9, 9, 9, 9, 9,  9, 9, 9, 9, 9, 9,  9, 9, 9, 9, 9, 9,  9, 9, 9, 9, 9, 9,  9, 9, 9, 9, 9, 9},
 { 9, 9, 9, 9, 9, 9,  9, 9, 9, 9, 9, 9,  9, 9, 9, 9, 9, 9,  9, 9, 9, 9, 9, 9,  9, 9, 9, 9, 9, 9},
@@ -247,6 +248,7 @@ void GameMain(void)
 void GameMainDraw(void)
 {
 	stageDraw();
+	
 	PlayerDraw();
 	DrawFormatString(0, 0, 0xffffff, "GameMain : %d", gameCounter);
 }
@@ -255,8 +257,14 @@ void GameMainDraw(void)
 void GameSClear(void)
 {
 	stageDraw();
+	
 	PlayerGoalDraw();
 	DrawString(0, 0, "GameSClear", 0xffffff);
+	if (PlayerNextStage() == true) {
+		stageInit();
+		PlayerInit();
+		gameMode = GMODE_GAME;
+	}
 }
 
 //クリアー処理

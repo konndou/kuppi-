@@ -17,4 +17,5 @@ bool Player1HitCheck(XY sPos, XY sSize);
 CHARACTER GetPlayerPos(void);
 
 bool PlayerGoal(void);
+bool PlayerNextStage(void);
 bool Player1GameOver(void);

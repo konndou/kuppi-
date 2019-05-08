@@ -32,6 +32,8 @@ void PlayerInit(void)
 	player1.movedir = DIR_RIGHT;
 	player1.imgLockCnt = 30;
 	player1.flag = true;
+	player1.gFlag = false;
+	player1.xFlag = false;
 }
 
 void PlayerUpdate(void)
@@ -315,21 +317,36 @@ void PlayerGoalDraw(void)
 
 	if (player1.gFlag == true) {
 		if(player1.pos.y - player1.sizeOffset.y >= SCREEN_SIZE_Y - GoalPos.y) {
-			player1.pos.y -= 1;
+			player1.pos.y -= 2;
 		}
 	}
 
 	if (player1.pos.y - player1.sizeOffset.y < SCREEN_SIZE_Y - GoalPos.y) {
-		GoalPos.x++;
-		if (GoalPos.x < 40) {
-			player1.pos.x = player1.pos.x + GoalPos.x;
-		}
+		player1.xFlag = true;
 		player1.jumpFlag = true;
 		player1.gFlag = false;
 	}
-	
-	
 
+	if (player1.xFlag == true) {
+		GoalPos.x++;
+		if (GoalPos.x < 60) {
+			player1.pos.x = player1.pos.x + GoalPos.x;
+		}
+		else {
+			player1.xFlag = false;
+		}
+	}
+}
+
+bool PlayerNextStage(void)
+{
+	XY movedPos = player1.pos;
+
+	//ƒS[ƒ‹‚µ‚½‚©‚Ç‚¤‚©
+	if (IsNextPass(movedPos)) {
+		return false;
+	}
+	return true;
 }
 
 CHARACTER GetPlayerPos(void)

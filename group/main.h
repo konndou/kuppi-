@@ -54,6 +54,7 @@ typedef struct {
 	bool shotFlag;		//キャラクタの状態(弾を撃っているか)
 	bool damageFlag;	//キャラクタの状態(ダメージを受けているか)
 	bool gFlag;
+	bool xFlag;
 	int moveSpeed;		//キャラクタの移動量
 	int life;			//キャラクタの体力
 	int lifeMax;		//キャラクタの体力最大
