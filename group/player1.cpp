@@ -23,6 +23,7 @@ void PlayerInit(void)
 	player1.sizeOffset = { (player1.size.x / 2), (player1.size.y / 2) };
 	player1.hitPosS = { 8, 8 };
 	player1.hitPosE = { 8, 16 };
+	player1.life = 3;
 	player1.moveSpeed = 4;
 	player1.Velocity = { 0,0 };
 	player1.damageFlag = false;
@@ -140,7 +141,7 @@ void PlayerUpdate(void)
 				tmpPos = MapIndexToPos(tmpIndex);
 				//	(movedHitCheck.y / 32) * 32
 				player1.pos.y = tmpPos.y + player1.hitPosS.y;	//頭上から中心を求める
-				player1.Velocity.y *= -1;
+				player1.Velocity.y *= - 1;
 
 				movedPos = player1.pos;
 			}
@@ -302,6 +303,7 @@ void PlayerGoalDraw(void)
 	if (player1.jumpFlag == true)image = player1jumpImage[player1.animCnt / 7 % 3];
 
 	XY mapTemp = GetMapPos();
+	player1.movedir = DIR_RIGHT;
 
 	player1.animCnt++;
 	if (player1.flag == true) {
@@ -313,7 +315,9 @@ void PlayerGoalDraw(void)
 		}
 	}
 
-	XY GoalPos = { 0, 32 * 11 };
+
+	//ゴール演出
+	XY GoalPos = { 0, 32 * 12 };
 
 	if (player1.gFlag == true) {
 		if(player1.pos.y - player1.sizeOffset.y >= SCREEN_SIZE_Y - GoalPos.y) {
@@ -344,6 +348,17 @@ bool PlayerNextStage(void)
 
 	//ゴールしたかどうか
 	if (IsNextPass(movedPos)) {
+		return false;
+	}
+	return true;
+}
+
+bool PlayerOver(void)
+{
+	XY movedPos = player1.pos;
+
+	if (IsOverPass(movedPos)) {
+		player1.life = player1.life - 1;
 		return false;
 	}
 	return true;

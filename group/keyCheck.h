@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 
 enum KEY_MODE {
 	P1_UP,

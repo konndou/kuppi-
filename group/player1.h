@@ -18,4 +18,4 @@ CHARACTER GetPlayerPos(void);
 
 bool PlayerGoal(void);
 bool PlayerNextStage(void);
-bool Player1GameOver(void);
+bool PlayerOver(void);

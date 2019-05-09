@@ -17,5 +17,6 @@ XY MapIndexToPos(XY Index);
 bool IsPass(XY pos);
 bool IsGoalPass(XY pos);
 bool IsNextPass(XY pos);
+bool IsOverPass(XY pos);
 
 XY GetMapPos(void);

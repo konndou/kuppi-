@@ -5,11 +5,7 @@
 #include "player1.h"
 #include <vector>
 
-#define N 300
-#define Row 20
 #define SEEK_TOP 0
-
-int mapImage[35];
 
 XY mapPos;
 XY move;
@@ -31,27 +27,32 @@ int mapH;
 
 void stageSystemInit(void)
 {
-	LoadDivGraph("image/mapchip.png", 35, 7, 5, MAP_CHIP_SIZE_X, MAP_CHIP_SIZE_Y, mapImage);
+	
 }
 
 void stageInit(void)
 {
+	//マップデータのファイルを開く
 	switch (stageCnt) {
 	case 0:
-		mapH = FileRead_open("maptest.map", true);
+		mapH = FileRead_open("map1.map", true);
 		break;
 	case 1:
-		mapH = FileRead_open("map1.map", true);
+		mapH = FileRead_open("map2.map", true);
+		break;
+	case 2:
+		mapH = FileRead_open("map3.map", true);
 		break;
 	}
 
+	//ファイルを開く
 	FileRead_read(&header, sizeof(header), mapH);
 
 	chipH = LoadGraph("image/mapchip2.png", true);
 
 	FileRead_seek(mapH, 16, SEEK_TOP);
 
-	mapData.resize(header.w * header.h);
+	mapData.resize(header.w * header.h);	//マップデータの配列数を確定
 	FileRead_read(mapData.data(), mapData.size(), mapH);
 
 	FileRead_close(mapH);
@@ -67,7 +68,7 @@ void stageUpdate(void)
 	CHARACTER playerTemp;
 	playerTemp = GetPlayerPos();
 
-	
+	//マップの移動処理
 	if (playerTemp.pos.x > mapPos.x + SCREEN_SIZE_X / 2) {
 		move.x = + playerTemp.pos.x - SCREEN_SIZE_X / 2 - mapPos.x;
 		mapPos.x = mapPos.x + move.x;
@@ -86,7 +87,6 @@ void stageUpdate(void)
 
 void stageDraw(void)
 {
-
 	for (int y = 0; y < header.h; y++) {
 		for (int x = 0; x < header.w; x++) {
 			auto idx = mapData[x + y * header.w];
@@ -94,24 +94,8 @@ void stageDraw(void)
 			auto idxY = idx / 32;
 			DrawRectGraph(x * header.cw - mapPos.x, y * header.ch, idxX * header.cw, idxY * header.ch, header.cw, header.ch, chipH, true, false, false);
 
-			//DrawFormatString(x * header.cw, y * header.ch, 0xffffff, "%d", mapData[x + y * header.w]);
 		}
 	}
-
-	/*
-	for (int y = 0; y < MAP_CHIP_Y; y++) {
-		for (int x = 0; x < MAP_CHIP_X; x++) {
-			DrawGraph(MAP_CHIP_SIZE_X * x - mapPos.x, MAP_CHIP_SIZE_Y * y, mapImage[mapData[y][x]], true);
-		}
-	}
-
-	for (int y = 0; y < MAP_CHIP_Y; y++) {
-		for (int x = 0; x < MAP_CHIP_X; x++) {
-			//DrawBox(MAP_CHIP_SIZE_X * x, MAP_CHIP_SIZE_Y * y, MAP_CHIP_SIZE_X * (x + 1), MAP_CHIP_SIZE_Y * (y + 1), 0x00ffff, false);
-		}
-	}
-	DrawFormatString(32, 32, 0x000fff, "%d", mapPos.x);
-	*/
 }
 
 //マップのPosをindexに変える
@@ -133,13 +117,6 @@ XY MapIndexToPos(XY Index)
 	return pos;
 }
 
-/*
-XY MapPosToMoveIndexPos(XY pos, MOVE_DIR dir)
-{
-	XY mapIndex;
-}
-*/
-
 //通れるか
 bool IsPass(XY pos)
 {
@@ -147,23 +124,27 @@ bool IsPass(XY pos)
 	XY mapIndex;
 
 	mapIndex = MapPosToIndex(pos);
-	auto id = mapIndex.y * 300 + mapIndex.x;
+	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
 	if (id >= mapData.size()) {
 		return false;
 	}
 
 	//通ってよいか
 	switch (mapData[id]) {
-	case 0:
-	case 1:
 	case 2:
+	case 3:
+	case 4:
+	case 8:
+	case 9:
+	case 10:
+	case 11:
 	case 14:
 	case 15:
 	case 16:
+	case 17:
+	case 18:
+	case 19:
 	case 20:
-	case 21:
-	case 23:
-	case 24:
 		ret = false;
 		break;
 	}
@@ -178,10 +159,7 @@ bool IsGoalPass(XY pos)
 	XY mapIndex;
 
 	mapIndex = MapPosToIndex(pos);
-	auto id = mapIndex.y * 300 + mapIndex.x;
-	if (id >= mapData.size()) {
-		return false;
-	}
+	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
 
 	//通ってよいか
 	switch (mapData[id]) {
@@ -201,14 +179,11 @@ bool IsNextPass(XY pos)
 	XY mapIndex;
 
 	mapIndex = MapPosToIndex(pos);
-	auto id = mapIndex.y * 300 + mapIndex.x;
-	if (id >= mapData.size()) {
-		return false;
-	}
+	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
 
 	//通ってよいか
 	switch (mapData[id]) {
-	case 30:
+	case 21:
 		ret = false;
 		stageCnt = stageCnt + 1;
 		break;
@@ -216,6 +191,26 @@ bool IsNextPass(XY pos)
 
 	return ret;
 }
+
+//ゲームオーバー処理
+bool IsOverPass(XY pos)
+{
+	bool ret = true;
+	XY mapIndex;
+
+	mapIndex = MapPosToIndex(pos);
+	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+
+	//通ってよいか
+	switch (mapData[id]) {
+	case 13:
+		stageCnt = 0;
+		ret = false;
+		break;
+	}
+
+	return ret;
+ }
 
 XY GetMapPos(void) {
 	return mapPos;

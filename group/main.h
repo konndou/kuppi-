@@ -70,6 +70,8 @@ int SystemInit(void);
 void GameInit(void);
 void GameTitle(void);
 void GameTitleDraw(void);
+void GameLife(void);
+void GameLifeDraw(void);
 void GameMain(void);
 void GameMainDraw(void);
 void GameSClear(void);
