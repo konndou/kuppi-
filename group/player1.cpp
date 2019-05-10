@@ -245,33 +245,6 @@ void PlayerGoalDraw(void)
 		XY tmpIndex;
 		XY tmpPos;
 
-		movedPos.y -= player1.Velocity.y * 0.05;
-		player1.Velocity.y -= ACC_G * 0.05;
-
-		movedHitCheck.y = movedPos.y - player1.hitPosS.y;	//頭上の座標計算
-		//頭上の右上
-		movedHitCheck2 = movedHitCheck;
-		movedHitCheck2.x = movedPos.x + player1.hitPosS.x;
-		//頭上の左上
-		movedHitCheck3 = movedHitCheck;
-		movedHitCheck3.x = movedPos.x - player1.hitPosS.x;
-		//頭上にブロックがあるかどうか
-		//通れるかどうか
-		if (IsPass(movedHitCheck) && IsPass(movedHitCheck2) && IsPass(movedHitCheck3)) {
-			player1.pos = movedPos;
-		}
-		else {
-			tmpIndex = MapPosToIndex(movedHitCheck);
-			//	movedHitCheck.y / 32
-			tmpIndex.y++;
-			tmpPos = MapIndexToPos(tmpIndex);
-			//	(movedHitCheck.y / 32) * 32
-			player1.pos.y = tmpPos.y + player1.hitPosS.y;	//頭上から中心を求める
-			player1.Velocity.y *= -1;
-
-			movedPos = player1.pos;
-		}
-
 		movedHitCheck.y = movedPos.y + player1.hitPosE.y;	//足元の座標計算
 			//足元右下
 		movedHitCheck2 = movedHitCheck;
@@ -283,7 +256,7 @@ void PlayerGoalDraw(void)
 		//足元にブロックがあるかどうか
 		//通れるかどうか
 		if (player1.Velocity.y < 0) {
-			if (IsPass(movedHitCheck) && IsPass(movedHitCheck2) && IsPass(movedHitCheck3)) {
+			if (IsGPass(movedHitCheck) && IsGPass(movedHitCheck2) && IsGPass(movedHitCheck3)) {
 				player1.pos = movedPos;
 			}
 			else {

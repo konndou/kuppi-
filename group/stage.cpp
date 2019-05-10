@@ -152,6 +152,26 @@ bool IsPass(XY pos)
 	return ret;
 }
 
+//ƒS[ƒ‹‰‰o’†‚Ì‘«Œ³
+bool IsGPass(XY pos)
+{
+	bool ret = true;
+	XY mapIndex;
+
+	mapIndex = MapPosToIndex(pos);
+	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+
+	//’Ê‚Á‚Ä‚æ‚¢‚©
+	switch (mapData[id]) {
+	case 14:
+	case 15:
+	case 16:
+		ret = false;
+		break;
+	}
+	return ret;
+}
+
 //ƒS[ƒ‹‚µ‚Ä‚¢‚é‚©
 bool IsGoalPass(XY pos)
 {

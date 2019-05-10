@@ -15,6 +15,7 @@ void stageDraw(void);
 XY MapPosToIndex(XY pos);
 XY MapIndexToPos(XY Index);
 bool IsPass(XY pos);
+bool IsGPass(XY pos);
 bool IsGoalPass(XY pos);
 bool IsNextPass(XY pos);
 bool IsOverPass(XY pos);
