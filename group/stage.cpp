@@ -38,7 +38,7 @@ void stageInit(void)
 		mapH = FileRead_open("map3.map", true);
 		break;
 	case 1:
-		mapH = FileRead_open("map2.map", true);
+		mapH = FileRead_open("map3.map", true);
 		break;
 	case 2:
 		mapH = FileRead_open("map1.map", true);
