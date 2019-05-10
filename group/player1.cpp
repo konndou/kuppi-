@@ -245,6 +245,31 @@ void PlayerGoalDraw(void)
 		XY tmpIndex;
 		XY tmpPos;
 
+		movedPos.y -= player1.Velocity.y * SECOND_PER_FRAME;
+		player1.Velocity.y -= ACC_G * SECOND_PER_FRAME;
+
+		movedHitCheck.y = movedPos.y - player1.hitPosS.y;	//頭上の座標計算
+		//頭上の右上
+		movedHitCheck2 = movedHitCheck;
+		movedHitCheck2.x = movedPos.x + player1.hitPosS.x;
+		//頭上の左上
+		movedHitCheck3 = movedHitCheck;
+		movedHitCheck3.x = movedPos.x - player1.hitPosS.x;
+		//頭上にブロックがあるかどうか
+		//通れるかどうか
+		if (IsPass(movedHitCheck) && IsPass(movedHitCheck2) && IsPass(movedHitCheck3)) {
+			player1.pos = movedPos;
+		}
+		else {
+			tmpIndex = MapPosToIndex(movedHitCheck);
+			tmpIndex.y++;
+			tmpPos = MapIndexToPos(tmpIndex);
+			player1.pos.y = tmpPos.y + player1.hitPosS.y;	//頭上から中心を求める
+			player1.Velocity.y *= -1;
+
+			movedPos = player1.pos;
+		}
+
 		movedHitCheck.y = movedPos.y + player1.hitPosE.y;	//足元の座標計算
 			//足元右下
 		movedHitCheck2 = movedHitCheck;
@@ -289,22 +314,34 @@ void PlayerGoalDraw(void)
 
 
 	//ゴール演出
-	XY GoalPos = { 0, 32 * 12 };
+	XY GoalPos = { 0, 0 };
 
 	if (player1.gFlag == true) {
-		if(player1.pos.y - player1.sizeOffset.y >= SCREEN_SIZE_Y - GoalPos.y) {
+		XY movedPos = player1.pos;
+		XY movedHitCheck = movedPos;
+		XY movedHitCheck2 = movedPos;
+		XY movedHitCheck3 = movedPos;
+
+		movedHitCheck.y = movedPos.y - player1.hitPosS.y;	//頭上の座標計算
+		//頭上の右上
+		movedHitCheck2 = movedHitCheck;
+		movedHitCheck2.x = movedPos.x + player1.hitPosS.x;
+		//頭上の左上
+		movedHitCheck3 = movedHitCheck;
+		movedHitCheck3.x = movedPos.x - player1.hitPosS.x;
+
+		if (IsGoal2Pass(movedHitCheck) && IsGoal2Pass(movedHitCheck2) && IsGoal2Pass(movedHitCheck3) == true) {
 			player1.pos.y -= 2;
+		}
+		else {
+			player1.xFlag = true;
+			player1.jumpFlag = true;
+			player1.gFlag = false;
 		}
 	}
 
-	if (player1.pos.y - player1.sizeOffset.y < SCREEN_SIZE_Y - GoalPos.y) {
-		player1.xFlag = true;
-		player1.jumpFlag = true;
-		player1.gFlag = false;
-	}
-
 	if (player1.xFlag == true) {
-		GoalPos.x++;
+		GoalPos.x += 2;
 		if (GoalPos.x < 60) {
 			player1.pos.x = player1.pos.x + GoalPos.x;
 		}
