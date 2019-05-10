@@ -229,6 +229,7 @@ bool PlayerGoal(void)
 	if (IsGoalPass(movedHitCheck) && IsGoalPass(movedHitCheck2) && IsGoalPass(movedHitCheck3)) {
 		return false;
 	}
+	player1.Velocity.y = 30;
 	player1.jumpFlag = false;
 	player1.gFlag = true;
 	return true;
@@ -262,7 +263,7 @@ void PlayerGoalDraw(void)
 		}
 		else {
 			tmpIndex = MapPosToIndex(movedHitCheck);
-			tmpIndex.y++;
+			tmpIndex.y += 1;
 			tmpPos = MapIndexToPos(tmpIndex);
 			player1.pos.y = tmpPos.y + player1.hitPosS.y;	//頭上から中心を求める
 			player1.Velocity.y *= -1;
@@ -322,7 +323,7 @@ void PlayerGoalDraw(void)
 		XY movedHitCheck2 = movedPos;
 		XY movedHitCheck3 = movedPos;
 
-		movedHitCheck.y = movedPos.y - player1.hitPosS.y;	//頭上の座標計算
+		movedHitCheck.y = movedPos.y + player1.sizeOffset.y;	//頭上の座標計算
 		//頭上の右上
 		movedHitCheck2 = movedHitCheck;
 		movedHitCheck2.x = movedPos.x + player1.hitPosS.x;

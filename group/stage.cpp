@@ -35,13 +35,13 @@ void stageInit(void)
 	//マップデータのファイルを開く
 	switch (stageCnt) {
 	case 0:
-		mapH = FileRead_open("map3.map", true);
+		mapH = FileRead_open("map1.map", true);
 		break;
 	case 1:
 		mapH = FileRead_open("map2.map", true);
 		break;
 	case 2:
-		mapH = FileRead_open("map1.map", true);
+		mapH = FileRead_open("map3.map", true);
 		break;
 	}
 
