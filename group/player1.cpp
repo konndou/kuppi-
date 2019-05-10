@@ -18,12 +18,11 @@ void PlayerSystemInit(void)
 void PlayerInit(void)
 {
 	//初期化
-	player1.pos = { 5 * MAP_CHIP_SIZE_X, 8 * MAP_CHIP_SIZE_Y };
-	player1.size = { 32, 32 };
+	player1.pos = { 5 * MAP_CHIP_SIZE_X, 8 * MAP_CHIP_SIZE_Y };	//プレイヤーの初期位置
+	player1.size = { 32, 32 };	//プレイヤーのサイズ
 	player1.sizeOffset = { (player1.size.x / 2), (player1.size.y / 2) };
 	player1.hitPosS = { 8, 8 };
 	player1.hitPosE = { 8, 16 };
-	player1.life = 3;
 	player1.moveSpeed = 4;
 	player1.Velocity = { 0,0 };
 	player1.damageFlag = false;
@@ -33,8 +32,8 @@ void PlayerInit(void)
 	player1.movedir = DIR_RIGHT;
 	player1.imgLockCnt = 30;
 	player1.flag = true;
-	player1.gFlag = false;
-	player1.xFlag = false;
+	player1.gFlag = false;	//ゴール演出用フラグ
+	player1.xFlag = false;	//ゴール演出用フラグ(横移動)
 }
 
 void PlayerUpdate(void)
@@ -358,7 +357,6 @@ bool PlayerOver(void)
 	XY movedPos = player1.pos;
 
 	if (IsOverPass(movedPos)) {
-		player1.life = player1.life - 1;
 		return false;
 	}
 	return true;

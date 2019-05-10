@@ -58,6 +58,7 @@ int haikeiData[20][30] = {
 };
 
 XY haikeiPos;
+int life = 3;
 
 //ÌßÛÄÀ²ÌßéŒ¾
 int SystemInit(void);
@@ -243,12 +244,10 @@ void GameLife(void)
 
 void GameLifeDraw(void)
 {
-	CHARACTER playerTemp;
-	playerTemp = GetPlayerPos();
 	auto cnt = 0;
 
 	DrawGraph(SCREEN_SIZE_X / 2 - 32, SCREEN_SIZE_Y / 2, pImage, true);
-	DrawFormatString(SCREEN_SIZE_X / 2, SCREEN_SIZE_Y / 2, 0xffffff, " x  %d", playerTemp.life);
+	DrawFormatString(SCREEN_SIZE_X / 2, SCREEN_SIZE_Y / 2, 0xffffff, " x  %d", life);
 
 	/*cnt++;
 	if (cnt > 150) {
@@ -288,15 +287,15 @@ void GameMain(void)
 		gameMode = GMODE_SCLEAR;
 	}
 
-
-	CHARACTER playerTemp;
-	playerTemp = GetPlayerPos();
 	//ƒvƒŒƒCƒ„[‚ªŽ€–S‚µ‚½
 	if (PlayerOver() == true) {
-		if (playerTemp.life > 0) {
+		life--;
+		if (life >= 0) {
+			PlayerInit();
 			gameMode = GMODE_LIFE;
 		}
 		else {
+			life = 3;
 			gameMode = GMODE_OVER;
 		}
 	}
