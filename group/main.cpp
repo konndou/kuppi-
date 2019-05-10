@@ -137,11 +137,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 					fadeIn = false;
 				}
 			}
-			/*
-			if (trgkey[KEY_START]) {
-				gameMode = GMODE_OVER;
-			}
-			*/
 			break;
 
 		case GMODE_SCLEAR:
@@ -318,7 +313,7 @@ void GameSClear(void)
 	if (PlayerNextStage() == true) {
 		stageInit();
 		PlayerInit();
-		gameMode = GMODE_GAME;
+		gameMode = GMODE_LIFE;
 	}
 }
 
