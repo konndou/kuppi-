@@ -272,11 +272,8 @@ void GameMain(void)
 	else {
 		stageUpdate();
 		PlayerUpdate();
-<<<<<<< HEAD
 		EnemyUpdate();
 		//HitCheck();
-=======
->>>>>>> 35550fa255b7f7434912c179b1cf99e692bed92f
 	}
 
 	GameMainDraw();
