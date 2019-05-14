@@ -290,10 +290,10 @@ void GameMain(void)
 	//ƒvƒŒƒCƒ„[‚ª€–S‚µ‚½
 	if (PlayerOver() == true) {
 		cnt++;
-		if (cnt < 75) {
+		if (cnt < 50) {
 			PlayerDEffect();
 		}
-		else if (cnt < 150) {
+		else if (cnt < 100) {
 			PlayerDEffectDraw();
 		}
 		else {

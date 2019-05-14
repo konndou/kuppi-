@@ -10,6 +10,7 @@ int player1Image[2];
 int player1jumpImage[3];
 int player1dImage;	//死んだ時の画像
 int jumpse;	//サウンド
+bool playerdrun;
 
 void PlayerSystemInit(void)
 {
@@ -38,6 +39,7 @@ void PlayerInit(void)
 	player1.flag = true;
 	player1.gFlag = false;	//ゴール演出中フラグ
 	player1.xFlag = false;	//ゴール演出用フラグ(横移動)
+	playerdrun = true;
 }
 
 //プレイヤー処理
@@ -46,22 +48,24 @@ void PlayerUpdate(void)
 	if (player1.flag == true) {
 		bool playerMoved = false;
 
-		//右に走る
-		player1.runFlag = false;
-		if (newkey[P2_RIGHT]) {
-			playerMoved = true;
-			player1.runFlag = true;
-			player1.movedir = DIR_RIGHT;
-			player1.Velocity.x += ACC_RUN;
-			if (player1.Velocity.x > VELOCITY_X_MAX)player1.Velocity.x = VELOCITY_X_MAX;
-		}
-		//左に走る
-		if (newkey[P2_LEFT]) {
-			playerMoved = true;
-			player1.runFlag = true;
-			player1.movedir = DIR_LEFT;
-			player1.Velocity.x -= ACC_RUN;
-			if (player1.Velocity.x < -VELOCITY_X_MAX)player1.Velocity.x = -VELOCITY_X_MAX;
+		if (playerdrun == true) {
+			//右に走る
+			player1.runFlag = false;
+			if (newkey[P2_RIGHT]) {
+				playerMoved = true;
+				player1.runFlag = true;
+				player1.movedir = DIR_RIGHT;
+				player1.Velocity.x += ACC_RUN;
+				if (player1.Velocity.x > VELOCITY_X_MAX)player1.Velocity.x = VELOCITY_X_MAX;
+			}
+			//左に走る
+			if (newkey[P2_LEFT]) {
+				playerMoved = true;
+				player1.runFlag = true;
+				player1.movedir = DIR_LEFT;
+				player1.Velocity.x -= ACC_RUN;
+				if (player1.Velocity.x < -VELOCITY_X_MAX)player1.Velocity.x = -VELOCITY_X_MAX;
+			}
 		}
 
 		if (player1.runFlag == false) {	//何もキー入力がない場合は、止まろうとする
@@ -400,6 +404,7 @@ bool PlayerOver(void)
 
 //死んだ時の処理
 void PlayerDEffect(void) {
+	playerdrun = false;
 	player1.animCnt = 0;
 	player1.Velocity = { 0,0 };
 }
