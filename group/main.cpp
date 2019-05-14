@@ -3,6 +3,7 @@
 #include "keyCheck.h"
 #include "player1.h"
 #include "stage.h"
+#include "enemy.h"
 
 
 typedef enum {
@@ -189,6 +190,7 @@ int SystemInit(void)
 	KeyCheckSystemInit();
 	stageSystemInit();
 	PlayerSystemInit();
+	EnemySystemInit();
 
 	fadeIn = false;
 	fadeOut = false;
@@ -210,6 +212,7 @@ void GameInit(void)
 
 	stageInit();
 	PlayerInit();
+	EnemyInit();
 }
 
 //É^ÉCÉgÉãÇÃèàóù
@@ -263,6 +266,7 @@ void GameMain(void)
 	else {
 		stageUpdate();
 		PlayerUpdate();
+		EnemyUpdate();
 		//HitCheck();
 	}
 
@@ -300,6 +304,7 @@ void GameMainDraw(void)
 {
 	stageDraw();
 	PlayerDraw();
+	EnemyDraw();
 	DrawFormatString(0, 0, 0xffffff, "GameMain : %d", gameCounter);
 }
 
@@ -313,6 +318,7 @@ void GameSClear(void)
 	if (PlayerNextStage() == true) {
 		stageInit();
 		PlayerInit();
+		EnemyInit();
 		gameMode = GMODE_LIFE;
 	}
 }
