@@ -81,3 +81,5 @@ void GameOverDraw(void);
 //void HitCheck(void);
 bool FadeInScreen(int fadeIn);
 bool FadeOutScreen(int fadeOut);
+
+int GetStageCnt(void);

@@ -36,13 +36,13 @@ void stageInit(void)
 	//マップデータのファイルを開く
 	switch (stageCnt) {
 	case 0:
-		mapH = FileRead_open("map3.map", true);
+		mapH = FileRead_open("map1.map", true);
 		break;
 	case 1:
 		mapH = FileRead_open("map2.map", true);
 		break;
 	case 2:
-		mapH = FileRead_open("map1.map", true);
+		mapH = FileRead_open("map3.map", true);
 		break;
 	}
 
@@ -84,17 +84,18 @@ void stageUpdate(void)
 	if (mapPos.x < 0) {
 		mapPos.x = 0;
 	}
+	
 }
 
 void stageDraw(void)
 {
+	
 	for (int y = 0; y < header.h; y++) {
 		for (int x = 0; x < header.w; x++) {
 			auto idx = mapData[x + y * header.w];
 			auto idxX = idx % 32;
 			auto idxY = idx / 32;
 			DrawRectGraph(x * header.cw - mapPos.x, y * header.ch, idxX * header.cw, idxY * header.ch, header.cw, header.ch, chipH, true, false, false);
-
 		}
 	}
 }
@@ -126,6 +127,7 @@ bool IsPass(XY pos)
 
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+	if (id < 0)return ret;
 	if (id >= mapData.size()) {
 		return false;
 	}
@@ -161,6 +163,7 @@ bool IsGPass(XY pos)
 
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+	if (id < 0)return ret;
 
 	//通ってよいか
 	switch (mapData[id]) {
@@ -181,6 +184,7 @@ bool IsGoal2Pass(XY pos)
 
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+	if (id < 0)return ret;
 
 	//通ってよいか
 	switch (mapData[id]) {
@@ -200,6 +204,7 @@ bool IsGoalPass(XY pos)
 
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+	if (id < 0)return ret;
 
 	//通ってよいか
 	switch (mapData[id]) {
@@ -220,6 +225,7 @@ bool IsNextPass(XY pos)
 
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+	if (id < 0)return ret;
 
 	//通ってよいか
 	switch (mapData[id]) {
@@ -240,11 +246,10 @@ bool IsOverPass(XY pos)
 
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
-
+	if (id < 0)return ret;
 	//通ってよいか
 	switch (mapData[id]) {
 	case 13:
-		stageCnt = 0;
 		ret = false;
 		break;
 	}
@@ -256,3 +261,13 @@ XY GetMapPos(void) {
 	return mapPos;
 }
 
+<<<<<<< HEAD
+=======
+int GetStageCnt(void) {
+	return stageCnt;
+}
+
+void StageCntInit(void) {
+	stageCnt = 0;
+}
+>>>>>>> 35550fa255b7f7434912c179b1cf99e692bed92f

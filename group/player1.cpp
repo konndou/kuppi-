@@ -9,44 +9,47 @@
 CHARACTER player1;
 int player1Image[2];
 int player1jumpImage[3];
+int player1dImage;	//死んだ時の画像
+int jumpse;	//サウンド
 
 void PlayerSystemInit(void)
 {
   	LoadDivGraph("image/player1.png", 2, 2, 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, player1Image);
 	LoadDivGraph("image/player1jump.png", 3, 3, 1, PLAYER_SIZE_X * 2, 40, player1jumpImage);
+	player1dImage = LoadGraph("image/playerd.png", true);
+	jumpse = LoadSoundMem("bgm/jump2.mp3");
 }
 
+//プレイヤーの初期化
 void PlayerInit(void)
 {
 	//初期化
 	player1.pos = { 5 * MAP_CHIP_SIZE_X, 8 * MAP_CHIP_SIZE_Y };	//プレイヤーの初期位置
 	player1.size = { 32, 32 };	//プレイヤーのサイズ
 	player1.sizeOffset = { (player1.size.x / 2), (player1.size.y / 2) };
-	player1.hitPosS = { 8, 8 };
-	player1.hitPosE = { 8, 16 };
+	player1.hitPosS = { 8, 15 };
+	player1.hitPosE = { 8, 17 };
 	player1.moveSpeed = 4;
 	player1.Velocity = { 0,0 };
-	player1.damageFlag = false;
 	player1.jumpFlag = false;
 	player1.runFlag = false;
 	player1.shotFlag = false;
 	player1.movedir = DIR_RIGHT;
 	player1.imgLockCnt = 30;
 	player1.flag = true;
-	player1.gFlag = false;	//ゴール演出用フラグ
+	player1.gFlag = false;	//ゴール演出中フラグ
 	player1.xFlag = false;	//ゴール演出用フラグ(横移動)
 }
 
+//プレイヤー処理
 void PlayerUpdate(void)
 {
 	if (player1.flag == true) {
-		//XY movedOffset = { 0, player1.pos.y - player1.sizeOffset.y / 2 };
-
 		bool playerMoved = false;
 
 		//右に走る
 		player1.runFlag = false;
-		if (newkey[P1_RIGHT]) {
+		if (newkey[P2_RIGHT]) {
 			playerMoved = true;
 			player1.runFlag = true;
 			player1.movedir = DIR_RIGHT;
@@ -54,7 +57,7 @@ void PlayerUpdate(void)
 			if (player1.Velocity.x > VELOCITY_X_MAX)player1.Velocity.x = VELOCITY_X_MAX;
 		}
 		//左に走る
-		if (newkey[P1_LEFT]) {
+		if (newkey[P2_LEFT]) {
 			playerMoved = true;
 			player1.runFlag = true;
 			player1.movedir = DIR_LEFT;
@@ -65,11 +68,11 @@ void PlayerUpdate(void)
 		if (player1.runFlag == false) {	//何もキー入力がない場合は、止まろうとする
 			//段階的に速度を落とす
 			if (player1.Velocity.x < 0) {
-				player1.Velocity.x += ACC_STOP * 1;
+				player1.Velocity.x += ACC_STOP * 2;
 				if (player1.Velocity.x > 0)player1.Velocity.x = 0;
 			}
 			else if (player1.Velocity.x > 0) {
-				player1.Velocity.x -= ACC_STOP * 1;
+				player1.Velocity.x -= ACC_STOP * 2;
 				if (player1.Velocity.x < 0)player1.Velocity.x = 0;
 			}
 		}
@@ -91,10 +94,10 @@ void PlayerUpdate(void)
 		}
 
 		movedHitCheck2 = movedHitCheck;
-		movedHitCheck2.y = movedPos.y + player1.hitPosS.y;
+		movedHitCheck2.y = movedPos.y + player1.hitPosS.y - 3;
 
 		movedHitCheck3 = movedHitCheck;
-		movedHitCheck3.y = movedPos.y - player1.hitPosE.y;
+		movedHitCheck3.y = movedPos.y - player1.hitPosE.y + 3;
 
 		//通れるかどうか
 		if (IsPass(movedHitCheck) && IsPass(movedHitCheck2) && IsPass(movedHitCheck3)) {
@@ -102,6 +105,7 @@ void PlayerUpdate(void)
 		}
 		else {
 			tmpIndex = MapPosToIndex(movedHitCheck);	//ブロックの上の座標を計算
+			player1.Velocity.x = 0;
 			if (player1.Velocity.x < 0) {
 				tmpIndex.x++;
 				tmpPos = MapIndexToPos(tmpIndex);			//足元のｙ座標
@@ -109,6 +113,7 @@ void PlayerUpdate(void)
 			}
 		}
 
+		
 		player1.jumpFlag = true;
 		//プレイヤー1ジャンプ
 		if (player1.jumpFlag == true) {
@@ -129,6 +134,7 @@ void PlayerUpdate(void)
 			//頭上の左上
 			movedHitCheck3 = movedHitCheck;
 			movedHitCheck3.x = movedPos.x - player1.hitPosS.x;
+
 			//頭上にブロックがあるかどうか
 			//通れるかどうか
 			if (IsPass(movedHitCheck) && IsPass(movedHitCheck2) && IsPass(movedHitCheck3)) {
@@ -141,7 +147,7 @@ void PlayerUpdate(void)
 				tmpPos = MapIndexToPos(tmpIndex);
 				//	(movedHitCheck.y / 32) * 32
 				player1.pos.y = tmpPos.y + player1.hitPosS.y;	//頭上から中心を求める
-				player1.Velocity.y *= - 1;
+				player1.Velocity.y *= -0.5;
 
 				movedPos = player1.pos;
 			}
@@ -173,7 +179,8 @@ void PlayerUpdate(void)
 		}
 		//ジャンプしていなかったらジャンプする
 		if (player1.jumpFlag == false) {
-			if (trgkey[P1_UP]) {
+			if (trgkey[P2_A]) {
+				PlaySoundMem(jumpse, DX_PLAYTYPE_BACK, false);
 				player1.jumpFlag = true;
 				player1.Velocity.y = INIT_VELOCITY;
 			}
@@ -193,6 +200,7 @@ void PlayerUpdate(void)
 	}
 }
 
+//プレイヤー描画
 void PlayerDraw(void)
 {
 	int image = player1Image[player1.animCnt / 10 % 2];
@@ -209,6 +217,15 @@ void PlayerDraw(void)
 			DrawTurnGraph(player1.pos.x - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
 		}
 	}
+
+	//プレイヤーの死体表示
+	if (player1.flag == false) {
+		DrawGraph(player1.pos.x - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, player1dImage, true);
+	}
+
+	//一時的なプレイヤーのあたり範囲
+	DrawBox(player1.pos.x + player1.hitPosS.x - mapTemp.x, player1.pos.y - player1.hitPosS.y,
+		player1.pos.x - player1.hitPosE.x - mapTemp.x, player1.pos.y + player1.hitPosE.y, 0xff00ff, false);
 }
 
 bool PlayerGoal(void)
@@ -230,6 +247,7 @@ bool PlayerGoal(void)
 	if (IsGoalPass(movedHitCheck) && IsGoalPass(movedHitCheck2) && IsGoalPass(movedHitCheck3)) {
 		return false;
 	}
+	player1.Velocity.y = 30;
 	player1.jumpFlag = false;
 	player1.gFlag = true;
 	return true;
@@ -263,7 +281,7 @@ void PlayerGoalDraw(void)
 		}
 		else {
 			tmpIndex = MapPosToIndex(movedHitCheck);
-			tmpIndex.y++;
+			tmpIndex.y += 1;
 			tmpPos = MapIndexToPos(tmpIndex);
 			player1.pos.y = tmpPos.y + player1.hitPosS.y;	//頭上から中心を求める
 			player1.Velocity.y *= -1;
@@ -272,7 +290,7 @@ void PlayerGoalDraw(void)
 		}
 
 		movedHitCheck.y = movedPos.y + player1.hitPosE.y;	//足元の座標計算
-			//足元右下
+		//足元右下
 		movedHitCheck2 = movedHitCheck;
 		movedHitCheck2.x = movedPos.x + player1.hitPosE.x;
 		//足元左下
@@ -313,7 +331,6 @@ void PlayerGoalDraw(void)
 		}
 	}
 
-
 	//ゴール演出
 	XY GoalPos = { 0, 0 };
 
@@ -323,7 +340,7 @@ void PlayerGoalDraw(void)
 		XY movedHitCheck2 = movedPos;
 		XY movedHitCheck3 = movedPos;
 
-		movedHitCheck.y = movedPos.y - player1.hitPosS.y;	//頭上の座標計算
+		movedHitCheck.y = movedPos.y + player1.sizeOffset.y;	//頭上の座標計算
 		//頭上の右上
 		movedHitCheck2 = movedHitCheck;
 		movedHitCheck2.x = movedPos.x + player1.hitPosS.x;
@@ -366,11 +383,30 @@ bool PlayerNextStage(void)
 bool PlayerOver(void)
 {
 	XY movedPos = player1.pos;
+	XY movedHitCheck = movedPos;
+	XY movedHitCheck2 = movedPos;
+	XY movedHitCheck3 = movedPos;
 
-	if (IsOverPass(movedPos)) {
+	movedHitCheck2 = movedHitCheck;
+	movedHitCheck2.y = movedPos.y + player1.hitPosS.y;
+
+	movedHitCheck3 = movedHitCheck;
+	movedHitCheck3.y = movedPos.y - player1.hitPosE.y;
+
+	if (IsOverPass(movedHitCheck) && IsOverPass(movedHitCheck2) && IsOverPass(movedHitCheck3)) {
 		return false;
 	}
 	return true;
+}
+
+//死んだ時の処理
+void PlayerDEffect(void) {
+	player1.animCnt = 0;
+	player1.Velocity = { 0,0 };
+}
+
+void PlayerDEffectDraw(void) {
+	player1.flag = false;
 }
 
 CHARACTER GetPlayerPos(void)

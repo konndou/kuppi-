@@ -12,6 +12,7 @@ void stageInit(void);
 void stageUpdate(void);
 void stageDraw(void);
 
+void StageCntInit(void);
 XY MapPosToIndex(XY pos);
 XY MapIndexToPos(XY Index);
 bool IsPass(XY pos);
