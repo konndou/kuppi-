@@ -272,8 +272,15 @@ void GameMain(void)
 	else {
 		stageUpdate();
 		PlayerUpdate();
+<<<<<<< HEAD
 		EnemyUpdate();
 		//HitCheck();
+=======
+
+		EnemyUpdate();
+		//HitCheck();
+
+>>>>>>> d9b999ef826954bd8e688999aa3da8f7c11c15de
 	}
 
 	GameMainDraw();
