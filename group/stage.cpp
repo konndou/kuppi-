@@ -261,13 +261,13 @@ XY GetMapPos(void) {
 	return mapPos;
 }
 
-<<<<<<< HEAD
-=======
-int GetStageCnt(void) {
+
+int GetStageCnt(void) 
+{
 	return stageCnt;
 }
 
 void StageCntInit(void) {
 	stageCnt = 0;
 }
->>>>>>> 35550fa255b7f7434912c179b1cf99e692bed92f
+
