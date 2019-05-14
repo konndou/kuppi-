@@ -3,6 +3,7 @@
 #include "stage.h"
 #include "keyCheck.h"
 #include "player1.h"
+#include "enemy.h"
 #include <vector>
 
 #define SEEK_TOP 0
@@ -260,6 +261,8 @@ XY GetMapPos(void) {
 	return mapPos;
 }
 
+<<<<<<< HEAD
+=======
 int GetStageCnt(void) {
 	return stageCnt;
 }
@@ -267,3 +270,4 @@ int GetStageCnt(void) {
 void StageCntInit(void) {
 	stageCnt = 0;
 }
+>>>>>>> 35550fa255b7f7434912c179b1cf99e692bed92f
