@@ -19,3 +19,5 @@ CHARACTER GetPlayerPos(void);
 bool PlayerGoal(void);
 bool PlayerNextStage(void);
 bool PlayerOver(void);
+void PlayerDEffect(void);
+void PlayerDEffectDraw(void);

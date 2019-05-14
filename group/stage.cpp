@@ -83,17 +83,18 @@ void stageUpdate(void)
 	if (mapPos.x < 0) {
 		mapPos.x = 0;
 	}
+	
 }
 
 void stageDraw(void)
 {
+	
 	for (int y = 0; y < header.h; y++) {
 		for (int x = 0; x < header.w; x++) {
 			auto idx = mapData[x + y * header.w];
 			auto idxX = idx % 32;
 			auto idxY = idx / 32;
 			DrawRectGraph(x * header.cw - mapPos.x, y * header.ch, idxX * header.cw, idxY * header.ch, header.cw, header.ch, chipH, true, false, false);
-
 		}
 	}
 }
@@ -125,6 +126,7 @@ bool IsPass(XY pos)
 
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+	if (id < 0)return ret;
 	if (id >= mapData.size()) {
 		return false;
 	}
@@ -160,6 +162,7 @@ bool IsGPass(XY pos)
 
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+	if (id < 0)return ret;
 
 	//’Ê‚Á‚Ä‚æ‚¢‚©
 	switch (mapData[id]) {
@@ -180,6 +183,7 @@ bool IsGoal2Pass(XY pos)
 
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+	if (id < 0)return ret;
 
 	//’Ê‚Á‚Ä‚æ‚¢‚©
 	switch (mapData[id]) {
@@ -199,6 +203,7 @@ bool IsGoalPass(XY pos)
 
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+	if (id < 0)return ret;
 
 	//’Ê‚Á‚Ä‚æ‚¢‚©
 	switch (mapData[id]) {
@@ -219,6 +224,7 @@ bool IsNextPass(XY pos)
 
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+	if (id < 0)return ret;
 
 	//’Ê‚Á‚Ä‚æ‚¢‚©
 	switch (mapData[id]) {
@@ -239,11 +245,10 @@ bool IsOverPass(XY pos)
 
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
-
+	if (id < 0)return ret;
 	//’Ê‚Á‚Ä‚æ‚¢‚©
 	switch (mapData[id]) {
 	case 13:
-		stageCnt = 0;
 		ret = false;
 		break;
 	}
@@ -253,4 +258,12 @@ bool IsOverPass(XY pos)
 
 XY GetMapPos(void) {
 	return mapPos;
+}
+
+int GetStageCnt(void) {
+	return stageCnt;
+}
+
+void StageCntInit(void) {
+	stageCnt = 0;
 }

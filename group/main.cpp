@@ -59,6 +59,8 @@ int haikeiData[20][30] = {
 
 XY haikeiPos;
 int life = 3;
+int se;
+int cnt = 0;
 
 //ﾌﾟﾛﾄﾀｲﾌﾟ宣言
 int SystemInit(void);
@@ -78,6 +80,7 @@ bool FadeOutScreen(int fadeOut);
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	SystemInit();
+	
 
 	// ---------- ｹﾞｰﾑﾙｰﾌﾟ 
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
@@ -132,6 +135,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		case GMODE_GAME:
 			GameMain();
+			PlaySoundMem(se, DX_PLAYTYPE_BACK, false);
+			PlaySoundMem(se, DX_PLAYTYPE_LOOP, false);
 			if (fadeIn) {
 				if (!FadeInScreen(5)) {
 					fadeIn = false;
@@ -140,6 +145,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			break;
 
 		case GMODE_SCLEAR:
+			StopSoundMem(se);
 			GameSClear();
 			break;
 
@@ -197,6 +203,8 @@ int SystemInit(void)
 	titleImage = LoadGraph("image/title.png");
 	LoadDivGraph("image/mapchip2.png", 30, 30, 1, MAP_CHIP_SIZE_X, MAP_CHIP_SIZE_Y, haikeiImage);
 	pImage = LoadGraph("image/player.png");
+
+	se = LoadSoundMem("bgm/stage1.mp3");
 }
 
 void GameInit(void)
@@ -239,8 +247,6 @@ void GameLife(void)
 
 void GameLifeDraw(void)
 {
-	auto cnt = 0;
-
 	DrawGraph(SCREEN_SIZE_X / 2 - 32, SCREEN_SIZE_Y / 2, pImage, true);
 	DrawFormatString(SCREEN_SIZE_X / 2, SCREEN_SIZE_Y / 2, 0xffffff, " x  %d", life);
 
@@ -263,7 +269,6 @@ void GameMain(void)
 	else {
 		stageUpdate();
 		PlayerUpdate();
-		//HitCheck();
 	}
 
 	GameMainDraw();
@@ -284,16 +289,28 @@ void GameMain(void)
 
 	//プレイヤーが死亡した
 	if (PlayerOver() == true) {
-		life--;
-		if (life >= 0) {
-			PlayerInit();
-			gameMode = GMODE_LIFE;
+		cnt++;
+		if (cnt < 75) {
+			PlayerDEffect();
+		}
+		else if (cnt < 150) {
+			PlayerDEffectDraw();
 		}
 		else {
-			life = 3;
-			gameMode = GMODE_OVER;
+			life--;
+			cnt = 0;
+			if (life >= 0) {
+				PlayerInit();
+				gameMode = GMODE_LIFE;
+			}
+			else {
+				life = 3;
+				StageCntInit();
+				gameMode = GMODE_OVER;
+			}
 		}
 	}
+	
 }
 
 void GameMainDraw(void)
@@ -301,6 +318,7 @@ void GameMainDraw(void)
 	stageDraw();
 	PlayerDraw();
 	DrawFormatString(0, 0, 0xffffff, "GameMain : %d", gameCounter);
+	DrawFormatString(0, 32, 0xff00ff, "cnt : %d", cnt);
 }
 
 //ステージクリア
