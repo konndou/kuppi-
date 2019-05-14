@@ -272,10 +272,15 @@ void GameMain(void)
 	else {
 		stageUpdate();
 		PlayerUpdate();
+<<<<<<< HEAD
+		EnemyUpdate();
+		//HitCheck();
+=======
 
 		EnemyUpdate();
 		//HitCheck();
 
+>>>>>>> d9b999ef826954bd8e688999aa3da8f7c11c15de
 	}
 
 	GameMainDraw();
@@ -297,10 +302,10 @@ void GameMain(void)
 	//ƒvƒŒƒCƒ„[‚ª€–S‚µ‚½
 	if (PlayerOver() == true) {
 		cnt++;
-		if (cnt < 75) {
+		if (cnt < 50) {
 			PlayerDEffect();
 		}
-		else if (cnt < 150) {
+		else if (cnt < 100) {
 			PlayerDEffectDraw();
 		}
 		else {
