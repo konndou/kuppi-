@@ -7,17 +7,20 @@
 
 
 CHARACTER player1;
-int player1Image[2];
+int player1stopImage;
+int player1runImage[2];
 int player1jumpImage[3];
-int player1dImage;	//死んだ時の画像
+int player1dImage[4];	//死んだ時の画像
 int jumpse;	//サウンド
+int image;
 bool playerdrun;
 
 void PlayerSystemInit(void)
 {
-  	LoadDivGraph("image/player1.png", 2, 2, 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, player1Image);
-	LoadDivGraph("image/player1jump.png", 3, 3, 1, PLAYER_SIZE_X * 2, 40, player1jumpImage);
-	player1dImage = LoadGraph("image/playerd.png", true);
+	player1stopImage = LoadGraph("image/playerstop.png");
+  	LoadDivGraph("image/player2run.png", 2, 2, 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, player1runImage);
+	LoadDivGraph("image/player2jump3.png", 3, 3, 1, PLAYER_SIZE_X * 2, PLAYER_SIZE_Y, player1jumpImage);
+	LoadDivGraph("image/playerd4.png", 4, 4, 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, player1dImage);
 	jumpse = LoadSoundMem("bgm/jump2.mp3");
 }
 
@@ -207,8 +210,10 @@ void PlayerUpdate(void)
 //プレイヤー描画
 void PlayerDraw(void)
 {
-	int image = player1Image[player1.animCnt / 10 % 2];
+	image = player1stopImage;
+	if (player1.runFlag == true)image = player1runImage[player1.animCnt / 10 % 2];
 	if (player1.jumpFlag == true)image = player1jumpImage[player1.animCnt / 7 % 3];
+	if (player1.flag == false)image = player1dImage[player1.animCnt / 28 % 4];
 
 	XY mapTemp = GetMapPos();
 	
@@ -224,7 +229,7 @@ void PlayerDraw(void)
 
 	//プレイヤーの死体表示
 	if (player1.flag == false) {
-		DrawGraph(player1.pos.x - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, player1dImage, true);
+		DrawGraph(player1.pos.x - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
 	}
 
 	//一時的なプレイヤーのあたり範囲
@@ -319,7 +324,7 @@ void PlayerGoalDraw(void)
 		}
 	}
 
-	int image = player1Image[player1.animCnt / 10 % 2];
+	image = player1stopImage;
 	if (player1.jumpFlag == true)image = player1jumpImage[player1.animCnt / 7 % 3];
 
 	XY mapTemp = GetMapPos();
@@ -405,13 +410,13 @@ bool PlayerOver(void)
 
 //死んだ時の処理
 void PlayerDEffect(void) {
-	playerdrun = false;
 	player1.animCnt = 0;
-	player1.Velocity = { 0,0 };
 }
 
 void PlayerDEffectDraw(void) {
+	playerdrun = false;
 	player1.flag = false;
+	player1.Velocity = { 0,0 };
 }
 
 CHARACTER GetPlayerPos(void)
