@@ -6,43 +6,60 @@
 
 
 
-CHARACTER enemy1;
-int enemy1Image[2];
+CHARACTER enemy[ENEMY_MAX];
+int enemyImage[2];
 
 
 
 
 void EnemySystemInit(void)
 {
-	LoadDivGraph("image/boar3.png", 2, 2, 1, ENEMY1_SIZE_X, ENEMY1_SIZE_Y, enemy1Image);
+	LoadDivGraph("image/boar3.png", 2, 2, 1, ENEMY1_SIZE_X, ENEMY1_SIZE_Y, enemyImage);
 
+	//LoadDivGraph("image/icon4.png", 16, 4, 4, ENEMY1_SIZE_X, ENEMY1_SIZE_Y, enemy1Image);
 }
 
 void EnemyInit(void)
 {
-	enemy1.pos = { 100,100 };
-	enemy1.size = { 32,32 };
-	enemy1.sizeOffset = { (enemy1.size.x / 2),(enemy1.size.y / 2) };
-	enemy1.hitPosS = { 8, 15 };
-	enemy1.hitPosE = { 8, 17 };
-	enemy1.moveSpeed = 4;
-	enemy1.Velocity = { 0,0 };
-	enemy1.jumpFlag = false;
-	enemy1.imgLockCnt = 30;
-	enemy1.movedir = DIR_LEFT;
-	enemy1.flag = true;
+
+	for (int i = 0; i < ENEMY_MAX; i++)
+	{
+		int type = GetRand(2);
+
+		switch (type)
+		{
+		case ENEMY_TYPE_BOAR:
+			enemy[i].type = ENEMY_TYPE_BOAR;
+			enemy[i].pos = { 100,100 };
+			enemy[i].size = { 32,32 };
+			enemy[i].sizeOffset = { (enemy[i].size.x / 2),(enemy[i].size.y / 2) };
+			enemy[i].hitPosS = { 8, 15 };
+			enemy[i].hitPosE = { 8, 17 };
+			enemy[i].moveSpeed = 4;
+			enemy[i].Velocity = { 0,0 };
+			enemy[i].jumpFlag = false;
+			enemy[i].imgLockCnt = 30;
+			enemy[i].movedir = DIR_LEFT;
+			enemy[i].flag = true;
+			default:
+				break; 
+		}
+	}
+
+	
 
 
 }
 
-void EnemyUpdate(void)
+void EnemyUpdate(int i)
 {
-	if (enemy1.flag == true)
+
+	if (enemy[i].flag == true)
 	{
-		enemy1.jumpFlag = true;
+		enemy[i].jumpFlag = true;
 		//プレイヤー1ジャンプ
-		if (enemy1.jumpFlag == true) {
-			XY movedPos = enemy1.pos;
+		if (enemy[i].jumpFlag == true) {
+			XY movedPos = enemy[i].pos;
 			XY movedHitCheck = movedPos;
 			XY movedHitCheck2 = movedPos;
 			XY movedHitCheck3 = movedPos;
@@ -50,21 +67,21 @@ void EnemyUpdate(void)
 			XY tmpPos;
 
 
-			movedPos.y -= enemy1.Velocity.y * SECOND_PER_FRAME;
-			enemy1.Velocity.y -= ACC_G * SECOND_PER_FRAME;
+			movedPos.y -= enemy[i].Velocity.y * SECOND_PER_FRAME;
+			enemy[i].Velocity.y -= ACC_G * SECOND_PER_FRAME;
 
-			movedHitCheck.y = movedPos.y - enemy1.hitPosS.y;	//頭上の座標計算
+			movedHitCheck.y = movedPos.y - enemy[i].hitPosS.y;	//頭上の座標計算
 			//頭上の右上
 			movedHitCheck2 = movedHitCheck;
-			movedHitCheck2.x = movedPos.x + enemy1.hitPosS.x;
+			movedHitCheck2.x = movedPos.x + enemy[i].hitPosS.x;
 			//頭上の左上
 			movedHitCheck3 = movedHitCheck;
-			movedHitCheck3.x = movedPos.x - enemy1.hitPosS.x;
+			movedHitCheck3.x = movedPos.x - enemy[i].hitPosS.x;
 
 			//頭上にブロックがあるかどうか
 			//通れるかどうか
 			if (IsPass(movedHitCheck) && IsPass(movedHitCheck2) && IsPass(movedHitCheck3)) {
-				enemy1.pos = movedPos;
+				enemy[i].pos = movedPos;
 			}
 			else {
 				tmpIndex = MapPosToIndex(movedHitCheck);
@@ -72,35 +89,38 @@ void EnemyUpdate(void)
 				tmpIndex.y++;
 				tmpPos = MapIndexToPos(tmpIndex);
 				//	(movedHitCheck.y / 32) * 32
-				enemy1.pos.y = tmpPos.y + enemy1.hitPosS.y;	//頭上から中心を求める
-				enemy1.Velocity.y *= -0.5;
+				enemy[i].pos.y = tmpPos.y + enemy[i].hitPosS.y;	//頭上から中心を求める
+				enemy[i].Velocity.y *= -0.5;
 
-				movedPos = enemy1.pos;
+				movedPos = enemy[i].pos;
 			}
 			
 
-			movedHitCheck.y = movedPos.y + enemy1.hitPosE.y;	//足元の座標計算
+			movedHitCheck.y = movedPos.y + enemy[i].hitPosE.y;	//足元の座標計算
 			//足元右下
 			movedHitCheck2 = movedHitCheck;
-			movedHitCheck2.x = movedPos.x + enemy1.hitPosE.x;
+			movedHitCheck2.x = movedPos.x + enemy[i].hitPosE.x;
 			//足元左下
 			movedHitCheck3 = movedHitCheck;
-			movedHitCheck3.x = movedPos.x - enemy1.hitPosE.x;
+			movedHitCheck3.x = movedPos.x - enemy[i].hitPosE.x;
+
+
+			
 
 			//足元にブロックがあるかどうか
 			//通れるかどうか
-			if (enemy1.Velocity.y < 0) {
+			if (enemy[i].Velocity.y < 0) {
 				if (IsPass(movedHitCheck) && IsPass(movedHitCheck2) && IsPass(movedHitCheck3)) {
-					enemy1.pos = movedPos;
+					enemy[i].pos = movedPos;
 				}
 				else {
 					tmpIndex = MapPosToIndex(movedHitCheck);	//ブロックの上の座標を計算
 																//	movedHitCheck.y / 32
 					tmpPos = MapIndexToPos(tmpIndex);			//足元のｙ座標
 																//	(movedHitCheck.y / 32) * 32
-					enemy1.pos.y = tmpPos.y - enemy1.hitPosE.y;	//足元から中心を求める
-					enemy1.Velocity.y = 0;
-					enemy1.jumpFlag = false;
+					enemy[i].pos.y = tmpPos.y - enemy[i].hitPosE.y;	//足元から中心を求める
+					enemy[i].Velocity.y = 0;
+					enemy[i].jumpFlag = false;
 				}
 			}
 		}
@@ -110,21 +130,21 @@ void EnemyUpdate(void)
 	
 }
 
-void EnemyDraw(void)
+void EnemyDraw(int i)
 {
 
-	int image = enemy1Image[enemy1.animCnt / 10 % 2];
+	int image = enemyImage[enemy[i].animCnt / 10 % 2];
 
-	enemy1.animCnt++;
-	if (enemy1.flag == true) 
+	enemy[i].animCnt++;
+	if (enemy[i].flag == true) 
 	{
-		if (enemy1.movedir == DIR_RIGHT) {
+		if (enemy[i].movedir == DIR_RIGHT) {
 			
-			DrawTurnGraph(enemy1.pos.x - enemy1.sizeOffset.x, enemy1.pos.y - enemy1.sizeOffset.y, image, true);
+			DrawTurnGraph(enemy[i].pos.x - enemy[i].sizeOffset.x, enemy[i].pos.y - enemy[i].sizeOffset.y, image, true);
 		}
-		if (enemy1.movedir == DIR_LEFT) {
+		if (enemy[i].movedir == DIR_LEFT) {
 			
-			DrawGraph(enemy1.pos.x - enemy1.sizeOffset.x, enemy1.pos.y - enemy1.sizeOffset.y, image, true);
+			DrawGraph(enemy[i].pos.x - enemy[i].sizeOffset.x, enemy[i].pos.y - enemy[i].sizeOffset.y, image, true);
 		}
 	}
 
@@ -136,7 +156,10 @@ void EnemyDraw(void)
 
 CHARACTER GetEnemyPos(void)
 {
-	return enemy1;
+	for (int i = 0; i < ENEMY_MAX; i++)
+	{
+		return enemy[i];
+	}
 }
 
 //int GetStageCnt(void)

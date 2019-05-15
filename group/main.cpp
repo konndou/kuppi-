@@ -272,15 +272,15 @@ void GameMain(void)
 	else {
 		stageUpdate();
 		PlayerUpdate();
-<<<<<<< HEAD
-		EnemyUpdate();
-		//HitCheck();
-=======
-
-		EnemyUpdate();
+		for (int i = 0; i < ENEMY_MAX; i++)
+		{
+			EnemyUpdate(i);
+		}
 		//HitCheck();
 
->>>>>>> d9b999ef826954bd8e688999aa3da8f7c11c15de
+
+
+
 	}
 
 	GameMainDraw();
@@ -329,7 +329,10 @@ void GameMainDraw(void)
 {
 	stageDraw();
 	PlayerDraw();
-	EnemyDraw();
+	for (int i = 0; i < ENEMY_MAX; i++)
+	{
+		EnemyDraw(i);
+	}
 	DrawFormatString(0, 0, 0xffffff, "GameMain : %d", gameCounter);
 	DrawFormatString(0, 32, 0xff00ff, "cnt : %d", cnt);
 }

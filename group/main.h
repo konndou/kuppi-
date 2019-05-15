@@ -41,6 +41,12 @@ enum MOVE_DIR {
 	DIR_MAX
 };
 
+enum ENEMY_TYPE
+{
+	ENEMY_TYPE_BOAR,
+	ENEMY_TYPE_CROW
+};
+
 typedef struct {
 	MOVE_DIR movedir;	//向いている方向
 	XY pos;				//キャラクタの位置(中心)
