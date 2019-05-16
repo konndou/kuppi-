@@ -1,16 +1,12 @@
+
 #include "main.h"
 #include "enemy.h"
 #include "player1.h"
 #include "keyCheck.h"
 #include "stage.h"
 
-
-
 CHARACTER enemy[ENEMY_MAX];
 int enemyImage[2];
-
-
-
 
 void EnemySystemInit(void)
 {
@@ -40,24 +36,26 @@ void EnemyInit(void)
 			enemy[i].jumpFlag = false;
 			enemy[i].imgLockCnt = 30;
 			enemy[i].movedir = DIR_LEFT;
-			enemy[i].flag = true;
+			enemy[i].flag = false;
 			default:
 				break; 
 		}
 	}
-
-	
-
-
 }
 
 void EnemyUpdate(int i)
 {
+	//敵キャラの表示
+	auto flag = GetRand(300);
+	if (flag == 25) {
+		enemy[i].flag = true;
+	}
 
 	if (enemy[i].flag == true)
 	{
+		//敵キャラを地面に落とす
 		enemy[i].jumpFlag = true;
-		//プレイヤー1ジャンプ
+		
 		if (enemy[i].jumpFlag == true) {
 			XY movedPos = enemy[i].pos;
 			XY movedHitCheck = movedPos;
@@ -66,36 +64,9 @@ void EnemyUpdate(int i)
 			XY tmpIndex;
 			XY tmpPos;
 
-
 			movedPos.y -= enemy[i].Velocity.y * SECOND_PER_FRAME;
 			enemy[i].Velocity.y -= ACC_G * SECOND_PER_FRAME;
-
-			movedHitCheck.y = movedPos.y - enemy[i].hitPosS.y;	//頭上の座標計算
-			//頭上の右上
-			movedHitCheck2 = movedHitCheck;
-			movedHitCheck2.x = movedPos.x + enemy[i].hitPosS.x;
-			//頭上の左上
-			movedHitCheck3 = movedHitCheck;
-			movedHitCheck3.x = movedPos.x - enemy[i].hitPosS.x;
-
-			//頭上にブロックがあるかどうか
-			//通れるかどうか
-			if (IsPass(movedHitCheck) && IsPass(movedHitCheck2) && IsPass(movedHitCheck3)) {
-				enemy[i].pos = movedPos;
-			}
-			else {
-				tmpIndex = MapPosToIndex(movedHitCheck);
-				//	movedHitCheck.y / 32
-				tmpIndex.y++;
-				tmpPos = MapIndexToPos(tmpIndex);
-				//	(movedHitCheck.y / 32) * 32
-				enemy[i].pos.y = tmpPos.y + enemy[i].hitPosS.y;	//頭上から中心を求める
-				enemy[i].Velocity.y *= -0.5;
-
-				movedPos = enemy[i].pos;
-			}
 			
-
 			movedHitCheck.y = movedPos.y + enemy[i].hitPosE.y;	//足元の座標計算
 			//足元右下
 			movedHitCheck2 = movedHitCheck;
@@ -103,9 +74,6 @@ void EnemyUpdate(int i)
 			//足元左下
 			movedHitCheck3 = movedHitCheck;
 			movedHitCheck3.x = movedPos.x - enemy[i].hitPosE.x;
-
-
-			
 
 			//足元にブロックがあるかどうか
 			//通れるかどうか
@@ -124,34 +92,25 @@ void EnemyUpdate(int i)
 				}
 			}
 		}
-		
-		
+
+		//敵キャラの移動
 	}
-	
 }
 
 void EnemyDraw(int i)
 {
-
 	int image = enemyImage[enemy[i].animCnt / 10 % 2];
 
 	enemy[i].animCnt++;
 	if (enemy[i].flag == true) 
 	{
 		if (enemy[i].movedir == DIR_RIGHT) {
-			
 			DrawTurnGraph(enemy[i].pos.x - enemy[i].sizeOffset.x, enemy[i].pos.y - enemy[i].sizeOffset.y, image, true);
 		}
 		if (enemy[i].movedir == DIR_LEFT) {
-			
 			DrawGraph(enemy[i].pos.x - enemy[i].sizeOffset.x, enemy[i].pos.y - enemy[i].sizeOffset.y, image, true);
 		}
 	}
-
-	
-
-	
-
 }
 
 CHARACTER GetEnemyPos(void)
