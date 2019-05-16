@@ -261,9 +261,6 @@ XY GetMapPos(void) {
 	return mapPos;
 }
 
-
-
-
 int GetStageCnt(void) 
 {
 	return stageCnt;

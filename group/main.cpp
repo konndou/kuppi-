@@ -4,6 +4,7 @@
 #include "player1.h"
 #include "stage.h"
 #include "enemy.h"
+#include "shot.h"
 
 
 typedef enum {
@@ -26,6 +27,10 @@ bool fadeOut;
 int titleImage;
 int titleCnt;
 int pauseFlag;
+
+int gameoverImage;
+
+int clearImage;
 
 //プレイヤー
 int pImage;
@@ -58,6 +63,7 @@ int haikeiData[20][30] = {
 { 17, 18, 18, 18, 18, 18,  18, 18, 18, 18, 18, 18,  18, 18, 18, 18, 18, 18,  18, 18, 18, 18, 18, 18,  18, 18, 18, 18, 18, 19},
 };
 
+XY clearPos;
 XY haikeiPos;
 int life = 3;
 int se;
@@ -203,8 +209,10 @@ int SystemInit(void)
 
 	// ---------- グラフィックの登録 ----------- 
 	titleImage = LoadGraph("image/title.png");
+	gameoverImage = LoadGraph("image/gameover.png");
+	clearImage = LoadGraph("image/clear.png");
 	LoadDivGraph("image/mapchip2.png", 30, 30, 1, MAP_CHIP_SIZE_X, MAP_CHIP_SIZE_Y, haikeiImage);
-	pImage = LoadGraph("image/player.png");
+	pImage = LoadGraph("image/playerstop.png");
 
 	se = LoadSoundMem("bgm/stage1.mp3");
 }
@@ -217,6 +225,7 @@ void GameInit(void)
 	pauseFlag = false;
 
 	haikeiPos = { 0,0 };
+	clearPos = { SCREEN_SIZE_X, SCREEN_SIZE_Y / 4 };
 
 	stageInit();
 	PlayerInit();
@@ -277,10 +286,6 @@ void GameMain(void)
 			EnemyUpdate(i);
 		}
 		//HitCheck();
-
-
-
-
 	}
 
 	GameMainDraw();
@@ -313,6 +318,7 @@ void GameMain(void)
 			cnt = 0;
 			if (life >= 0) {
 				PlayerInit();
+				EnemyInit();
 				gameMode = GMODE_LIFE;
 			}
 			else {
@@ -343,7 +349,18 @@ void GameSClear(void)
 	stageDraw();
 	
 	PlayerGoalDraw();
+	
+	//クリア画像を動かす
+	if (clearPos.x > SCREEN_SIZE_X / 2) {
+		clearPos.x -= 5;
+	}
+	else {
+		clearPos.x = SCREEN_SIZE_X / 2;
+	}
+
+	DrawGraph(clearPos.x, clearPos.y, clearImage, true);
 	DrawString(0, 0, "GameSClear", 0xffffff);
+
 	if (PlayerNextStage() == true) {
 		stageInit();
 		PlayerInit();
@@ -366,6 +383,7 @@ void GameOver(void)
 
 void GameOverDraw(void)
 {
+	DrawGraph(0, 0, gameoverImage, true);
 	DrawString(0, 0, "GAME OVER", 0xffffff, true);
 }
 

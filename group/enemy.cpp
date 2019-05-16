@@ -47,7 +47,7 @@ void EnemyInit(void)
 void EnemyUpdate(int i)
 {
 	//敵キャラの表示
-	auto flag = GetRand(300);
+	auto flag = GetRand(100);
 	if (flag == 25) {
 		enemy[i].flag = true;
 	}
@@ -67,9 +67,6 @@ void EnemyUpdate(int i)
 
 			movedPos.y -= enemy[i].Velocity.y * SECOND_PER_FRAME;
 			enemy[i].Velocity.y -= ACC_G * SECOND_PER_FRAME;
-
-			
-			
 
 			movedHitCheck.y = movedPos.y + enemy[i].hitPosE.y;	//足元の座標計算
 			//足元右下

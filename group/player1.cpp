@@ -6,7 +6,7 @@
 #include "enemy.h"
 
 CHARACTER player1;
-int player1stopImage;	//プレイヤーが止まっているときの処理
+//int player1stopImage;	//プレイヤーが止まっているときの処理
 int player1runImage[2];	//プレイヤーが走っているときの処理
 int player1jumpImage[3];	//プレイヤージャンプ中の処理
 int player1dImage[4];	//死んだ時の画像
@@ -16,7 +16,7 @@ bool playerdrun;	//プレイヤーの移動を止める
 
 void PlayerSystemInit(void)
 {
-	player1stopImage = LoadGraph("image/playerstop.png");
+	//player1stopImage = LoadGraph("image/playerstop.png");
   	LoadDivGraph("image/player2run.png", 2, 2, 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, player1runImage);
 	LoadDivGraph("image/player2jump3.png", 3, 3, 1, PLAYER_SIZE_X * 2, PLAYER_SIZE_Y, player1jumpImage);
 	LoadDivGraph("image/playerd4.png", 4, 4, 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, player1dImage);
@@ -209,8 +209,7 @@ void PlayerUpdate(void)
 //プレイヤー描画
 void PlayerDraw(void)
 {
-	image = player1stopImage;
-	if (player1.runFlag == true)image = player1runImage[player1.animCnt / 10 % 2];
+	image = player1runImage[player1.animCnt / 10 % 2];
 	if (player1.jumpFlag == true)image = player1jumpImage[player1.animCnt / 7 % 3];
 	if (player1.flag == false)image = player1dImage[player1.animCnt / 28 % 4];
 
@@ -230,10 +229,6 @@ void PlayerDraw(void)
 	if (player1.flag == false) {
 		DrawGraph(player1.pos.x - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
 	}
-
-	//一時的なプレイヤーのあたり範囲
-	DrawBox(player1.pos.x + player1.hitPosS.x - mapTemp.x, player1.pos.y - player1.hitPosS.y,
-		player1.pos.x - player1.hitPosE.x - mapTemp.x, player1.pos.y + player1.hitPosE.y, 0xff00ff, false);
 }
 
 bool PlayerGoal(void)
@@ -323,7 +318,7 @@ void PlayerGoalDraw(void)
 		}
 	}
 
-	image = player1stopImage;
+	image = player1runImage[player1.animCnt / 10 % 2];
 	if (player1.jumpFlag == true)image = player1jumpImage[player1.animCnt / 7 % 3];
 
 	XY mapTemp = GetMapPos();

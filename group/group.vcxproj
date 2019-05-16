@@ -133,6 +133,7 @@
     <ClCompile Include="keyCheck.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player1.cpp" />
+    <ClCompile Include="shot.cpp" />
     <ClCompile Include="stage.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +141,7 @@
     <ClInclude Include="keyCheck.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="player1.h" />
+    <ClInclude Include="shot.h" />
     <ClInclude Include="stage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
