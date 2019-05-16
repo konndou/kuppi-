@@ -41,6 +41,7 @@ void EnemyInit(void)
 			enemy[i].imgLockCnt = 30;
 			enemy[i].movedir = DIR_LEFT;
 			enemy[i].flag = true;
+			enemy[i].moveSpeed = 2;
 			default:
 				break; 
 		}
@@ -70,30 +71,7 @@ void EnemyUpdate(int i)
 			movedPos.y -= enemy[i].Velocity.y * SECOND_PER_FRAME;
 			enemy[i].Velocity.y -= ACC_G * SECOND_PER_FRAME;
 
-			movedHitCheck.y = movedPos.y - enemy[i].hitPosS.y;	//頭上の座標計算
-			//頭上の右上
-			movedHitCheck2 = movedHitCheck;
-			movedHitCheck2.x = movedPos.x + enemy[i].hitPosS.x;
-			//頭上の左上
-			movedHitCheck3 = movedHitCheck;
-			movedHitCheck3.x = movedPos.x - enemy[i].hitPosS.x;
-
-			//頭上にブロックがあるかどうか
-			//通れるかどうか
-			if (IsPass(movedHitCheck) && IsPass(movedHitCheck2) && IsPass(movedHitCheck3)) {
-				enemy[i].pos = movedPos;
-			}
-			else {
-				tmpIndex = MapPosToIndex(movedHitCheck);
-				//	movedHitCheck.y / 32
-				tmpIndex.y++;
-				tmpPos = MapIndexToPos(tmpIndex);
-				//	(movedHitCheck.y / 32) * 32
-				enemy[i].pos.y = tmpPos.y + enemy[i].hitPosS.y;	//頭上から中心を求める
-				enemy[i].Velocity.y *= -0.5;
-
-				movedPos = enemy[i].pos;
-			}
+			
 			
 
 			movedHitCheck.y = movedPos.y + enemy[i].hitPosE.y;	//足元の座標計算
@@ -124,6 +102,25 @@ void EnemyUpdate(int i)
 				}
 			}
 		}
+
+
+
+		if (enemy[i].jumpFlag == false)
+		{
+			switch (enemy[i].movedir)
+			{
+			case DIR_LEFT:
+				enemy[i].pos.x -= enemy[i].moveSpeed;
+				break;
+			case DIR_RIGHT:
+				enemy[i].pos.x += enemy[i].moveSpeed;
+				break;
+			default:
+				break;
+			}
+		}
+
+
 		
 		
 	}
