@@ -261,13 +261,19 @@ bool IsEnemyPass(XY pos)
 {
 	bool ret = true;
 	XY mapIndex;
-	CHARACTER enemytempx[ENEMY_MAX];
+	CHARACTER enemytemp[ENEMY_MAX];
+	mapIndex = MapPosToIndex(pos);
+
 	for (int i = 0; i < ENEMY_MAX; i++)
 	{
-		enemytempx[i] = GetEnemyPos(i);
+		enemytemp[i] = GetEnemyPos(i);
+		if (enemytemp[i].movedir == DIR_LEFT) {
+			mapIndex.x--;
+		}
+		if (enemytemp[i].movedir == DIR_RIGHT) {
+			mapIndex.x++;
+		}
 	}
-
-	mapIndex = MapPosToIndex(pos);
 	
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
 	if (id < 0)return ret;

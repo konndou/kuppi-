@@ -16,8 +16,7 @@ bool playerdrun;	//プレイヤーの移動を止める
 
 void PlayerSystemInit(void)
 {
-	//player1stopImage = LoadGraph("image/playerstop.png");
-  	LoadDivGraph("image/player2run.png", 2, 2, 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, player1runImage);
+  	LoadDivGraph("image/player2run2.png", 2, 2, 1, PLAYER_SIZE_X * 2, PLAYER_SIZE_Y, player1runImage);
 	LoadDivGraph("image/player2jump3.png", 3, 3, 1, PLAYER_SIZE_X * 2, PLAYER_SIZE_Y, player1jumpImage);
 	LoadDivGraph("image/playerd4.png", 4, 4, 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, player1dImage);
 	jumpse = LoadSoundMem("bgm/jump2.mp3");
@@ -28,7 +27,7 @@ void PlayerInit(void)
 {
 	//初期化
 	player1.pos = { 5 * MAP_CHIP_SIZE_X, 8 * MAP_CHIP_SIZE_Y };	//プレイヤーの初期位置
-	player1.size = { 32, 32 };	//プレイヤーのサイズ
+	player1.size = { 64, 32 };	//プレイヤーのサイズ
 	player1.sizeOffset = { (player1.size.x / 2), (player1.size.y / 2) };
 	player1.hitPosS = { 8, 15 };
 	player1.hitPosE = { 8, 17 };
@@ -227,7 +226,7 @@ void PlayerDraw(void)
 
 	//プレイヤーの死体表示
 	if (player1.flag == false) {
-		DrawGraph(player1.pos.x - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
+		DrawGraph(player1.pos.x + 16 - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
 	}
 }
 

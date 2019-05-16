@@ -26,7 +26,7 @@ void EnemyInit(void)
 		{
 		case ENEMY_TYPE_BOAR:
 			enemy[i].type = ENEMY_TYPE_BOAR;
-			enemy[i].pos = { 100,100 };
+			enemy[i].pos = { 800,100 };
 			enemy[i].size = { 32,32 };
 			enemy[i].sizeOffset = { (enemy[i].size.x / 2),(enemy[i].size.y / 2) };
 			enemy[i].hitPosS = { 8, 15 };
@@ -112,6 +112,30 @@ void EnemyUpdate(int i)
 		}
 
 
+
+		XY movedPos = enemy[i].pos;
+		XY movedHitCheck = movedPos;
+		XY movedHitCheck2 = movedPos;
+		XY movedHitCheck3 = movedPos;
+		XY tmpIndex;
+		XY tmpPos;
+
+		movedHitCheck2 = movedHitCheck;
+		movedHitCheck2.y = movedPos.y + enemy[i].hitPosS.y - 3;
+
+		movedHitCheck3 = movedHitCheck;
+		movedHitCheck3.y = movedPos.y - enemy[i].hitPosE.y + 3;
+
+		//’Ê‚ê‚é‚©‚Ç‚¤‚©
+		if (IsEnemyPass(movedHitCheck) && IsEnemyPass(movedHitCheck2) && IsEnemyPass(movedHitCheck3)) {
+			if (enemy[i].movedir == DIR_LEFT) {
+				enemy[i].movedir = DIR_RIGHT;
+			}
+			if (enemy[i].movedir == DIR_RIGHT) {
+				enemy[i].movedir = DIR_LEFT;
+			}
+		}
+			
 		
 		
 	}
@@ -119,16 +143,18 @@ void EnemyUpdate(int i)
 
 void EnemyDraw(int i)
 {
+	XY mapTemp = GetMapPos();
+
 	int image = enemyImage[enemy[i].animCnt / 10 % 2];
 
 	enemy[i].animCnt++;
 	if (enemy[i].flag == true) 
 	{
 		if (enemy[i].movedir == DIR_RIGHT) {
-			DrawTurnGraph(enemy[i].pos.x - enemy[i].sizeOffset.x, enemy[i].pos.y - enemy[i].sizeOffset.y, image, true);
+			DrawTurnGraph(enemy[i].pos.x - enemy[i].sizeOffset.x - mapTemp.x, enemy[i].pos.y - enemy[i].sizeOffset.y, image, true);
 		}
 		if (enemy[i].movedir == DIR_LEFT) {
-			DrawGraph(enemy[i].pos.x - enemy[i].sizeOffset.x, enemy[i].pos.y - enemy[i].sizeOffset.y, image, true);
+			DrawGraph(enemy[i].pos.x - enemy[i].sizeOffset.x - mapTemp.x, enemy[i].pos.y - enemy[i].sizeOffset.y, image, true);
 		}
 	}
 }
