@@ -5,15 +5,14 @@
 #include "stage.h"
 #include "enemy.h"
 
-
 CHARACTER player1;
-int player1stopImage;
-int player1runImage[2];
-int player1jumpImage[3];
+int player1stopImage;	//プレイヤーが止まっているときの処理
+int player1runImage[2];	//プレイヤーが走っているときの処理
+int player1jumpImage[3];	//プレイヤージャンプ中の処理
 int player1dImage[4];	//死んだ時の画像
 int jumpse;	//サウンド
-int image;
-bool playerdrun;
+int image;	//イメージ
+bool playerdrun;	//プレイヤーの移動を止める
 
 void PlayerSystemInit(void)
 {

@@ -59,15 +59,15 @@ typedef struct {
 	bool jumpFlag;		//キャラクタの状態(ジャンプしているか)
 	bool shotFlag;		//キャラクタの状態(弾を撃っているか)
 	bool damageFlag;	//キャラクタの状態(ダメージを受けているか)
-	bool gFlag;
-	bool xFlag;
+	bool gFlag;			//ゴールした時の演出用フラグ
+	bool xFlag;			//ゴールした時の演出用フラグ
 	int moveSpeed;		//キャラクタの移動量
 	int life;			//キャラクタの体力
 	int lifeMax;		//キャラクタの体力最大
 	int animCnt;		//キャラクタのアニメーション用カウンタ
 	int imgLockCnt;		//キャラクタのイメージ固定用カウンタ
 	int type;			//何らかの属性を格納できる
-	bool flag;
+	bool flag;			//キャラクターのフラグ
 	XY_F Velocity;
 }CHARACTER;
 

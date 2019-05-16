@@ -1,9 +1,9 @@
-
 #include "main.h"
 #include "enemy.h"
 #include "player1.h"
 #include "keyCheck.h"
 #include "stage.h"
+
 
 CHARACTER enemy[ENEMY_MAX];
 int enemyImage[2];
@@ -37,6 +37,7 @@ void EnemyInit(void)
 			enemy[i].imgLockCnt = 30;
 			enemy[i].movedir = DIR_LEFT;
 			enemy[i].flag = false;
+			enemy[i].moveSpeed = 2;
 			default:
 				break; 
 		}
@@ -66,7 +67,10 @@ void EnemyUpdate(int i)
 
 			movedPos.y -= enemy[i].Velocity.y * SECOND_PER_FRAME;
 			enemy[i].Velocity.y -= ACC_G * SECOND_PER_FRAME;
+
 			
+			
+
 			movedHitCheck.y = movedPos.y + enemy[i].hitPosE.y;	//足元の座標計算
 			//足元右下
 			movedHitCheck2 = movedHitCheck;
@@ -93,7 +97,26 @@ void EnemyUpdate(int i)
 			}
 		}
 
-		//敵キャラの移動
+
+
+		if (enemy[i].jumpFlag == false)
+		{
+			switch (enemy[i].movedir)
+			{
+			case DIR_LEFT:
+				enemy[i].pos.x -= enemy[i].moveSpeed;
+				break;
+			case DIR_RIGHT:
+				enemy[i].pos.x += enemy[i].moveSpeed;
+				break;
+			default:
+				break;
+			}
+		}
+
+
+		
+		
 	}
 }
 
