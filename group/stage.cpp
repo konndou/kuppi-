@@ -257,6 +257,44 @@ bool IsOverPass(XY pos)
 	return ret;
  }
 
+bool IsEnemyPass(XY pos)
+{
+	bool ret = true;
+	XY mapIndex;
+	CHARACTER enemytempx[ENEMY_MAX];
+	for (int i = 0; i < ENEMY_MAX; i++)
+	{
+		enemytempx[i] = GetEnemyPos(i);
+	}
+
+	mapIndex = MapPosToIndex(pos);
+	
+	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+	if (id < 0)return ret;
+
+	//’Ê‚Á‚Ä‚æ‚¢‚©
+	switch (mapData[id]) {
+	case 2:
+	case 3:
+	case 4:
+	case 8:
+	case 9:
+	case 10:
+	case 11:
+	case 14:
+	case 15:
+	case 16:
+	case 17:
+	case 18:
+	case 19:
+	case 20:
+		ret = false;
+		break;
+	}
+
+	return ret;
+}
+
 XY GetMapPos(void) {
 	return mapPos;
 }

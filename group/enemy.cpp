@@ -133,12 +133,11 @@ void EnemyDraw(int i)
 	}
 }
 
-CHARACTER GetEnemyPos(void)
+CHARACTER GetEnemyPos(int i)
 {
-	for (int i = 0; i < ENEMY_MAX; i++)
-	{
-		return enemy[i];
-	}
+	
+	return enemy[i];
+	
 }
 
 //int GetStageCnt(void)
