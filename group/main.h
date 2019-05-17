@@ -68,6 +68,7 @@ typedef struct {
 	int animCnt;		//キャラクタのアニメーション用カウンタ
 	int imgLockCnt;		//キャラクタのイメージ固定用カウンタ
 	int type;			//何らかの属性を格納できる
+	int poscnt;
 	bool flag;			//キャラクターのフラグ
 	XY_F Velocity;
 }CHARACTER;

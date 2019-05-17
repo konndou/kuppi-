@@ -12,6 +12,8 @@ XY mapPos;
 XY move;
 int stageCnt = 0;
 
+auto cnttime = 30000;
+
 struct Header {
 	unsigned short w;	//マップの幅
 	unsigned short h;	//マップの高さ
@@ -89,7 +91,6 @@ void stageUpdate(void)
 
 void stageDraw(void)
 {
-	
 	for (int y = 0; y < header.h; y++) {
 		for (int x = 0; x < header.w; x++) {
 			auto idx = mapData[x + y * header.w];
@@ -98,6 +99,9 @@ void stageDraw(void)
 			DrawRectGraph(x * header.cw - mapPos.x, y * header.ch, idxX * header.cw, idxY * header.ch, header.cw, header.ch, chipH, true, false, false);
 		}
 	}
+	
+	cnttime -= 2;
+	DrawFormatString(0, 64, 0xff00ff, "time = %d", cnttime / 100);
 }
 
 //マップのPosをindexに変える
@@ -265,6 +269,7 @@ bool IsEnemyPass(XY pos)
 
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
 	if (id < 0)return ret;
+	if (id > 6000)return ret;
 
 	//通ってよいか
 	switch (mapData[id]) {

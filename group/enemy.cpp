@@ -4,52 +4,48 @@
 #include "keyCheck.h"
 #include "stage.h"
 
-
 CHARACTER enemy[ENEMY_MAX];
 int enemyImage[2];
 
 void EnemySystemInit(void)
 {
 	LoadDivGraph("image/boar3.png", 2, 2, 1, ENEMY1_SIZE_X, ENEMY1_SIZE_Y, enemyImage);
+	for (int i = 0; i < ENEMY_MAX; i++)
+	{
+		enemy[i].type = GetRand(1);
+	}
 
 	//LoadDivGraph("image/icon4.png", 16, 4, 4, ENEMY1_SIZE_X, ENEMY1_SIZE_Y, enemy1Image);
 }
 
-void EnemyInit(void)
+void EnemyInit(int i)
 {
-
-	for (int i = 0; i < ENEMY_MAX; i++)
+	switch (enemy[i].type)
 	{
-		int type = GetRand(2);
-
-		switch (type)
-		{
-		case ENEMY_TYPE_BOAR:
-			enemy[i].type = ENEMY_TYPE_BOAR;
-			enemy[i].pos = { 800, 100};
-			enemy[i].size = { 32,32 };
-			enemy[i].sizeOffset = { (enemy[i].size.x / 2),(enemy[i].size.y / 2) };
-			enemy[i].hitPosS = { 8, 15 };
-			enemy[i].hitPosE = { 8, 17 };
-			enemy[i].moveSpeed = 4;
-			enemy[i].Velocity = { 0,0 };
-			enemy[i].jumpFlag = true;
-			enemy[i].imgLockCnt = 30;
-			enemy[i].movedir = DIR_LEFT;
-			enemy[i].flag = false;
-			enemy[i].moveSpeed = 2;
-			enemy[i].flagcnt = 0;
-			default:
-				break; 
-		}
+	case ENEMY_TYPE_BOAR:
+		enemy[i].poscnt = GetRand(220);
+		enemy[i].pos = { 32 * (enemy[i].poscnt + 10) + 16, 0};
+		enemy[i].size = { 32,32 };
+		enemy[i].sizeOffset = { (enemy[i].size.x / 2),(enemy[i].size.y / 2) };
+		enemy[i].hitPosS = { 8, 16 };
+		enemy[i].hitPosE = { 8, 16 };
+		enemy[i].moveSpeed = 4;
+		enemy[i].Velocity = { 0,0 };
+		enemy[i].jumpFlag = true;
+		enemy[i].imgLockCnt = 30;
+		enemy[i].movedir = DIR_LEFT;
+		enemy[i].flag = false;
+		enemy[i].moveSpeed = 2;
+		enemy[i].flagcnt = 0;
+		break; 
 	}
 }
 
 void EnemyUpdate(int i)
 {
 	//“GƒLƒƒƒ‰‚Ì•\Ž¦
-	enemy[i].flagcnt = GetRand(100);
-	if (enemy[i].flagcnt == 25) {
+	auto stagecnt = GetStageCnt();
+	if (stagecnt == 0) {
 		enemy[i].flag = true;
 	}
 
@@ -57,7 +53,7 @@ void EnemyUpdate(int i)
 	{
 		//“GƒLƒƒƒ‰‚ð’n–Ê‚É—Ž‚Æ‚·
 
-		enemy[i].jumpFlag == true;
+		enemy[i].jumpFlag = true;
 
 		if (enemy[i].jumpFlag == true) {
 			XY movedPos = enemy[i].pos;
@@ -96,6 +92,7 @@ void EnemyUpdate(int i)
 			}
 		}
 
+		//“GƒLƒƒƒ‰‚Ì•ûŒü“]Š·
 		if (enemy[i].jumpFlag == false) {
 			XY movedPos = enemy[i].pos;
 			XY movedHitCheck = movedPos;
@@ -122,9 +119,29 @@ void EnemyUpdate(int i)
 					break;
 				}
 			}
+
+			movedHitCheck.y = movedPos.y;	//‘«Œ³‚ÌÀ•WŒvŽZ
+			//‘«Œ³‰E‰º
+			movedHitCheck2 = movedHitCheck;
+			movedHitCheck2.x = movedPos.x + enemy[i].hitPosE.x;
+			//‘«Œ³¶‰º
+			movedHitCheck3 = movedHitCheck;
+			movedHitCheck3.x = movedPos.x - enemy[i].hitPosE.x;
+
+			if ((IsPass(movedHitCheck) && IsPass(movedHitCheck2) && IsPass(movedHitCheck3)) == false) {
+				switch (enemy[i].movedir)
+				{
+				case DIR_LEFT:
+					enemy[i].movedir = DIR_RIGHT;
+					break;
+				case DIR_RIGHT:
+					enemy[i].movedir = DIR_LEFT;
+					break;
+				}
+			}
 		}
 		
-
+		//“GƒLƒƒƒ‰‚ÌˆÚ“®
 		if (enemy[i].jumpFlag == false)
 		{
 			switch (enemy[i].movedir)
@@ -139,7 +156,6 @@ void EnemyUpdate(int i)
 				break;
 			}
 		}
-		
 	}
 }
 
@@ -163,14 +179,5 @@ void EnemyDraw(int i)
 
 CHARACTER GetEnemyPos(int i)
 {
-	
 	return enemy[i];
-	
 }
-
-//int GetStageCnt(void)
-//{
-//	return = stageCnt;
-//}
-
-

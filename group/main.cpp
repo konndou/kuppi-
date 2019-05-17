@@ -65,7 +65,8 @@ int haikeiData[20][30] = {
 
 XY clearPos;
 XY haikeiPos;
-int life = 3;
+int lifeMax = 5;
+int life;
 int se;
 int cnt = 0;
 
@@ -203,6 +204,7 @@ int SystemInit(void)
 	stageSystemInit();
 	PlayerSystemInit();
 	EnemySystemInit();
+	ShotSystemInit();
 
 	fadeIn = false;
 	fadeOut = false;
@@ -223,13 +225,18 @@ void GameInit(void)
 	titleCnt = 0;
 	fadeCnt = 0;
 	pauseFlag = false;
+	life = lifeMax;
 
 	haikeiPos = { 0,0 };
 	clearPos = { SCREEN_SIZE_X, SCREEN_SIZE_Y / 4 };
 
 	stageInit();
 	PlayerInit();
-	EnemyInit();
+	for (int i = 0; i < ENEMY_MAX; i++)
+	{
+		EnemyInit(i);
+	}
+	ShotInit();
 }
 
 //ƒ^ƒCƒgƒ‹‚Ìˆ—
@@ -262,6 +269,8 @@ void GameLifeDraw(void)
 	DrawGraph(SCREEN_SIZE_X / 2 - 32, SCREEN_SIZE_Y / 2, pImage, true);
 	DrawFormatString(SCREEN_SIZE_X / 2, SCREEN_SIZE_Y / 2, 0xffffff, " x  %d", life);
 
+	clearPos = { SCREEN_SIZE_X, SCREEN_SIZE_Y / 4 };
+
 	/*cnt++;
 	if (cnt > 150) {
 		gameMode = GMODE_GAME;
@@ -285,6 +294,7 @@ void GameMain(void)
 		{
 			EnemyUpdate(i);
 		}
+		ShotUpdate();
 		//HitCheck();
 	}
 
@@ -318,11 +328,14 @@ void GameMain(void)
 			cnt = 0;
 			if (life >= 0) {
 				PlayerInit();
-				EnemyInit();
+				for (int i = 0; i < ENEMY_MAX; i++)
+				{
+					EnemyInit(i);
+				}
 				gameMode = GMODE_LIFE;
 			}
 			else {
-				life = 3;
+				life = lifeMax;
 				StageCntInit();
 				gameMode = GMODE_OVER;
 			}
@@ -339,6 +352,7 @@ void GameMainDraw(void)
 	{
 		EnemyDraw(i);
 	}
+	ShotDraw();
 	DrawFormatString(0, 0, 0xffffff, "GameMain : %d", gameCounter);
 	DrawFormatString(0, 32, 0xff00ff, "cnt : %d", cnt);
 }
@@ -364,7 +378,10 @@ void GameSClear(void)
 	if (PlayerNextStage() == true) {
 		stageInit();
 		PlayerInit();
-		EnemyInit();
+		for (int i = 0; i < ENEMY_MAX; i++)
+		{
+			EnemyInit(i);
+		}
 		gameMode = GMODE_LIFE;
 	}
 }

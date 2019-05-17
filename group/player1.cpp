@@ -4,9 +4,9 @@
 #include "keyCheck.h"
 #include "stage.h"
 #include "enemy.h"
+#include "shot.h"
 
 CHARACTER player1;
-//int player1stopImage;	//プレイヤーが止まっているときの処理
 int player1runImage[2];	//プレイヤーが走っているときの処理
 int player1jumpImage[3];	//プレイヤージャンプ中の処理
 int player1dImage[4];	//死んだ時の画像
@@ -190,6 +190,20 @@ void PlayerUpdate(void)
 				player1.Velocity.y = INIT_VELOCITY;
 			}
 		}
+
+		//弾を撃つ
+		if (trgkey[P2_PAUSE]) {
+			XY pshotPos = { 0, 0 };
+			pshotPos.y = player1.pos.y;
+			if (player1.movedir == DIR_RIGHT) {
+				pshotPos.x = player1.pos.x + player1.sizeOffset.x;
+			}
+			else if (player1.movedir == DIR_LEFT) {
+				pshotPos.x = player1.pos.x - player1.sizeOffset.x;
+			}
+			Shot(pshotPos, player1.movedir);
+			player1.shotFlag = true;
+		}
 	}
 
 	//一定時間イメージの固定
@@ -226,7 +240,12 @@ void PlayerDraw(void)
 
 	//プレイヤーの死体表示
 	if (player1.flag == false) {
-		DrawGraph(player1.pos.x + 16 - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
+		if (player1.movedir == DIR_RIGHT) {
+			DrawGraph(player1.pos.x + 16 - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
+		}
+		if (player1.movedir == DIR_LEFT) {
+			DrawTurnGraph(player1.pos.x + 16 - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
+		}
 	}
 }
 
