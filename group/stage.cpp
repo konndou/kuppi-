@@ -261,43 +261,17 @@ bool IsEnemyPass(XY pos)
 {
 	bool ret = true;
 	XY mapIndex;
-	CHARACTER enemytemp[ENEMY_MAX];
 	mapIndex = MapPosToIndex(pos);
 
-	for (int i = 0; i < ENEMY_MAX; i++)
-	{
-		enemytemp[i] = GetEnemyPos(i);
-		if (enemytemp[i].movedir == DIR_LEFT) {
-			mapIndex.x--;
-		}
-		if (enemytemp[i].movedir == DIR_RIGHT) {
-			mapIndex.x++;
-		}
-	}
-	
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
 	if (id < 0)return ret;
 
 	//’Ê‚Á‚Ä‚æ‚¢‚©
 	switch (mapData[id]) {
-	case 2:
-	case 3:
-	case 4:
-	case 8:
-	case 9:
-	case 10:
-	case 11:
-	case 14:
-	case 15:
-	case 16:
-	case 17:
-	case 18:
-	case 19:
-	case 20:
+	case 0:
 		ret = false;
 		break;
 	}
-
 	return ret;
 }
 

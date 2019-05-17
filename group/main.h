@@ -55,6 +55,7 @@ typedef struct {
 	XY sizeOffset;		//キャラクタ中央からの左上位置
 	XY hitPosS;			//当たり判定用の左上
 	XY hitPosE;			//当たり判定用の右下
+	int flagcnt;
 	bool runFlag;		//キャラクタの状態(走っているか)
 	bool jumpFlag;		//キャラクタの状態(ジャンプしているか)
 	bool shotFlag;		//キャラクタの状態(弾を撃っているか)

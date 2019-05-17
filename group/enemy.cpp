@@ -26,18 +26,19 @@ void EnemyInit(void)
 		{
 		case ENEMY_TYPE_BOAR:
 			enemy[i].type = ENEMY_TYPE_BOAR;
-			enemy[i].pos = { 800,100 };
+			enemy[i].pos = { 800, 100};
 			enemy[i].size = { 32,32 };
 			enemy[i].sizeOffset = { (enemy[i].size.x / 2),(enemy[i].size.y / 2) };
 			enemy[i].hitPosS = { 8, 15 };
 			enemy[i].hitPosE = { 8, 17 };
 			enemy[i].moveSpeed = 4;
 			enemy[i].Velocity = { 0,0 };
-			enemy[i].jumpFlag = false;
+			enemy[i].jumpFlag = true;
 			enemy[i].imgLockCnt = 30;
 			enemy[i].movedir = DIR_LEFT;
 			enemy[i].flag = false;
 			enemy[i].moveSpeed = 2;
+			enemy[i].flagcnt = 0;
 			default:
 				break; 
 		}
@@ -47,16 +48,17 @@ void EnemyInit(void)
 void EnemyUpdate(int i)
 {
 	//敵キャラの表示
-	auto flag = GetRand(100);
-	if (flag == 25) {
+	enemy[i].flagcnt = GetRand(100);
+	if (enemy[i].flagcnt == 25) {
 		enemy[i].flag = true;
 	}
 
 	if (enemy[i].flag == true)
 	{
 		//敵キャラを地面に落とす
-		enemy[i].jumpFlag = true;
-		
+
+		enemy[i].jumpFlag == true;
+
 		if (enemy[i].jumpFlag == true) {
 			XY movedPos = enemy[i].pos;
 			XY movedHitCheck = movedPos;
@@ -94,7 +96,34 @@ void EnemyUpdate(int i)
 			}
 		}
 
+		if (enemy[i].jumpFlag == false) {
+			XY movedPos = enemy[i].pos;
+			XY movedHitCheck = movedPos;
+			XY movedHitCheck2 = movedPos;
+			XY movedHitCheck3 = movedPos;
 
+			movedHitCheck.y = movedPos.y + enemy[i].hitPosE.y;	//足元の座標計算
+			//足元右下
+			movedHitCheck2 = movedHitCheck;
+			movedHitCheck2.x = movedPos.x + enemy[i].hitPosE.x;
+			//足元左下
+			movedHitCheck3 = movedHitCheck;
+			movedHitCheck3.x = movedPos.x - enemy[i].hitPosE.x;
+
+			//通れるかどうか
+			if ((IsEnemyPass(movedHitCheck) && IsEnemyPass(movedHitCheck2) && IsEnemyPass(movedHitCheck3)) == false) {
+				switch (enemy[i].movedir)
+				{
+				case DIR_LEFT:
+					enemy[i].movedir = DIR_RIGHT;
+					break;
+				case DIR_RIGHT:
+					enemy[i].movedir = DIR_LEFT;
+					break;
+				}
+			}
+		}
+		
 
 		if (enemy[i].jumpFlag == false)
 		{
@@ -110,33 +139,6 @@ void EnemyUpdate(int i)
 				break;
 			}
 		}
-
-
-
-		XY movedPos = enemy[i].pos;
-		XY movedHitCheck = movedPos;
-		XY movedHitCheck2 = movedPos;
-		XY movedHitCheck3 = movedPos;
-		XY tmpIndex;
-		XY tmpPos;
-
-		movedHitCheck2 = movedHitCheck;
-		movedHitCheck2.y = movedPos.y + enemy[i].hitPosS.y - 3;
-
-		movedHitCheck3 = movedHitCheck;
-		movedHitCheck3.y = movedPos.y - enemy[i].hitPosE.y + 3;
-
-		//通れるかどうか
-		if (IsEnemyPass(movedHitCheck) && IsEnemyPass(movedHitCheck2) && IsEnemyPass(movedHitCheck3)) {
-			if (enemy[i].movedir == DIR_LEFT) {
-				enemy[i].movedir = DIR_RIGHT;
-			}
-			if (enemy[i].movedir == DIR_RIGHT) {
-				enemy[i].movedir = DIR_LEFT;
-			}
-		}
-			
-		
 		
 	}
 }
