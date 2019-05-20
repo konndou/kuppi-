@@ -5,6 +5,7 @@
 #include "player1.h"
 #include "keyCheck.h"
 #include "stage.h"
+#include "boss.h"
 
 CHARACTER shot[SHOT_MAX];
 CHARACTER shot2[SHOT_MAX];

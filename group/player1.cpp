@@ -5,6 +5,7 @@
 #include "stage.h"
 #include "enemy.h"
 #include "shot.h"
+#include "boss.h"
 
 CHARACTER player1;
 int player1runImage[2];	//ƒvƒŒƒCƒ„[‚ª‘–‚Á‚Ä‚¢‚é‚Æ‚«‚Ìˆ—
