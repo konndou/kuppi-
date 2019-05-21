@@ -29,11 +29,7 @@
     <ClCompile Include="shot.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="item.cpp">
-=======
-    <ClCompile Include="boss.cpp">
->>>>>>> 01fa56f75f4c9b9e335c5a8035966bdd68bb2a5e
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,11 +52,7 @@
     <ClInclude Include="shot.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="item.h">
-=======
-    <ClInclude Include="boss.h">
->>>>>>> 01fa56f75f4c9b9e335c5a8035966bdd68bb2a5e
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
