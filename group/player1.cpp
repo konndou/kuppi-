@@ -5,22 +5,36 @@
 #include "stage.h"
 #include "enemy.h"
 #include "shot.h"
-#include "boss.h"
 
 CHARACTER player1;
 int player1runImage[2];	//プレイヤーが走っているときの処理
 int player1jumpImage[3];	//プレイヤージャンプ中の処理
 int player1dImage[4];	//死んだ時の画像
-int jumpse;	//サウンド
+int jumpse;	//ジャンプ時サウンド
+int shotse;	//ショット時のサウンド
 int image;	//イメージ
 bool playerdrun;	//プレイヤーの移動を止める
+int playerBigImage;
+int player1BigrunImage[2];	//鶏時の走っているときの画像
+int player1BigjumpImage[3];	//鶏時のジャンプ中の画像
 
 void PlayerSystemInit(void)
 {
+	//プレイヤー状態ヒヨコ
   	LoadDivGraph("image/player2run2.png", 2, 2, 1, PLAYER_SIZE_X * 2, PLAYER_SIZE_Y, player1runImage);
 	LoadDivGraph("image/player2jump3.png", 3, 3, 1, PLAYER_SIZE_X * 2, PLAYER_SIZE_Y, player1jumpImage);
 	LoadDivGraph("image/playerd4.png", 4, 4, 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, player1dImage);
+
+	//プレイヤー状態鶏
+	//playerBigImage = LoadGraph("image/playerBig2.png", true);
+	LoadDivGraph("image/playerBigrun2.png", 2, 2, 1, PLAYER_SIZE_X * 2, PLAYER_SIZE_Y, player1BigrunImage);
+	LoadDivGraph("image/playerBigjump.png", 3, 3, 1, PLAYER_SIZE_X * 2, PLAYER_SIZE_Y, player1BigjumpImage);
+
+	//サウンド
 	jumpse = LoadSoundMem("bgm/jump2.mp3");
+	ChangeVolumeSoundMem(80, jumpse);
+	shotse = LoadSoundMem("bgm/shot.mp3");
+	ChangeVolumeSoundMem(255, shotse);
 }
 
 //プレイヤーの初期化
@@ -194,6 +208,7 @@ void PlayerUpdate(void)
 
 		//弾を撃つ
 		if (trgkey[P2_PAUSE]) {
+			PlaySoundMem(shotse, DX_PLAYTYPE_BACK, false);
 			XY pshotPos = { 0, 0 };
 			pshotPos.y = player1.pos.y;
 			if (player1.movedir == DIR_RIGHT) {
@@ -226,6 +241,9 @@ void PlayerDraw(void)
 	image = player1runImage[player1.animCnt / 10 % 2];
 	if (player1.jumpFlag == true)image = player1jumpImage[player1.animCnt / 7 % 3];
 	if (player1.flag == false)image = player1dImage[player1.animCnt / 28 % 4];
+
+	/*image = player1BigrunImage[player1.animCnt / 10 % 2];
+	if (player1.jumpFlag == true)image = player1BigjumpImage[player1.animCnt / 7 % 3];*/
 
 	XY mapTemp = GetMapPos();
 	

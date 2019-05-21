@@ -3,7 +3,6 @@
 #include "player1.h"
 #include "keyCheck.h"
 #include "stage.h"
-#include "boss.h"
 
 CHARACTER enemy[ENEMY_MAX];
 int enemyImage[2];
@@ -35,9 +34,11 @@ void EnemyInit(int i)
 		enemy[i].jumpFlag = true;
 		enemy[i].imgLockCnt = 30;
 		enemy[i].movedir = DIR_LEFT;
-		enemy[i].flag = false;
+		enemy[i].flag = true;
 		enemy[i].moveSpeed = 2;
 		enemy[i].flagcnt = 0;
+		enemy[i].lifeMax = 10;
+		enemy[i].life = enemy[i].lifeMax;
 		break; 
 	}
 }
@@ -45,11 +46,7 @@ void EnemyInit(int i)
 void EnemyUpdate(int i)
 {
 	//“GƒLƒƒƒ‰‚Ì•\¦
-	auto stagecnt = GetStageCnt();
-	if (stagecnt == 0) {
-		enemy[i].flag = true;
-	}
-
+	
 	if (enemy[i].flag == true)
 	{
 		//“GƒLƒƒƒ‰‚ğ’n–Ê‚É—‚Æ‚·
@@ -157,6 +154,11 @@ void EnemyUpdate(int i)
 				break;
 			}
 		}
+
+		//“GƒLƒƒƒ‰‚ğÁ‚·
+		if (enemy[i].life <= 0) {
+			enemy[i].flag = false;
+		}
 	}
 }
 
@@ -176,6 +178,22 @@ void EnemyDraw(int i)
 			DrawGraph(enemy[i].pos.x - enemy[i].sizeOffset.x - mapTemp.x, enemy[i].pos.y - enemy[i].sizeOffset.y, image, true);
 		}
 	}
+}
+
+bool EnemyHitCheck(XY sPos, XY sSize)
+{
+	for (int i = 0; i < ENEMY_MAX; i++) {
+		if (enemy[i].flag == true) {
+			if ((enemy[i].pos.x - enemy[i].size.x / 2 < sPos.x + sSize.x / 2)
+				&& (enemy[i].pos.x + enemy[i].size.x / 2 > sPos.x - sSize.x / 2)
+				&& (enemy[i].pos.y - enemy[i].size.y / 2 < sPos.y + sSize.y / 2)
+				&& (enemy[i].pos.y + enemy[i].size.y / 2 > sPos.y - sSize.y / 2)) {
+				enemy[i].life -= 10;
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 CHARACTER GetEnemyPos(int i)

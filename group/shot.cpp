@@ -5,7 +5,6 @@
 #include "player1.h"
 #include "keyCheck.h"
 #include "stage.h"
-#include "boss.h"
 
 CHARACTER shot[SHOT_MAX];
 CHARACTER shot2[SHOT_MAX];
@@ -25,7 +24,7 @@ void ShotInit(void)
 		shot[i].movedir = DIR_DOWN;
 		shot[i].lifeMax = 60;
 		shot[i].moveSpeed = 7;
-		shot[i].size = { 8,8 };
+		shot[i].size = { 16,16 };
 		shot[i].sizeOffset = { shot[i].size.x / 2, shot[i].size.y / 2 };
 		shot[i].flag = false;
 	}
@@ -56,6 +55,12 @@ void ShotUpdate(void)
 		if (shot[i].life < 0) {
 			shot[i].flag = false;
 		}
+
+		
+		if (EnemyHitCheck(shot[i].pos, shot[i].size) == true) {
+			shot[i].flag = false;
+		}
+		
 	}
 }
 
@@ -83,3 +88,4 @@ void Shot(XY pos, MOVE_DIR dir)
 		}
 	}
 }
+

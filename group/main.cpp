@@ -5,7 +5,6 @@
 #include "stage.h"
 #include "enemy.h"
 #include "shot.h"
-#include "boss.h"
 
 
 typedef enum {
@@ -69,6 +68,7 @@ XY haikeiPos;
 int lifeMax = 5;
 int life;
 int se;
+int deathse;	//死んだときのサウンド
 int cnt = 0;
 
 //ﾌﾟﾛﾄﾀｲﾌﾟ宣言
@@ -215,10 +215,13 @@ int SystemInit(void)
 	titleImage = LoadGraph("image/title.png");
 	gameoverImage = LoadGraph("image/gameover.png");
 	clearImage = LoadGraph("image/clear.png");
-	LoadDivGraph("image/mapchip2.png", 30, 30, 1, MAP_CHIP_SIZE_X, MAP_CHIP_SIZE_Y, haikeiImage);
+	LoadDivGraph("image/mapchip7.png", 30, 30, 1, MAP_CHIP_SIZE_X, MAP_CHIP_SIZE_Y, haikeiImage);
 	pImage = LoadGraph("image/playerstop.png");
 
+	//サウンド
 	se = LoadSoundMem("bgm/stage1.mp3");
+	ChangeVolumeSoundMem(180, se);
+	deathse = LoadSoundMem("bgm/death.mp3");
 }
 
 void GameInit(void)
@@ -293,10 +296,22 @@ void GameMain(void)
 	else {
 		stageUpdate();
 		PlayerUpdate();
-		for (int i = 0; i < ENEMY_MAX; i++)
-		{
-			EnemyUpdate(i);
+		auto stagecnt = GetStageCnt();
+		switch (stagecnt) {
+		case 0:
+			for (int i = 0; i < 10; i++)
+			{
+				EnemyUpdate(i);
+			}
+			break;
+		case 2:
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				EnemyUpdate(i);
+			}
+			break;
 		}
+		
 		ShotUpdate();
 		BossUpdate();
 		//HitCheck();
@@ -321,6 +336,7 @@ void GameMain(void)
 	//プレイヤーが死亡した
 	if (PlayerOver() == true) {
 		cnt++;
+		PlaySoundMem(deathse, DX_PLAYTYPE_BACK, false);
 		if (cnt == 1) {
 			PlayerDEffect();
 		}
@@ -352,9 +368,20 @@ void GameMainDraw(void)
 {
 	stageDraw();
 	PlayerDraw();
-	for (int i = 0; i < ENEMY_MAX; i++)
-	{
-		EnemyDraw(i);
+	auto stagecnt = GetStageCnt();
+	switch (stagecnt) {
+	case 0:
+		for (int i = 0; i < 10; i++)
+		{
+			EnemyDraw(i);
+		}
+		break;
+	case 2:
+		for (int i = 0; i < ENEMY_MAX; i++)
+		{
+			EnemyDraw(i);
+		}
+		break;
 	}
 	ShotDraw();
 	BossDraw();
