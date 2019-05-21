@@ -206,6 +206,7 @@ int SystemInit(void)
 	PlayerSystemInit();
 	EnemySystemInit();
 	ShotSystemInit();
+	BossInit();
 
 	fadeIn = false;
 	fadeOut = false;
@@ -238,6 +239,7 @@ void GameInit(void)
 		EnemyInit(i);
 	}
 	ShotInit();
+	BossInit();
 }
 
 //É^ÉCÉgÉãÇÃèàóù
@@ -296,6 +298,7 @@ void GameMain(void)
 			EnemyUpdate(i);
 		}
 		ShotUpdate();
+		BossUpdate();
 		//HitCheck();
 	}
 
@@ -354,6 +357,7 @@ void GameMainDraw(void)
 		EnemyDraw(i);
 	}
 	ShotDraw();
+	BossDraw();
 	DrawFormatString(0, 0, 0xffffff, "GameMain : %d", gameCounter);
 	DrawFormatString(0, 32, 0xff00ff, "cnt : %d", cnt);
 }
@@ -383,6 +387,7 @@ void GameSClear(void)
 		{
 			EnemyInit(i);
 		}
+		BossInit();
 		gameMode = GMODE_LIFE;
 	}
 }

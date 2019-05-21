@@ -8,6 +8,12 @@ void EnemyInit(int i);
 void EnemyUpdate(int i);
 void EnemyDraw(int i);
 
+enum ENEMY_TYPE
+{
+	ENEMY_TYPE_BOAR,
+	ENEMY_TYPE_CROW
+};
+
 
 
 CHARACTER GetEnemyPos(int i);

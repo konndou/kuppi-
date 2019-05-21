@@ -1,4 +1,6 @@
 
+#define BOSS_SIZE_X 128
+#define BOSS_SIZE_Y 64
 
 
 
