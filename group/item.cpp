@@ -5,27 +5,29 @@
 #include "player1.h"
 #include "keyCheck.h"
 #include "stage.h"
-#include "boss.h"
 
-CHARACTER item[ITEM_MAX];
-int cheeseImage;
-int abokadoImage;
+CHARACTER itemtype[ITEM_TYPE_MAX];
+CHARACTER item[ITEM_TYPE_MAX];
+int itemImage[ITEM_TYPE_MAX];
 
 void ItemSystemInit(void)
 {
-	cheeseImage = LoadGraph("image/item1.png", true);
-	abokadoImage = LoadGraph("image/item2.png", true);
+	itemImage[0] = LoadGraph("image/item1.png", true);
+	itemImage[1] = LoadGraph("image/item2.png", true);
+
+	for (int i = 0; i < ITEM_TYPE_MAX; i++) {
+		itemtype[i].type = i;
+		itemtype[i].movedir = DIR_RIGHT;
+		itemtype[i].pos = { 0,0 };
+		itemtype[i].size = { 32,32 };
+		itemtype[i].sizeOffset = { itemtype[i].size.x / 2, itemtype[i].size.y / 2 };
+	}
 }
 
 void ItemInit(void)
 {
-	for (int i = 0; i < ITEM_MAX; i++) {
-		item[i].pos = { 0,0 };
-		item[i].movedir = DIR_RIGHT;
-		item[i].moveSpeed = 2;
-		item[i].size = { 32,32 };
-		item[i].sizeOffset = { item[i].size.x / 2, item[i].size.y / 2 };
-		item[i].flag = false;
+	for (int i = 0; i < ITEM_TYPE_MAX; i++) {
+		item[i] = itemtype[i];
 	}
 }
 

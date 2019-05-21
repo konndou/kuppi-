@@ -5,7 +5,8 @@
 enum ITEM_TYPE
 {
 	ITEM_TYPE_CHEESE,
-	ITEM_TYPE_ABOKADO
+	ITEM_TYPE_ABOKADO,
+	ITEM_TYPE_MAX
 };
 
 void ItemSystemInit(void);
