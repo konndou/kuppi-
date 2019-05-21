@@ -44,6 +44,9 @@ void stageInit(void)
 		mapH = FileRead_open("map2.map", true);
 		break;
 	case 2:
+		mapH = FileRead_open("map4.map", true);
+		break;
+	case 3:
 		mapH = FileRead_open("map3.map", true);
 		break;
 	}
@@ -51,7 +54,7 @@ void stageInit(void)
 	//ファイルを開く
 	FileRead_read(&header, sizeof(header), mapH);
 
-	chipH = LoadGraph("image/mapchip2.png", true);
+	chipH = LoadGraph("image/mapchip7.png", true);
 
 	FileRead_seek(mapH, 16, SEEK_TOP);
 

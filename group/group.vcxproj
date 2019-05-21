@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="item.cpp" />
     <ClCompile Include="keyCheck.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player1.cpp" />
@@ -138,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="item.h" />
     <ClInclude Include="keyCheck.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="player1.h" />
