@@ -5,6 +5,8 @@
 #include "stage.h"
 #include "enemy.h"
 #include "shot.h"
+#include "boss.h"
+#include "item.h"
 
 
 typedef enum {

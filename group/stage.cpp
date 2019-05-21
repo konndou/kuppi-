@@ -5,6 +5,8 @@
 #include "player1.h"
 #include "enemy.h"
 #include <vector>
+#include "boss.h"
+#include "item.h"
 
 #define SEEK_TOP 0
 

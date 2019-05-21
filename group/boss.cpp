@@ -4,6 +4,7 @@
 #include "keyCheck.h"
 #include "stage.h"
 #include "boss.h"
+#include "item.h"
 
 CHARACTER boss;
 int bossImage[2];

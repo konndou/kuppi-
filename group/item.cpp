@@ -5,6 +5,7 @@
 #include "player1.h"
 #include "keyCheck.h"
 #include "stage.h"
+#include "boss.h"
 
 CHARACTER item[ITEM_MAX];
 int cheeseImage;

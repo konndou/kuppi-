@@ -3,6 +3,8 @@
 #include "player1.h"
 #include "keyCheck.h"
 #include "stage.h"
+#include "boss.h"
+#include "item.h"
 
 CHARACTER enemy[ENEMY_MAX];
 int enemyImage[2];
