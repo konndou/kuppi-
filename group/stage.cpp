@@ -40,7 +40,7 @@ void stageInit(void)
 	//マップデータのファイルを開く
 	switch (stageCnt) {
 	case 0:
-		mapH = FileRead_open("map1.map", true);
+		mapH = FileRead_open("map4.map", true);
 		break;
 	case 1:
 		mapH = FileRead_open("map2.map", true);
@@ -101,7 +101,8 @@ void stageDraw(void)
 			auto idx = mapData[x + y * header.w];
 			auto idxX = idx % 32;
 			auto idxY = idx / 32;
-			DrawRectGraph(x * header.cw - mapPos.x, y * header.ch, idxX * header.cw, idxY * header.ch, header.cw, header.ch, chipH, true, false, false);
+			DrawRectGraph(x * header.cw - mapPos.x, y * header.ch, 
+						 idxX * header.cw, idxY * header.ch, header.cw, header.ch, chipH, true, false, false);
 		}
 	}
 	
@@ -279,6 +280,27 @@ bool IsEnemyPass(XY pos)
 	//通ってよいか
 	switch (mapData[id]) {
 	case 0:
+		ret = false;
+		break;
+	}
+	return ret;
+}
+
+//アイテムの出現
+bool ItemEvent(XY pos) 
+{
+	bool ret = true;
+	XY mapIndex;
+	mapIndex = MapPosToIndex(pos);
+
+	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
+	if (id < 0)return ret;
+	if (id > 6000)return ret;
+
+	//アイテムブロックがあるか
+	switch (mapData[id]) {
+	case 2:
+		mapData[id] = 9;
 		ret = false;
 		break;
 	}

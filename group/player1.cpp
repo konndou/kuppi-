@@ -19,6 +19,9 @@ bool playerdrun;	//プレイヤーの移動を止める
 int playerBigImage;
 int player1BigrunImage[2];	//鶏時の走っているときの画像
 int player1BigjumpImage[3];	//鶏時のジャンプ中の画像
+bool player1Bigflag;
+
+bool flag;	//アイテムで死んだ時用
 
 void PlayerSystemInit(void)
 {
@@ -37,6 +40,8 @@ void PlayerSystemInit(void)
 	ChangeVolumeSoundMem(80, jumpse);
 	shotse = LoadSoundMem("bgm/shot.mp3");
 	ChangeVolumeSoundMem(255, shotse);
+
+	player1Bigflag = false;
 }
 
 //プレイヤーの初期化
@@ -59,6 +64,8 @@ void PlayerInit(void)
 	player1.gFlag = false;	//ゴール演出中フラグ
 	player1.xFlag = false;	//ゴール演出用フラグ(横移動)
 	playerdrun = true;
+	flag = false;
+	
 }
 
 //プレイヤー処理
@@ -174,6 +181,11 @@ void PlayerUpdate(void)
 				movedPos = player1.pos;
 			}
 
+			//アイテムの出現
+			if ((ItemEvent(movedHitCheck) && ItemEvent(movedHitCheck2) && ItemEvent(movedHitCheck3)) == false) {
+				ItemFlag();
+			}
+
 			movedHitCheck.y = movedPos.y + player1.hitPosE.y;	//足元の座標計算
 			//足元右下
 			movedHitCheck2 = movedHitCheck;
@@ -222,6 +234,20 @@ void PlayerUpdate(void)
 			Shot(pshotPos, player1.movedir);
 			player1.shotFlag = true;
 		}
+		//アイテムが当たった時
+		if (ItemHitCheck(player1.pos, player1.size) == true) {
+			int num = GetItemNum();
+			CHARACTER itemTemp = GetItemPos(num);
+			if (itemTemp.type == ITEM_TYPE_CHEESE) {
+				player1Bigflag = true;
+				image = player1BigrunImage[player1.animCnt / 10 % 2];
+				DeleteItem(num);	//アイテムを消す
+			}
+			if (itemTemp.type == ITEM_TYPE_ABOKADO) {
+				player1Bigflag = false;
+				DeleteItem(num);	//アイテムを消す
+			}
+		}
 	}
 
 	//一定時間イメージの固定
@@ -240,12 +266,17 @@ void PlayerUpdate(void)
 //プレイヤー描画
 void PlayerDraw(void)
 {
-	image = player1runImage[player1.animCnt / 10 % 2];
-	if (player1.jumpFlag == true)image = player1jumpImage[player1.animCnt / 7 % 3];
-	if (player1.flag == false)image = player1dImage[player1.animCnt / 28 % 4];
+	//画像の入れ替え
+	if (player1Bigflag == false) {	//ヒヨコの時
+		image = player1runImage[player1.animCnt / 10 % 2];
+		if (player1.jumpFlag == true)image = player1jumpImage[player1.animCnt / 7 % 3];
+		if (player1.flag == false)image = player1dImage[player1.animCnt / 28 % 4];
+	}
 
-	/*image = player1BigrunImage[player1.animCnt / 10 % 2];
-	if (player1.jumpFlag == true)image = player1BigjumpImage[player1.animCnt / 7 % 3];*/
+	if (player1Bigflag == true) {	//鶏の時
+		image = player1BigrunImage[player1.animCnt / 10 % 2];
+		if (player1.jumpFlag == true)image = player1BigjumpImage[player1.animCnt / 7 % 3];
+	}
 
 	XY mapTemp = GetMapPos();
 	
@@ -357,8 +388,15 @@ void PlayerGoalDraw(void)
 		}
 	}
 
-	image = player1runImage[player1.animCnt / 10 % 2];
-	if (player1.jumpFlag == true)image = player1jumpImage[player1.animCnt / 7 % 3];
+	//画像の入れ替え
+	if (player1Bigflag == false) {
+		image = player1runImage[player1.animCnt / 10 % 2];
+		if (player1.jumpFlag == true)image = player1jumpImage[player1.animCnt / 7 % 3];
+	}
+	if (player1Bigflag == true) {
+		image = player1BigrunImage[player1.animCnt / 10 % 2];
+		if (player1.jumpFlag == true)image = player1BigjumpImage[player1.animCnt / 7 % 3];
+	}
 
 	XY mapTemp = GetMapPos();
 	player1.movedir = DIR_RIGHT;
@@ -435,10 +473,29 @@ bool PlayerOver(void)
 	movedHitCheck3 = movedHitCheck;
 	movedHitCheck3.y = movedPos.y - player1.hitPosE.y;
 
-	if (IsOverPass(movedHitCheck) && IsOverPass(movedHitCheck2) && IsOverPass(movedHitCheck3)) {
-		return false;
+	if ((IsOverPass(movedHitCheck) && IsOverPass(movedHitCheck2) && IsOverPass(movedHitCheck3)) == false) {
+		if (player1Bigflag == true) {
+			image = player1runImage[player1.animCnt / 10 % 2];
+			player1Bigflag = false;
+			return false;
+		}
+		return true;
 	}
-	return true;
+
+	//アイテム(アボカド)を取った時
+	if ((ItemHitCheck(player1.pos, player1.size)) == true) {
+		int num = GetItemNum();
+		CHARACTER itemTemp = GetItemPos(num);
+		if (player1Bigflag == false) {
+			if (itemTemp.type == ITEM_TYPE_ABOKADO) {
+				flag = true;
+			}
+		}
+	}
+	if (flag == true) {
+		return true;
+	}
+	return false;
 }
 
 //死んだ時の処理

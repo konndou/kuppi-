@@ -22,5 +22,6 @@ bool IsGoal2Pass(XY pos);
 bool IsNextPass(XY pos);
 bool IsOverPass(XY pos);
 bool IsEnemyPass(XY pos);
+bool ItemEvent(XY pos);
 
 XY GetMapPos(void);
