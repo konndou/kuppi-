@@ -209,7 +209,7 @@ int SystemInit(void)
 	EnemySystemInit();
 	ShotSystemInit();
 	ItemSystemInit();
-	BossInit();
+	BossSystemInit();
 
 	fadeIn = false;
 	fadeOut = false;
