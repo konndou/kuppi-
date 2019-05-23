@@ -11,17 +11,18 @@ int bossImage[2];
 
 void BossSystemInit(void)
 {
-	LoadDivGraph("image/snake.png", 2, 2, 1, BOSS_SIZE_X, BOSS_SIZE_Y, bossImage);
+	LoadDivGraph("image/snakeboss1.png", 2, 2, 1, BOSS_SIZE_X, BOSS_SIZE_Y, bossImage);
 }
 
 void BossInit(void)
 {
 	//boss.poscnt = GetRand(220);
-	boss.pos = { 32 * (boss.poscnt + 10) + 16, 0 };
-	boss.size = { 128,64 };
+	//boss.pos = { 128 * (boss.poscnt + 10) + 64, 0 };
+	boss.pos = { 100,100 };
+	boss.size = { 256,256 };
 	boss.sizeOffset = { (boss.size.x / 2),(boss.size.y / 2) };
-	boss.hitPosS = { 32, 32 };
-	boss.hitPosE = { 32, 32 };
+	boss.hitPosS = { 64, 128 };
+	boss.hitPosE = { 64, 128 };
 	boss.moveSpeed = 4;
 	boss.Velocity = { 0,0 };
 	boss.jumpFlag = true;
@@ -36,10 +37,10 @@ void BossInit(void)
 void BossUpdate(void)
 {
 
-	auto stagecnt = GetStageCnt();
+	/*auto stagecnt = GetStageCnt();
 	if (stagecnt == 0) {
 		boss.flag = true;
-	}
+	}*/
 
 	if (boss.flag == true)
 	{

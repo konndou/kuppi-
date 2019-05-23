@@ -208,7 +208,7 @@ int SystemInit(void)
 	PlayerSystemInit();
 	EnemySystemInit();
 	ShotSystemInit();
-	BossInit();
+	BossSystemInit();
 
 	fadeIn = false;
 	fadeOut = false;
@@ -239,12 +239,13 @@ void GameInit(void)
 
 	stageInit();
 	PlayerInit();
+	BossInit();
 	for (int i = 0; i < ENEMY_MAX; i++)
 	{
 		EnemyInit(i);
 	}
 	ShotInit();
-	BossInit();
+	
 }
 
 //ƒ^ƒCƒgƒ‹‚Ìˆ—
