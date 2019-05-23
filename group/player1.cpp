@@ -65,7 +65,6 @@ void PlayerInit(void)
 	player1.xFlag = false;	//ゴール演出用フラグ(横移動)
 	playerdrun = true;
 	flag = false;
-	
 }
 
 //プレイヤー処理
@@ -241,10 +240,6 @@ void PlayerUpdate(void)
 			if (itemTemp.type == ITEM_TYPE_CHEESE) {
 				player1Bigflag = true;
 				image = player1BigrunImage[player1.animCnt / 10 % 2];
-				DeleteItem(num);	//アイテムを消す
-			}
-			if (itemTemp.type == ITEM_TYPE_ABOKADO) {
-				player1Bigflag = false;
 				DeleteItem(num);	//アイテムを消す
 			}
 		}
@@ -483,12 +478,16 @@ bool PlayerOver(void)
 	}
 
 	//アイテム(アボカド)を取った時
-	if ((ItemHitCheck(player1.pos, player1.size)) == true) {
+	if (ItemHitCheck(player1.pos, player1.size) == true) {
 		int num = GetItemNum();
 		CHARACTER itemTemp = GetItemPos(num);
-		if (player1Bigflag == false) {
-			if (itemTemp.type == ITEM_TYPE_ABOKADO) {
+		if (itemTemp.type == ITEM_TYPE_ABOKADO) {
+			if (player1Bigflag == true) {
+				player1Bigflag = false;
+				DeleteItem(num);	//アイテムを消す
+			}else if (player1Bigflag == false) {
 				flag = true;
+				DeleteItem(num);	//アイテムを消す
 			}
 		}
 	}

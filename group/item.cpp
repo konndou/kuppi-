@@ -139,13 +139,17 @@ void ItemDraw(void)
 	}
 }
 
+//アイテムを発生させる
 void ItemFlag(void)
 {
 	CHARACTER playerTemp = GetPlayerPos();
 
 	if ( cntitem < ITEM_MAX) {
 		if (item[cntitem].flag == false) {
-			item[cntitem].pos = { playerTemp.pos.x, playerTemp.pos.y - 64 };
+			XY mapIndex = MapPosToIndex(playerTemp.pos);
+			mapIndex.y = mapIndex.y - 1;
+			XY pos = MapIndexToPos(mapIndex);
+			item[cntitem].pos = { pos.x + 16, pos.y};
 			item[cntitem].type = GetRand(1);
 			switch (item[cntitem].type) {
 			case ITEM_TYPE_CHEESE:
@@ -161,6 +165,7 @@ void ItemFlag(void)
 	}
 }
 
+//当たり判定
 bool ItemHitCheck(XY pPos, XY pSize)
 {
 	for (int i = 0; i < ITEM_MAX; i++) {
@@ -177,6 +182,7 @@ bool ItemHitCheck(XY pPos, XY pSize)
 	return false;
 }
 
+//アイテムの情報を渡す
 CHARACTER GetItemPos(int i)
 {
 	return item[i];

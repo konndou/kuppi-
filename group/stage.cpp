@@ -40,7 +40,7 @@ void stageInit(void)
 	//マップデータのファイルを開く
 	switch (stageCnt) {
 	case 0:
-		mapH = FileRead_open("map4.map", true);
+		mapH = FileRead_open("map1.map", true);
 		break;
 	case 1:
 		mapH = FileRead_open("map2.map", true);
@@ -50,6 +50,9 @@ void stageInit(void)
 		break;
 	case 3:
 		mapH = FileRead_open("map3.map", true);
+		break;
+	case 4:
+		mapH = FileRead_open("boss.map", true);
 		break;
 	}
 
@@ -158,6 +161,9 @@ bool IsPass(XY pos)
 	case 18:
 	case 19:
 	case 20:
+	case 23:
+	case 25:
+	case 26:
 		ret = false;
 		break;
 	}
@@ -260,6 +266,7 @@ bool IsOverPass(XY pos)
 	//通ってよいか
 	switch (mapData[id]) {
 	case 13:
+	case 27:
 		ret = false;
 		break;
 	}
@@ -280,6 +287,8 @@ bool IsEnemyPass(XY pos)
 	//通ってよいか
 	switch (mapData[id]) {
 	case 0:
+	case 22:
+	case 24:
 		ret = false;
 		break;
 	}
@@ -301,6 +310,10 @@ bool ItemEvent(XY pos)
 	switch (mapData[id]) {
 	case 2:
 		mapData[id] = 9;
+		ret = false;
+		break;
+	case 25:
+		mapData[id] = 26;
 		ret = false;
 		break;
 	}

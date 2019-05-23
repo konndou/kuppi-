@@ -314,6 +314,12 @@ void GameMain(void)
 				EnemyUpdate(i);
 			}
 			break;
+		case 4:
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				EnemyUpdate(i);
+			}
+			break;
 		}
 		ShotUpdate();
 		BossUpdate();
