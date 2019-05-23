@@ -18,7 +18,7 @@ void BossInit(void)
 {
 	//boss.poscnt = GetRand(220);
 	//boss.pos = { 128 * (boss.poscnt + 10) + 64, 0 };
-	boss.pos = { 100,100 };
+	boss.pos = { 9200,100 };
 	boss.size = { 256,256 };
 	boss.sizeOffset = { (boss.size.x / 2),(boss.size.y / 2) };
 	boss.hitPosS = { 64, 128 };
@@ -31,6 +31,8 @@ void BossInit(void)
 	boss.flag = true;
 	boss.moveSpeed = 2;
 	boss.flagcnt = 0;
+	boss.lifeMax = 100;
+	boss.life = boss.lifeMax;
 
 }
 
@@ -151,6 +153,10 @@ void BossUpdate(void)
 		}
 	}
 
+	if (boss.life <= 0) {
+		boss.flag = false;
+	}
+
 
 }
 
@@ -172,4 +178,20 @@ void BossDraw(void)
 		}
 	}
 
+}
+
+bool BossHitCheck(XY sPos, XY sSize)
+{
+	for (int i = 0; i < BOSS_MAX; i++) {
+		if (boss.flag == true) {
+			if ((boss.pos.x - boss.size.x / 2 < sPos.x + sSize.x / 2)
+				&& (boss.pos.x + boss.size.x / 2 > sPos.x - sSize.x / 2)
+				&& (boss.pos.y - boss.size.y / 2 < sPos.y + sSize.y / 2)
+				&& (boss.pos.y + boss.size.y / 2 > sPos.y - sSize.y / 2)) {
+				boss.life -= 10;
+				return true;
+			}
+		}
+	}
+	return false;
 }

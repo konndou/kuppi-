@@ -49,6 +49,7 @@ void PlayerInit(void)
 {
 	//初期化
 	player1.pos = { 5 * MAP_CHIP_SIZE_X, 8 * MAP_CHIP_SIZE_Y };	//プレイヤーの初期位置
+	//player1.pos = {9200,100 };
 	player1.size = { 64, 32 };	//プレイヤーのサイズ
 	player1.sizeOffset = { (player1.size.x / 2), (player1.size.y / 2) };
 	player1.hitPosS = { 8, 15 };

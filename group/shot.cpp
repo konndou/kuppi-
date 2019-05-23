@@ -62,6 +62,10 @@ void ShotUpdate(void)
 		if ((EnemyHitCheck(shot[i].pos, shot[i].size)) == true) {
 			shot[i].flag = false;
 		}
+
+		if ((BossHitCheck(shot[i].pos, shot[i].size)) == true) {
+			shot[i].flag = false;
+		}
 		
 	}
 }
