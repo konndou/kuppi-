@@ -1,6 +1,6 @@
 #pragma once
 
-#define SHOT_MAX 2
+#define SHOT_MAX 1
 
 //プロトタイプ宣言
 void ShotSystemInit(void);

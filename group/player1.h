@@ -3,7 +3,7 @@
 #define PLAYER_SIZE_X 32
 #define PLAYER_SIZE_Y 32
 
-#define ACC_RUN 0.15	//走る加速度
+#define ACC_RUN 0.18	//走る加速度
 #define ACC_STOP 0.10	//停まる加速度
 #define VELOCITY_X_MAX 5//X方向の速度最大
 

@@ -5,6 +5,7 @@
 #include "stage.h"
 #include "boss.h"
 #include "item.h"
+#include "effect.h"
 
 CHARACTER enemy[ENEMY_MAX];
 int enemyImage[2];
@@ -26,7 +27,7 @@ void EnemyInit(int i)
 	{
 	case ENEMY_TYPE_BOAR:
 		enemy[i].poscnt = GetRand(220);
-		enemy[i].pos = { 32 * (enemy[i].poscnt + 10) + 16, 0};
+		enemy[i].pos = { 32 * (enemy[i].poscnt + 10) + 16, 0 };
 		enemy[i].size = { 32,32 };
 		enemy[i].sizeOffset = { (enemy[i].size.x / 2),(enemy[i].size.y / 2) };
 		enemy[i].hitPosS = { 8, 16 };
@@ -36,18 +37,19 @@ void EnemyInit(int i)
 		enemy[i].jumpFlag = true;
 		enemy[i].imgLockCnt = 30;
 		enemy[i].movedir = DIR_LEFT;
-		enemy[i].flag = true;
 		enemy[i].moveSpeed = 2;
 		enemy[i].flagcnt = 0;
 		enemy[i].lifeMax = 10;
 		enemy[i].life = enemy[i].lifeMax;
-		break; 
+		break;
 	}
+	enemy[i].flag = false;
 }
 
 void EnemyUpdate(int i)
 {
 	//“GƒLƒƒƒ‰‚Ì•\Ž¦
+	enemy[i].flag = true;
 	
 	if (enemy[i].flag == true)
 	{
@@ -186,11 +188,12 @@ bool EnemyHitCheck(XY sPos, XY sSize)
 {
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if (enemy[i].flag == true) {
-			if ((enemy[i].pos.x - enemy[i].size.x / 2 < sPos.x + sSize.x / 2)
+			if (   (enemy[i].pos.x - enemy[i].size.x / 2 < sPos.x + sSize.x / 2)
 				&& (enemy[i].pos.x + enemy[i].size.x / 2 > sPos.x - sSize.x / 2)
 				&& (enemy[i].pos.y - enemy[i].size.y / 2 < sPos.y + sSize.y / 2)
 				&& (enemy[i].pos.y + enemy[i].size.y / 2 > sPos.y - sSize.y / 2)) {
 				enemy[i].life -= 10;
+				SetBlockEffect(enemy[i].pos);
 				return true;
 			}
 		}

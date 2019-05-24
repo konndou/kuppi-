@@ -81,18 +81,22 @@ void stageUpdate(void)
 
 	//ƒ}ƒbƒv‚ÌˆÚ“®ˆ—
 	if (playerTemp.pos.x > mapPos.x + SCREEN_SIZE_X / 2) {
-		move.x = + playerTemp.pos.x - SCREEN_SIZE_X / 2 - mapPos.x;
+		move.x = playerTemp.pos.x - SCREEN_SIZE_X / 2 - mapPos.x;
 		mapPos.x = mapPos.x + move.x;
 	}
 	
 	if (playerTemp.pos.x < mapPos.x + SCREEN_SIZE_X / 6) {
-		move.x = + playerTemp.pos.x - SCREEN_SIZE_X / 6 - mapPos.x;
+		move.x = playerTemp.pos.x - SCREEN_SIZE_X / 6 - mapPos.x;
 		mapPos.x = mapPos.x + move.x;
 	}
 	
 	//ˆÚ“®§ŒÀ
 	if (mapPos.x < 0) {
 		mapPos.x = 0;
+	}
+
+	if (mapPos.x > header.w * header.cw - SCREEN_SIZE_X) {
+		mapPos.x = header.w * header.cw - SCREEN_SIZE_X;
 	}
 	
 }
