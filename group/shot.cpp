@@ -55,15 +55,13 @@ void ShotUpdate(void)
 		shot.flag = false;
 	}
 
-		
-		if ((EnemyHitCheck(shot[i].pos, shot[i].size)) == true) {
-			shot[i].flag = false;
-		}
+	//“–‚½‚è”»’è
+	if ((EnemyHitCheck(shot.pos, shot.size)) == true) {
+		shot.flag = false;
+	}
 
-		if ((BossHitCheck(shot[i].pos, shot[i].size)) == true) {
-			shot[i].flag = false;
-		}
-		
+	if ((BossHitCheck(shot.pos, shot.size)) == true) {
+		shot.flag = false;
 	}
 }
 
