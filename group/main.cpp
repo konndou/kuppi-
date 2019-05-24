@@ -216,7 +216,7 @@ int SystemInit(void)
 	fadeOut = false;
 
 	// ---------- グラフィックの登録 ----------- 
-	titleImage = LoadGraph("image/title.png");
+	titleImage = LoadGraph("image/titlekuppi-.png");
 	gameoverImage = LoadGraph("image/gameover.png");
 	clearImage = LoadGraph("image/clear.png");
 	LoadDivGraph("image/mapchip7.png", 30, 30, 1, MAP_CHIP_SIZE_X, MAP_CHIP_SIZE_Y, haikeiImage);
@@ -278,7 +278,7 @@ void GameTitle(void)
 
 void GameTitleDraw(void)
 {
-	XY titlePos = { 0,0 };
+	XY titlePos = { SCREEN_SIZE_X/4-60,50 };
 
 	DrawString(0, 0, "GameTitle", 0xffffff);
 	for (int y = 0; y < MAP_CHIP_Y; y++) {
