@@ -7,6 +7,7 @@
 #include "shot.h"
 #include "boss.h"
 #include "item.h"
+#include "effect.h"
 
 
 typedef enum {
@@ -209,7 +210,7 @@ int SystemInit(void)
 	EnemySystemInit();
 	ShotSystemInit();
 	ItemSystemInit();
-	BossInit();
+	EffectSystemInit();
 
 	fadeIn = false;
 	fadeOut = false;
@@ -240,13 +241,33 @@ void GameInit(void)
 
 	stageInit();
 	PlayerInit();
-	for (int i = 0; i < ENEMY_MAX; i++)
-	{
-		EnemyInit(i);
+	auto stagecnt = GetStageCnt();
+	switch (stagecnt) {
+	case 0:
+		for (int i = 0; i < 10; i++)
+		{
+			EnemyInit(i);
+		}
+		break;
+	case 2:
+		for (int i = 0; i < ENEMY_MAX; i++)
+		{
+			EnemyInit(i);
+		}
+		break;
+	case 4:
+		for (int i = 0; i < 20; i++)
+		{
+			EnemyInit(i);
+		}
+		break;
+	default:
+		break;
 	}
 	ShotInit();
 	ItemInit();
 	BossInit();
+	EffectInit();
 }
 
 //ƒ^ƒCƒgƒ‹‚Ìˆ—
@@ -315,15 +336,18 @@ void GameMain(void)
 			}
 			break;
 		case 4:
-			for (int i = 0; i < ENEMY_MAX; i++)
+			for (int i = 0; i < 20; i++)
 			{
 				EnemyUpdate(i);
 			}
+			break;
+		default:
 			break;
 		}
 		ShotUpdate();
 		BossUpdate();
 		ItemUpdate();
+		EffectUpdata();
 		//HitCheck();
 	}
 
@@ -358,9 +382,28 @@ void GameMain(void)
 			cnt = 0;
 			if (life >= 0) {
 				PlayerInit();
-				for (int i = 0; i < ENEMY_MAX; i++)
-				{
-					EnemyInit(i);
+				auto stagecnt = GetStageCnt();
+				switch (stagecnt) {
+				case 0:
+					for (int i = 0; i < 10; i++)
+					{
+						EnemyInit(i);
+					}
+					break;
+				case 2:
+					for (int i = 0; i < ENEMY_MAX; i++)
+					{
+						EnemyInit(i);
+					}
+					break;
+				case 4:
+					for (int i = 0; i < 20; i++)
+					{
+						EnemyInit(i);
+					}
+					break;
+				default:
+					break;
 				}
 				stageInit();
 				ItemInit();
@@ -380,24 +423,14 @@ void GameMainDraw(void)
 {
 	stageDraw();
 	PlayerDraw();
-	auto stagecnt = GetStageCnt();
-	switch (stagecnt) {
-	case 0:
-		for (int i = 0; i < 10; i++)
-		{
-			EnemyDraw(i);
-		}
-		break;
-	case 2:
-		for (int i = 0; i < ENEMY_MAX; i++)
-		{
-			EnemyDraw(i);
-		}
-		break;
+	for (int i = 0; i < ENEMY_MAX; i++)
+	{
+		EnemyDraw(i);
 	}
 	ShotDraw();
 	BossDraw();
 	ItemDraw();
+	EffectDraw();
 	DrawFormatString(0, 0, 0xffffff, "GameMain : %d", gameCounter);
 	DrawFormatString(0, 32, 0xff00ff, "cnt : %d", cnt);
 }
@@ -429,6 +462,7 @@ void GameSClear(void)
 		}
 		BossInit();
 		ItemInit();
+		life = 5;
 		gameMode = GMODE_LIFE;
 	}
 }

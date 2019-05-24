@@ -37,7 +37,7 @@ void PlayerSystemInit(void)
 
 	//サウンド
 	jumpse = LoadSoundMem("bgm/jump2.mp3");
-	ChangeVolumeSoundMem(80, jumpse);
+	ChangeVolumeSoundMem(150, jumpse);
 	shotse = LoadSoundMem("bgm/shot.mp3");
 	ChangeVolumeSoundMem(255, shotse);
 
@@ -48,7 +48,7 @@ void PlayerSystemInit(void)
 void PlayerInit(void)
 {
 	//初期化
-	player1.pos = { 5 * MAP_CHIP_SIZE_X, 8 * MAP_CHIP_SIZE_Y };	//プレイヤーの初期位置
+	player1.pos = { 250 * MAP_CHIP_SIZE_X, 8 * MAP_CHIP_SIZE_Y };	//プレイヤーの初期位置
 	player1.size = { 64, 32 };	//プレイヤーのサイズ
 	player1.sizeOffset = { (player1.size.x / 2), (player1.size.y / 2) };
 	player1.hitPosS = { 8, 15 };
@@ -76,7 +76,7 @@ void PlayerUpdate(void)
 		if (playerdrun == true) {
 			//右に走る
 			player1.runFlag = false;
-			if (newkey[P2_RIGHT]) {
+			if (newkey[P1_RIGHT]) {
 				playerMoved = true;
 				player1.runFlag = true;
 				player1.movedir = DIR_RIGHT;
@@ -84,7 +84,7 @@ void PlayerUpdate(void)
 				if (player1.Velocity.x > VELOCITY_X_MAX)player1.Velocity.x = VELOCITY_X_MAX;
 			}
 			//左に走る
-			if (newkey[P2_LEFT]) {
+			if (newkey[P1_LEFT]) {
 				playerMoved = true;
 				player1.runFlag = true;
 				player1.movedir = DIR_LEFT;
@@ -212,7 +212,7 @@ void PlayerUpdate(void)
 		}
 		//ジャンプしていなかったらジャンプする
 		if (player1.jumpFlag == false) {
-			if (trgkey[P2_A]) {
+			if (trgkey[P1_UP]) {
 				PlaySoundMem(jumpse, DX_PLAYTYPE_BACK, false);
 				player1.jumpFlag = true;
 				player1.Velocity.y = INIT_VELOCITY;
@@ -220,7 +220,7 @@ void PlayerUpdate(void)
 		}
 
 		//弾を撃つ
-		if (trgkey[P2_PAUSE]) {
+		if (trgkey[P2_B]) {
 			PlaySoundMem(shotse, DX_PLAYTYPE_BACK, false);
 			XY pshotPos = { 0, 0 };
 			pshotPos.y = player1.pos.y;
@@ -475,6 +475,16 @@ bool PlayerOver(void)
 			return false;
 		}
 		return true;
+	}
+
+	//敵キャラとの当たり判定
+	if (EnemyHitCheck(player1.pos, player1.sizeOffset) == true) {
+		if (player1Bigflag == true) {
+			player1Bigflag = false;
+		}
+		else if (player1Bigflag == false) {
+			flag = true;
+		}
 	}
 
 	//アイテム(アボカド)を取った時

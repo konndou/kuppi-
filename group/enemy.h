@@ -14,8 +14,6 @@ void EnemyInit(int i);
 void EnemyUpdate(int i);
 void EnemyDraw(int i);
 
-
-
 bool EnemyHitCheck(XY sPos, XY sSize);
 
 
