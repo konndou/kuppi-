@@ -11,17 +11,18 @@ int bossImage[2];
 
 void BossSystemInit(void)
 {
-	LoadDivGraph("image/snake.png", 2, 2, 1, BOSS_SIZE_X, BOSS_SIZE_Y, bossImage);
+	LoadDivGraph("image/snakeboss1.png", 2, 2, 1, BOSS_SIZE_X, BOSS_SIZE_Y, bossImage);
 }
 
 void BossInit(void)
 {
 	//boss.poscnt = GetRand(220);
-	boss.pos = { 32 * (boss.poscnt + 10) + 16, 0 };
-	boss.size = { 128,64 };
+	//boss.pos = { 128 * (boss.poscnt + 10) + 64, 0 };
+	boss.pos = { 9200,100 };
+	boss.size = { 256,256 };
 	boss.sizeOffset = { (boss.size.x / 2),(boss.size.y / 2) };
-	boss.hitPosS = { 32, 32 };
-	boss.hitPosE = { 32, 32 };
+	boss.hitPosS = { 64, 128 };
+	boss.hitPosE = { 64, 128 };
 	boss.moveSpeed = 4;
 	boss.Velocity = { 0,0 };
 	boss.jumpFlag = true;
@@ -30,16 +31,18 @@ void BossInit(void)
 	boss.flag = true;
 	boss.moveSpeed = 2;
 	boss.flagcnt = 0;
+	boss.lifeMax = 100;
+	boss.life = boss.lifeMax;
 
 }
 
 void BossUpdate(void)
 {
 
-	auto stagecnt = GetStageCnt();
+	/*auto stagecnt = GetStageCnt();
 	if (stagecnt == 0) {
 		boss.flag = true;
-	}
+	}*/
 
 	if (boss.flag == true)
 	{
@@ -150,6 +153,10 @@ void BossUpdate(void)
 		}
 	}
 
+	if (boss.life <= 0) {
+		boss.flag = false;
+	}
+
 
 }
 
@@ -171,4 +178,20 @@ void BossDraw(void)
 		}
 	}
 
+}
+
+bool BossHitCheck(XY sPos, XY sSize)
+{
+	for (int i = 0; i < BOSS_MAX; i++) {
+		if (boss.flag == true) {
+			if ((boss.pos.x - boss.size.x / 2 < sPos.x + sSize.x / 2)
+				&& (boss.pos.x + boss.size.x / 2 > sPos.x - sSize.x / 2)
+				&& (boss.pos.y - boss.size.y / 2 < sPos.y + sSize.y / 2)
+				&& (boss.pos.y + boss.size.y / 2 > sPos.y - sSize.y / 2)) {
+				boss.life -= 10;
+				return true;
+			}
+		}
+	}
+	return false;
 }

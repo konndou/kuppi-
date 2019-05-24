@@ -210,8 +210,8 @@ int SystemInit(void)
 	EnemySystemInit();
 	ShotSystemInit();
 	ItemSystemInit();
+	BossSystemInit();
 	EffectSystemInit();
-
 	fadeIn = false;
 	fadeOut = false;
 
