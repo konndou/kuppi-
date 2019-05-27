@@ -7,6 +7,7 @@
 #include "shot.h"
 #include "boss.h"
 #include "item.h"
+#include "effect.h"
 
 CHARACTER player1;
 int player1runImage[2];	//プレイヤーが走っているときの処理
@@ -243,6 +244,9 @@ void PlayerUpdate(void)
 			int num = GetItemNum();
 			CHARACTER itemTemp = GetItemPos(num);
 			if (itemTemp.type == ITEM_TYPE_CHEESE) {
+				if (player1Bigflag == false) {
+					SetBlockPlayerEffect(player1.pos);
+				}
 				player1Bigflag = true;
 				image = player1BigrunImage[player1.animCnt / 10 % 2];
 				DeleteItem(num);	//アイテムを消す
@@ -544,6 +548,7 @@ bool PlayerOver(void)
 				player1Bigflag = false;
 				DeleteItem(num);	//アイテムを消す
 			}else if (player1Bigflag == false) {
+				SetBlockAboEffect(player1.pos);
 				flag = true;
 				DeleteItem(num);	//アイテムを消す
 			}

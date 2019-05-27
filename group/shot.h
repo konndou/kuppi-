@@ -8,4 +8,8 @@ void ShotInit(void);
 void ShotUpdate(void);
 void ShotDraw(void);
 
+void Deleteshot(void);
+
 void Shot(XY pos, MOVE_DIR dir);
+
+bool shotHitCheck(XY bPos, XY bSize);
