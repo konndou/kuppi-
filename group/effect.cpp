@@ -26,8 +26,8 @@ void EffectSystemInit(void)
 {
 	LoadDivGraph("image/effect2.png", 10, 10, 1, 64, 64, effectImage, true);
 	LoadDivGraph("image/bosseffect.png", 10, 10, 1, 128, 128, bosseffectImage, true);
-	LoadDivGraph("image/pani.png", 15, 15, 1, 64, 64, playeraniImage, true);
 	LoadDivGraph("image/aboani.png", 15, 15, 1, 64, 64, aboImage, true);
+	LoadDivGraph("image/pani.png", 15, 15, 1, 64, 64, playeraniImage, true);
 }
 
 void EffectInit(void)

@@ -199,14 +199,22 @@ void BossDraw(void)
 			DrawGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
 		}
 	}
-	if (boss.flag == false)
-	{
-		if (boss.movedir == DIR_RIGHT) {
-			DrawTurnGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
+	//ƒ{ƒX‚ªŽ€‚ñ‚¾Žž‚Ì‰æ‘œ
+	auto stagecnt = GetStageCnt();
+	switch (stagecnt) {
+	case 4:
+		if (boss.flag == false)
+		{
+			if (boss.movedir == DIR_RIGHT) {
+				DrawTurnGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
+			}
+			if (boss.movedir == DIR_LEFT) {
+				DrawGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
+			}
 		}
-		if (boss.movedir == DIR_LEFT) {
-			DrawGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
-		}
+		break;
+	default:
+		break;
 	}
 
 	DrawFormatString(32, 96, 0xffff00, "%d", boss.life);
