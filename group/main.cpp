@@ -257,7 +257,7 @@ int SystemInit(void)
 	// ---------- グラフィックの登録 ----------- 
 	titleImage = LoadGraph("image/titlekuppi-.png");
 	gameoverImage = LoadGraph("image/gameover.png");
-	clearImage = LoadGraph("image/clear.png");
+	clearImage = LoadGraph("image/flag.png");
 	LoadDivGraph("image/mapchip7.png", 30, 30, 1, MAP_CHIP_SIZE_X, MAP_CHIP_SIZE_Y, haikeiImage);
 	pImage = LoadGraph("image/playerstop.png");
 	startImage = LoadGraph("image/start.png");
