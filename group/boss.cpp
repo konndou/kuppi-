@@ -5,9 +5,13 @@
 #include "stage.h"
 #include "boss.h"
 #include "item.h"
+#include "effect.h"
 
 CHARACTER boss;
 int bossImage[2];
+bool bossclearFlag;
+
+int effectcnt;
 
 void BossSystemInit(void)
 {
@@ -16,8 +20,6 @@ void BossSystemInit(void)
 
 void BossInit(void)
 {
-	//boss.poscnt = GetRand(220);
-	//boss.pos = { 128 * (boss.poscnt + 10) + 64, 0 };
 	boss.pos = { 9200,100 };
 	boss.size = { 256,256 };
 	boss.sizeOffset = { (boss.size.x / 2),(boss.size.y / 2) };
@@ -28,22 +30,26 @@ void BossInit(void)
 	boss.jumpFlag = true;
 	boss.imgLockCnt = 30;
 	boss.movedir = DIR_LEFT;
-	boss.flag = true;
+	//boss.flag = false;
 	boss.moveSpeed = 2;
 	boss.flagcnt = 0;
 	boss.lifeMax = 100;
 	boss.life = boss.lifeMax;
-
+	auto stagecnt = GetStageCnt();
+	switch (stagecnt) {
+	case 4:
+		boss.flag = true;
+		break;
+	default:
+		boss.flag = false;
+		break;
+	}
+	effectcnt = 0;
+	bossclearFlag = false;
 }
 
 void BossUpdate(void)
 {
-
-	/*auto stagecnt = GetStageCnt();
-	if (stagecnt == 0) {
-		boss.flag = true;
-	}*/
-
 	if (boss.flag == true)
 	{
 		//“GƒLƒƒƒ‰‚ð’n–Ê‚É—Ž‚Æ‚·
@@ -155,8 +161,11 @@ void BossUpdate(void)
 
 	if (boss.life <= 0) {
 		boss.flag = false;
+		bossclearFlag = true;
+		for (int i = 0; i < BOSS_EFFECT_MAX; i++) {
+			SetBlockBossEffect(boss.pos, i);
+		}
 	}
-
 
 }
 
@@ -191,6 +200,17 @@ bool BossHitCheck(XY sPos, XY sSize)
 				boss.life -= 10;
 				return true;
 			}
+		}
+	}
+	return false;
+}
+
+bool BossClear(void)
+{
+	if (bossclearFlag == true) {
+		effectcnt++;
+		if (effectcnt > 200) {
+			return true;
 		}
 	}
 	return false;

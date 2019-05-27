@@ -13,6 +13,7 @@
 typedef enum {
 	GMODE_INIT,
 	GMODE_TITLE,
+	GMODE_SELECT,
 	GMODE_LIFE,
 	GMODE_GAME,
 	GMODE_SCLEAR,
@@ -34,6 +35,8 @@ int pauseFlag;
 int gameoverImage;
 
 int clearImage;
+
+int stageselectImage[6];
 
 //プレイヤー
 int pImage;
@@ -73,12 +76,15 @@ int life;
 int se;
 int deathse;	//死んだときのサウンド
 int cnt = 0;
+auto cnttime = 30000;
 
 //ﾌﾟﾛﾄﾀｲﾌﾟ宣言
 int SystemInit(void);
 void GameInit(void);
 void GameTitle(void);
 void GameTitleDraw(void);
+void GameSelect(void);
+void GameSelectDraw(void);
 void GameMain(void);
 void GameMainDraw(void);
 void GameClear(void);
@@ -109,6 +115,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		case GMODE_TITLE:
 			GameTitle();
+			if (fadeIn) {
+				if (!FadeInScreen(5))fadeIn = false;
+			}
+			else if (fadeOut) {
+				if (!FadeOutScreen(5)) {
+					gameMode = GMODE_SELECT;
+					fadeOut = false;
+					fadeIn = true;
+				}
+			}
+			else {
+				if (trgkey[KEY_START]) {
+					fadeOut = true;
+				}
+			}
+			break;
+
+		case GMODE_SELECT:
+			GameSelect();
 			if (fadeIn) {
 				if (!FadeInScreen(5))fadeIn = false;
 			}
@@ -163,6 +188,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		case GMODE_CLEAR:
 			GameClear();
+			if (fadeOut) {
+				if (!FadeOutScreen(5)) {
+					fadeOut = false;
+					fadeIn = true;
+					gameMode = GMODE_INIT;
+				}
+			}
+			if (trgkey[KEY_START]) {
+				fadeOut = true;
+			}
 			break;
 
 		case GMODE_OVER:
@@ -226,6 +261,14 @@ int SystemInit(void)
 	se = LoadSoundMem("bgm/stage1.mp3");
 	ChangeVolumeSoundMem(180, se);
 	deathse = LoadSoundMem("bgm/death.mp3");
+
+	//ステージセレクト画像
+	stageselectImage[0] = LoadGraph("image/stage1gazo.png", true);
+	stageselectImage[1] = LoadGraph("image/stage2gazo.png", true);
+	stageselectImage[2] = LoadGraph("image/stage3gazo.png", true);
+	stageselectImage[3] = LoadGraph("image/stage4gazo.png", true);
+	stageselectImage[4] = LoadGraph("image/stage5gazo.png", true);
+	stageselectImage[5] = LoadGraph("image/stage6gazo.png", true);
 }
 
 void GameInit(void)
@@ -239,34 +282,13 @@ void GameInit(void)
 	haikeiPos = { 0,0 };
 	clearPos = { SCREEN_SIZE_X, SCREEN_SIZE_Y / 4 };
 
-	stageInit();
+	
 	PlayerInit();
-	auto stagecnt = GetStageCnt();
-	switch (stagecnt) {
-	case 0:
-		for (int i = 0; i < 10; i++)
-		{
-			EnemyInit(i);
-		}
-		break;
-	case 2:
-		for (int i = 0; i < ENEMY_MAX; i++)
-		{
-			EnemyInit(i);
-		}
-		break;
-	case 4:
-		for (int i = 0; i < 20; i++)
-		{
-			EnemyInit(i);
-		}
-		break;
-	default:
-		break;
+	for (int i = 0; i < ENEMY_MAX; i++) {
+		EnemyInit(i);
 	}
 	ShotInit();
 	ItemInit();
-	BossInit();
 	EffectInit();
 }
 
@@ -290,8 +312,50 @@ void GameTitleDraw(void)
 	
 }
 
+//ステージセレクト
+void GameSelect(void)
+{
+	StageSelect();
+	GameSelectDraw();
+}
+
+void GameSelectDraw(void)
+{
+	auto stagecnt = GetStageCnt();
+	switch (stagecnt) {
+	case 0:
+		DrawString(200, SCREEN_SIZE_Y / 4, "stage  =  map 1", 0xffffff, true);
+		DrawGraph(200, SCREEN_SIZE_Y / 3, stageselectImage[0], true);
+		break;
+	case 1:
+		DrawString(200, SCREEN_SIZE_Y / 4, "stage  =  map 2", 0xffffff, true);
+		DrawGraph(200, SCREEN_SIZE_Y / 3, stageselectImage[1], true);
+		break;
+	case 2:
+		DrawString(200, SCREEN_SIZE_Y / 4, "stage  =  map ENEMY", 0xffffff, true);
+		DrawGraph(200, SCREEN_SIZE_Y / 3, stageselectImage[2], true);
+		break;
+	case 3:
+		DrawString(200, SCREEN_SIZE_Y / 4, "stage  =  map HARD", 0xffffff, true);
+		DrawGraph(200, SCREEN_SIZE_Y / 3, stageselectImage[3], true);
+		break;
+	case 4:
+		DrawString(200, SCREEN_SIZE_Y / 4, "stage  =  map BOSS", 0xffffff, true);
+		DrawGraph(200, SCREEN_SIZE_Y / 3, stageselectImage[4], true);
+		break;
+	case 5:
+		DrawString(200, SCREEN_SIZE_Y / 4, "stage  =  map EX STAGE", 0xffffff, true);
+		DrawGraph(200, SCREEN_SIZE_Y / 3, stageselectImage[5], true);
+		break;
+	}
+	
+}
+
+//プレイヤーライフ
 void GameLife(void)
 {
+	stageInit();
+	BossInit();
 	GameLifeDraw();
 }
 
@@ -301,11 +365,6 @@ void GameLifeDraw(void)
 	DrawFormatString(SCREEN_SIZE_X / 2, SCREEN_SIZE_Y / 2, 0xffffff, " x  %d", life);
 
 	clearPos = { SCREEN_SIZE_X, SCREEN_SIZE_Y / 4 };
-
-	/*cnt++;
-	if (cnt > 150) {
-		gameMode = GMODE_GAME;
-	}*/
 }
 
 //ゲームのメイン処理
@@ -348,7 +407,6 @@ void GameMain(void)
 		BossUpdate();
 		ItemUpdate();
 		EffectUpdata();
-		//HitCheck();
 	}
 
 	GameMainDraw();
@@ -382,28 +440,9 @@ void GameMain(void)
 			cnt = 0;
 			if (life >= 0) {
 				PlayerInit();
-				auto stagecnt = GetStageCnt();
-				switch (stagecnt) {
-				case 0:
-					for (int i = 0; i < 10; i++)
-					{
-						EnemyInit(i);
-					}
-					break;
-				case 2:
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						EnemyInit(i);
-					}
-					break;
-				case 4:
-					for (int i = 0; i < 20; i++)
-					{
-						EnemyInit(i);
-					}
-					break;
-				default:
-					break;
+				for (int i = 0; i < ENEMY_MAX; i++)
+				{
+					EnemyInit(i);
 				}
 				stageInit();
 				ItemInit();
@@ -417,6 +456,10 @@ void GameMain(void)
 		}
 	}
 	
+	if (BossClear() == true) {
+		gameMode = GMODE_CLEAR;
+	}
+
 }
 
 void GameMainDraw(void)
@@ -431,8 +474,12 @@ void GameMainDraw(void)
 	BossDraw();
 	ItemDraw();
 	EffectDraw();
-	DrawFormatString(0, 0, 0xffffff, "GameMain : %d", gameCounter);
-	DrawFormatString(0, 32, 0xff00ff, "cnt : %d", cnt);
+	
+	auto stagecnt = GetStageCnt();
+	DrawFormatString(0, 0, 0xffffff, "stage  =  %d", stagecnt);
+
+	cnttime -= 2;
+	DrawFormatString(850, 32, 0xff00ff, "time  %d", cnttime / 100);
 }
 
 //ステージクリア
@@ -470,7 +517,8 @@ void GameSClear(void)
 //クリアー処理
 void GameClear(void)
 {
-
+	StageCntInit();
+	DrawString(SCREEN_SIZE_X / 2, SCREEN_SIZE_Y / 2, "CLEAR", 0xffffff, true);
 }
 
 //ゲームオーバー処理

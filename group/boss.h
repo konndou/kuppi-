@@ -12,3 +12,5 @@ void BossUpdate(void);
 void BossDraw(void);
 
 bool BossHitCheck(XY sPos, XY sSize);
+
+bool BossClear(void);

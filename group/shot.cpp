@@ -62,7 +62,7 @@ void ShotUpdate(void)
 
 	if ((BossHitCheck(shot.pos, shot.size)) == true) {
 		shot.flag = false;
-	
+	}
 }
 
 void ShotDraw(void)
