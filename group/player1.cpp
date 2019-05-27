@@ -21,7 +21,12 @@ int player1BigrunImage[2];	//鶏時の走っているときの画像
 int player1BigjumpImage[3];	//鶏時のジャンプ中の画像
 bool player1Bigflag;
 
+bool playerdamageFlag;
+
 bool flag;	//アイテムで死んだ時用
+
+auto anicnt = 0;
+auto damagecnt = 0;
 
 void PlayerSystemInit(void)
 {
@@ -48,8 +53,7 @@ void PlayerSystemInit(void)
 void PlayerInit(void)
 {
 	//初期化
-	player1.pos = { 5 * MAP_CHIP_SIZE_X, 8 * MAP_CHIP_SIZE_Y };	//プレイヤーの初期位置
-	//player1.pos = {9200,100 };
+	player1.pos = { 250 * MAP_CHIP_SIZE_X, 8 * MAP_CHIP_SIZE_Y };	//プレイヤーの初期位置
 	player1.size = { 64, 32 };	//プレイヤーのサイズ
 	player1.sizeOffset = { (player1.size.x / 2), (player1.size.y / 2) };
 	player1.hitPosS = { 8, 15 };
@@ -257,6 +261,8 @@ void PlayerUpdate(void)
 	if (player1.pos.x < player1.size.x) {
 		player1.pos.x = player1.size.x;
 	}
+
+	
 }
 
 //プレイヤー描画
@@ -277,13 +283,38 @@ void PlayerDraw(void)
 	XY mapTemp = GetMapPos();
 	
 	player1.animCnt++;
-	if (player1.flag == true) {
-		if (player1.movedir == DIR_RIGHT) {
-			DrawGraph(player1.pos.x - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
+	if (playerdamageFlag == false) {
+		if (player1.flag == true) {
+			if (player1.movedir == DIR_RIGHT) {
+				DrawGraph(player1.pos.x - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
+			}
+			if (player1.movedir == DIR_LEFT) {
+				DrawTurnGraph(player1.pos.x - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
+			}
 		}
-		if (player1.movedir == DIR_LEFT) {
-			DrawTurnGraph(player1.pos.x - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
+	}
+
+	//プレイヤー無敵時間
+	if (playerdamageFlag == true) {
+		anicnt++;
+		damagecnt++;
+	}
+	if (playerdamageFlag == true) {
+		if ((anicnt / 7 % 3) == 1) {
+			if (player1.flag == true) {
+				if (player1.movedir == DIR_RIGHT) {
+					DrawGraph(player1.pos.x - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
+				}
+				if (player1.movedir == DIR_LEFT) {
+					DrawTurnGraph(player1.pos.x - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
+				}
+			}
 		}
+	}
+	if (damagecnt > 75) {
+		playerdamageFlag = false;
+		anicnt = 0;
+		damagecnt = 0;
 	}
 
 	//プレイヤーの死体表示
@@ -479,12 +510,28 @@ bool PlayerOver(void)
 	}
 
 	//敵キャラとの当たり判定
-	if (EnemyHitCheck(player1.pos, player1.sizeOffset) == true) {
-		if (player1Bigflag == true) {
-			player1Bigflag = false;
+	if (playerdamageFlag == false) {
+		if (EnemyHitCheck(player1.pos, player1.sizeOffset) == true) {
+			if (player1Bigflag == true) {
+				playerdamageFlag = true;
+				player1Bigflag = false;
+			}
+			else if (player1Bigflag == false) {
+				flag = true;
+			}
 		}
-		else if (player1Bigflag == false) {
-			flag = true;
+	}
+
+	//ボスとの当たり判定
+	if (playerdamageFlag == false) {
+		if (BossHitCheck(player1.pos, player1.sizeOffset) == true) {
+			if (player1Bigflag == true) {
+				playerdamageFlag = true;
+				player1Bigflag = false;
+			}
+			else if (player1Bigflag == false) {
+				flag = true;
+			}
 		}
 	}
 

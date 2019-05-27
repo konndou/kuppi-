@@ -12,9 +12,7 @@
 
 XY mapPos;
 XY move;
-int stageCnt = 0;
-
-auto cnttime = 30000;
+int stageCnt;
 
 struct Header {
 	unsigned short w;	//マップの幅
@@ -32,7 +30,7 @@ int mapH;
 
 void stageSystemInit(void)
 {
-	
+	stageCnt = 0;
 }
 
 void stageInit(void)
@@ -53,6 +51,9 @@ void stageInit(void)
 		break;
 	case 4:
 		mapH = FileRead_open("boss.map", true);
+		break;
+	case 5:
+		mapH = FileRead_open("map5.map", true);
 		break;
 	}
 
@@ -112,9 +113,6 @@ void stageDraw(void)
 						 idxX * header.cw, idxY * header.ch, header.cw, header.ch, chipH, true, false, false);
 		}
 	}
-	
-	cnttime -= 2;
-	DrawFormatString(0, 64, 0xff00ff, "time = %d", cnttime / 100);
 }
 
 //マップのPosをindexに変える
@@ -145,6 +143,7 @@ bool IsPass(XY pos)
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
 	if (id < 0)return ret;
+	if (id > 6000)return ret;
 	if (id >= mapData.size()) {
 		return false;
 	}
@@ -184,6 +183,7 @@ bool IsGPass(XY pos)
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
 	if (id < 0)return ret;
+	if (id > 6000)return ret;
 
 	//通ってよいか
 	switch (mapData[id]) {
@@ -205,6 +205,7 @@ bool IsGoal2Pass(XY pos)
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
 	if (id < 0)return ret;
+	if (id > 6000)return ret;
 
 	//通ってよいか
 	switch (mapData[id]) {
@@ -225,6 +226,7 @@ bool IsGoalPass(XY pos)
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
 	if (id < 0)return ret;
+	if (id > 6000)return ret;
 
 	//通ってよいか
 	switch (mapData[id]) {
@@ -246,6 +248,7 @@ bool IsNextPass(XY pos)
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
 	if (id < 0)return ret;
+	if (id > 6000)return ret;
 
 	//通ってよいか
 	switch (mapData[id]) {
@@ -267,6 +270,8 @@ bool IsOverPass(XY pos)
 	mapIndex = MapPosToIndex(pos);
 	auto id = mapIndex.y * MAP_CHIP_X + mapIndex.x;
 	if (id < 0)return ret;
+	if (id > 6000)return ret;
+
 	//通ってよいか
 	switch (mapData[id]) {
 	case 13:
@@ -333,7 +338,24 @@ int GetStageCnt(void)
 	return stageCnt;
 }
 
-void StageCntInit(void) {
+void StageCntInit(void) 
+{
 	stageCnt = 0;
 }
 
+void StageSelect(void) 
+{
+	if (trgkey[P1_RIGHT]) {
+		stageCnt++;
+	}
+	if (trgkey[P1_LEFT]) {
+		stageCnt--;
+	}
+
+	if (stageCnt <= 0) {
+		stageCnt = 0;
+	}
+	if (stageCnt >= 5) {
+		stageCnt = 5;
+	}
+}

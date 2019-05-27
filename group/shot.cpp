@@ -55,7 +55,7 @@ void ShotUpdate(void)
 		shot.flag = false;
 	}
 
-		
+	//“–‚½‚è”»’è
 	if ((EnemyHitCheck(shot.pos, shot.size)) == true) {
 		shot.flag = false;
 	}
@@ -63,8 +63,6 @@ void ShotUpdate(void)
 	if ((BossHitCheck(shot.pos, shot.size)) == true) {
 		shot.flag = false;
 	}
-		
-	
 }
 
 void ShotDraw(void)
