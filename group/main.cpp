@@ -25,11 +25,15 @@ int gameCounter;
 int fadeCnt;
 bool fadeIn;
 bool fadeOut;
+int startcnt;
 
 //タイトル
 int titleImage;
 int titleCnt;
 int pauseFlag;
+int startImage;
+int playerstopImage2;
+int playerstopImage3;
 
 int gameoverImage;
 
@@ -61,9 +65,9 @@ int haikeiData[20][30] = {
 
 { 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0},
 { 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0},
-{ 14, 15, 15, 15, 15, 15,  15, 15, 15, 15, 15, 15,  15, 15, 15, 15, 15, 15,  15, 15, 15, 15, 15, 15,  15, 15, 15, 15, 15, 16},
+{ 14, 15, 15, 15, 15, 15,  15, 15, 15, 15, 15, 15,  15, 15, 15, 15, 15, 15,  15, 15, 15, 15, 15, 15,  15, 15, 15, 15, 15, 15},
 { 20, 20, 20, 20, 20, 20,  20, 20, 20, 20, 20, 20,  20, 20, 20, 20, 20, 20,  20, 20, 20, 20, 20, 20,  20, 20, 20, 20, 20, 20},
-{ 17, 18, 18, 18, 18, 18,  18, 18, 18, 18, 18, 18,  18, 18, 18, 18, 18, 18,  18, 18, 18, 18, 18, 18,  18, 18, 18, 18, 18, 19},
+{ 17, 18, 18, 18, 18, 18,  18, 18, 18, 18, 18, 18,  18, 18, 18, 18, 18, 18,  18, 18, 18, 18, 18, 18,  18, 18, 18, 18, 18, 18},
 };
 
 XY clearPos;
@@ -221,6 +225,10 @@ int SystemInit(void)
 	clearImage = LoadGraph("image/clear.png");
 	LoadDivGraph("image/mapchip7.png", 30, 30, 1, MAP_CHIP_SIZE_X, MAP_CHIP_SIZE_Y, haikeiImage);
 	pImage = LoadGraph("image/playerstop.png");
+	startImage = LoadGraph("image/start.png");
+	playerstopImage2 = LoadGraph("image/playerstop2.png");
+	playerstopImage3 = LoadGraph("image/playerstop3.png");
+
 
 	//サウンド
 	se = LoadSoundMem("bgm/stage1.mp3");
@@ -279,6 +287,7 @@ void GameTitle(void)
 void GameTitleDraw(void)
 {
 	XY titlePos = { SCREEN_SIZE_X/4-60,50 };
+	
 
 	DrawString(0, 0, "GameTitle", 0xffffff);
 	for (int y = 0; y < MAP_CHIP_Y; y++) {
@@ -287,6 +296,15 @@ void GameTitleDraw(void)
 		}
 	}
 	DrawGraph(titlePos.x, titlePos.y, titleImage, true);
+	//DrawFormatString(SCREEN_SIZE_X / 2-100,450, 0xffffff, "P U S H   S P A C E K E Y", gameCounter);
+	startcnt++;
+	if (startcnt / 24 % 3)
+	{
+		DrawGraph(SCREEN_SIZE_X / 2 - 150, 450, startImage, true);
+		DrawGraph(SCREEN_SIZE_X / 2 - 182, 455, playerstopImage2, true);
+		DrawTurnGraph(SCREEN_SIZE_X / 2 +150, 455, playerstopImage3, true);
+
+	}
 	
 }
 
