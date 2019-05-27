@@ -59,10 +59,6 @@ void ShotUpdate(void)
 	if ((EnemyHitCheck(shot.pos, shot.size)) == true) {
 		shot.flag = false;
 	}
-
-	if ((BossHitCheck(shot.pos, shot.size)) == true) {
-		shot.flag = false;
-	}
 }
 
 void ShotDraw(void)
@@ -86,3 +82,21 @@ void Shot(XY pos, MOVE_DIR dir)
 	}
 }
 
+bool shotHitCheck(XY bPos, XY bSize)
+{
+	if (shot.flag == true) {
+		if ((shot.pos.x - shot.size.x / 2 < bPos.x + bSize.x / 2)
+			&& (shot.pos.x + shot.size.x / 2 > bPos.x - bSize.x / 2)
+			&& (shot.pos.y - shot.size.y / 2 < bPos.y + bSize.y / 2)
+			&& (shot.pos.y + shot.size.y / 2 > bPos.y - bSize.y / 2)) {
+			shot.flag = false;
+			return true;
+		}
+	}
+	return false;
+}
+
+void Deleteshot(void)
+{
+	shot.flag = false;
+}

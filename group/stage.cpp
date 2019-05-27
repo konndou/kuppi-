@@ -44,10 +44,10 @@ void stageInit(void)
 		mapH = FileRead_open("map2.map", true);
 		break;
 	case 2:
-		mapH = FileRead_open("map4.map", true);
+		mapH = FileRead_open("map3.map", true);
 		break;
 	case 3:
-		mapH = FileRead_open("map3.map", true);
+		mapH = FileRead_open("map4.map", true);
 		break;
 	case 4:
 		mapH = FileRead_open("boss.map", true);
