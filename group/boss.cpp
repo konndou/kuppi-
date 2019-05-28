@@ -20,7 +20,7 @@ void BossSystemInit(void)
 {
 	LoadDivGraph("image/snakeboss1.png", 2, 2, 1, BOSS_SIZE_X, BOSS_SIZE_Y, bossImage);
 	bossdieImage = LoadGraph("image/snakedie6.png", true);
-	bossdiese = LoadSoundMem("bgm/explosion.mp3", true);
+	bossdiese = LoadSoundMem("bgm/explosion.mp3");
 }
 
 void BossInit(void)

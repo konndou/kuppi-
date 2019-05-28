@@ -324,7 +324,6 @@ void GameTitleDraw(void)
 {
 	XY titlePos = { SCREEN_SIZE_X/4-60,50 };
 	
-
 	DrawString(0, 0, "GameTitle", 0xffffff);
 	for (int y = 0; y < MAP_CHIP_Y; y++) {
 		for (int x = 0; x < 30; x++) {
@@ -487,6 +486,8 @@ void GameMain(void)
 			}
 			else {
 				life = lifeMax;
+				auto stagecnt = GetStageCnt();
+				StopSoundMem(se[stagecnt]);
 				StageCntInit();
 				gameMode = GMODE_OVER;
 			}
@@ -569,9 +570,6 @@ void GameClear(void)
 //ゲームオーバー処理
 void GameOver(void)
 {
-	auto stagecnt = GetStageCnt();
-	StopSoundMem(se[stagecnt]);
-
 	GameOverDraw();
 	PlaySoundMem(gameoverse, DX_PLAYTYPE_BACK, false);
 	PlaySoundMem(gameoverse, DX_PLAYTYPE_LOOP, false);

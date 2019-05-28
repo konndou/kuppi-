@@ -15,6 +15,7 @@ int player1jumpImage[3];	//プレイヤージャンプ中の処理
 int player1dImage[4];	//死んだ時の画像
 int jumpse;	//ジャンプ時サウンド
 int shotse;	//ショット時のサウンド
+int itemse;	//アイテム取得時のサウンド
 int image;	//イメージ
 bool playerdrun;	//プレイヤーの移動を止める
 int playerBigImage;
@@ -46,6 +47,8 @@ void PlayerSystemInit(void)
 	ChangeVolumeSoundMem(150, jumpse);
 	shotse = LoadSoundMem("bgm/shot.mp3");
 	ChangeVolumeSoundMem(255, shotse);
+	itemse = LoadSoundMem("bgm/item.mp3");
+	
 
 	player1Bigflag = false;
 }
@@ -246,6 +249,7 @@ void PlayerUpdate(void)
 			if (itemTemp.type == ITEM_TYPE_CHEESE) {
 				if (player1Bigflag == false) {
 					SetBlockPlayerEffect(player1.pos);
+					PlaySoundMem(itemse, DX_PLAYTYPE_BACK, false);
 				}
 				player1Bigflag = true;
 				image = player1BigrunImage[player1.animCnt / 10 % 2];

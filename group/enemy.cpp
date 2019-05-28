@@ -20,6 +20,7 @@ void EnemySystemInit(void)
 	}
 
 	enemydiese = LoadSoundMem("bgm/monster2.mp3", true);
+	ChangeVolumeSoundMem(180, enemydiese);
 }
 
 void EnemyInit(int i)
