@@ -244,6 +244,7 @@ bool BossClear(void)
 	if (bossclearFlag == true) {
 		effectcnt++;
 		if (effectcnt > 200) {
+			StopSoundMem(bossdiese);
 			return true;
 		}
 	}

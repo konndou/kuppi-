@@ -553,6 +553,10 @@ void GameSClear(void)
 		BossInit();
 		ItemInit();
 		life = 5;
+		auto stageCnt = GetStageCnt();
+		if (stageCnt > 5) {
+			gameMode = GMODE_CLEAR;
+		}
 		gameMode = GMODE_LIFE;
 	}
 }
