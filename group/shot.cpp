@@ -44,7 +44,6 @@ void ShotUpdate(void)
 		}
 	}
 
-	//弾が壁に当たったらエフェクトを表示する
 	if (shot.flag == true) {
 		if (IsPass(shot.pos) == false) {
 			shot.flag = false;
@@ -94,6 +93,11 @@ bool shotHitCheck(XY bPos, XY bSize)
 		}
 	}
 	return false;
+}
+
+XY GetShotPos(void)
+{
+	return shot.pos;
 }
 
 void Deleteshot(void)

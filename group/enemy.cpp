@@ -9,6 +9,7 @@
 
 CHARACTER enemy[ENEMY_MAX];
 int enemyImage[2];
+int enemydiese;
 
 void EnemySystemInit(void)
 {
@@ -18,7 +19,8 @@ void EnemySystemInit(void)
 		enemy[i].type = GetRand(1);
 	}
 
-	//LoadDivGraph("image/icon4.png", 16, 4, 4, ENEMY1_SIZE_X, ENEMY1_SIZE_Y, enemy1Image);
+	enemydiese = LoadSoundMem("bgm/monster2.mp3", true);
+	ChangeVolumeSoundMem(180, enemydiese);
 }
 
 void EnemyInit(int i)
@@ -194,6 +196,7 @@ bool EnemyHitCheck(XY sPos, XY sSize)
 				&& (enemy[i].pos.y + enemy[i].size.y / 2 > sPos.y - sSize.y / 2)) {
 				enemy[i].life -= 10;
 				SetBlockEffect(enemy[i].pos);
+				PlaySoundMem(enemydiese, DX_PLAYTYPE_BACK, false);
 				return true;
 			}
 		}

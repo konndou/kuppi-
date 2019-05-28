@@ -13,12 +13,14 @@ int bossImage[2];
 int bossdieImage;
 bool bossclearFlag;
 
+int bossdiese;
 int effectcnt;
 
 void BossSystemInit(void)
 {
 	LoadDivGraph("image/snakeboss1.png", 2, 2, 1, BOSS_SIZE_X, BOSS_SIZE_Y, bossImage);
 	bossdieImage = LoadGraph("image/snakedie6.png", true);
+	bossdiese = LoadSoundMem("bgm/explosion.mp3");
 }
 
 void BossInit(void)
@@ -165,6 +167,8 @@ void BossUpdate(void)
 	//ショットの当たり判定
 	if (shotHitCheck(boss.pos, boss.size) == true) {
 		boss.life -= 5;
+		XY shotTemp = GetShotPos();
+		SetBlockEffect(shotTemp);
 		Deleteshot();
 	}
 
@@ -174,6 +178,8 @@ void BossUpdate(void)
 		for (int i = 0; i < BOSS_EFFECT_MAX; i++) {
 			SetBlockBossEffect(boss.pos, i);
 		}
+		PlaySoundMem(bossdiese, DX_PLAYTYPE_BACK, false);
+		PlaySoundMem(bossdiese, DX_PLAYTYPE_LOOP, false);
 	}
 
 }
@@ -199,14 +205,22 @@ void BossDraw(void)
 			DrawGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
 		}
 	}
-	if (boss.flag == false)
-	{
-		if (boss.movedir == DIR_RIGHT) {
-			DrawTurnGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
+	//ボスが死んだ時の画像
+	auto stagecnt = GetStageCnt();
+	switch (stagecnt) {
+	case 4:
+		if (boss.flag == false)
+		{
+			if (boss.movedir == DIR_RIGHT) {
+				DrawTurnGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
+			}
+			if (boss.movedir == DIR_LEFT) {
+				DrawGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
+			}
 		}
-		if (boss.movedir == DIR_LEFT) {
-			DrawGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
-		}
+		break;
+	default:
+		break;
 	}
 
 	DrawFormatString(32, 96, 0xffff00, "%d", boss.life);
