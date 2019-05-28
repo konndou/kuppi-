@@ -315,6 +315,7 @@ void PlayerDraw(void)
 			}
 		}
 	}
+
 	if (damagecnt > 75) {
 		playerdamageFlag = false;
 		anicnt = 0;

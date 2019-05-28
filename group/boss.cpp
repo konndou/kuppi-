@@ -13,12 +13,14 @@ int bossImage[2];
 int bossdieImage;
 bool bossclearFlag;
 
+int bossdiese;
 int effectcnt;
 
 void BossSystemInit(void)
 {
 	LoadDivGraph("image/snakeboss1.png", 2, 2, 1, BOSS_SIZE_X, BOSS_SIZE_Y, bossImage);
 	bossdieImage = LoadGraph("image/snakedie6.png", true);
+	bossdiese = LoadSoundMem("bgm/explosion.mp3", true);
 }
 
 void BossInit(void)
@@ -165,6 +167,8 @@ void BossUpdate(void)
 	//ƒVƒ‡ƒbƒg‚Ì“–‚½‚è”»’è
 	if (shotHitCheck(boss.pos, boss.size) == true) {
 		boss.life -= 5;
+		XY shotTemp = GetShotPos();
+		SetBlockEffect(shotTemp);
 		Deleteshot();
 	}
 
@@ -174,6 +178,8 @@ void BossUpdate(void)
 		for (int i = 0; i < BOSS_EFFECT_MAX; i++) {
 			SetBlockBossEffect(boss.pos, i);
 		}
+		PlaySoundMem(bossdiese, DX_PLAYTYPE_BACK, false);
+		PlaySoundMem(bossdiese, DX_PLAYTYPE_LOOP, false);
 	}
 
 }

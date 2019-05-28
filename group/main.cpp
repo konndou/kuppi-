@@ -31,15 +31,20 @@ int startcnt;
 //タイトル
 int titleImage;
 int titleCnt;
+int titlese;
 int pauseFlag;
 int startImage;
 int playerstopImage2;
 int playerstopImage3;
 
+//ゲームオーバー
 int gameoverImage;
+int gameoverse;
 
+//クリア
 int clearImage;
 
+//ステージセレクト
 int stageselectImage[6];
 
 //プレイヤー
@@ -77,7 +82,7 @@ XY clearPos;
 XY haikeiPos;
 int lifeMax = 5;
 int life;
-int se;
+int se[6];
 int deathse;	//死んだときのサウンド
 int cnt = 0;
 auto cnttime = 30000;
@@ -113,6 +118,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		switch (gameMode) {
 		case GMODE_INIT:
+			StopSoundMem(gameoverse);
 			GameInit();
 			gameMode = GMODE_TITLE;
 			break;
@@ -176,8 +182,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		case GMODE_GAME:
 			GameMain();
-			PlaySoundMem(se, DX_PLAYTYPE_BACK, false);
-			PlaySoundMem(se, DX_PLAYTYPE_LOOP, false);
 			if (fadeIn) {
 				if (!FadeInScreen(5)) {
 					fadeIn = false;
@@ -186,7 +190,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			break;
 
 		case GMODE_SCLEAR:
-			StopSoundMem(se);
 			GameSClear();
 			break;
 
@@ -264,12 +267,6 @@ int SystemInit(void)
 	playerstopImage2 = LoadGraph("image/playerstop2.png");
 	playerstopImage3 = LoadGraph("image/playerstop3.png");
 
-
-	//サウンド
-	se = LoadSoundMem("bgm/stage1.mp3");
-	ChangeVolumeSoundMem(180, se);
-	deathse = LoadSoundMem("bgm/death.mp3");
-
 	//ステージセレクト画像
 	stageselectImage[0] = LoadGraph("image/stage1gazo.png", true);
 	stageselectImage[1] = LoadGraph("image/stage2gazo.png", true);
@@ -277,6 +274,21 @@ int SystemInit(void)
 	stageselectImage[3] = LoadGraph("image/stage4gazo.png", true);
 	stageselectImage[4] = LoadGraph("image/stage5gazo.png", true);
 	stageselectImage[5] = LoadGraph("image/stage6gazo.png", true);
+
+	//サウンド
+	se[0] = LoadSoundMem("bgm/stage1.mp3");
+	se[1] = LoadSoundMem("bgm/stage2.mp3");
+	se[2] = LoadSoundMem("bgm/stage3.mp3");
+	se[3] = LoadSoundMem("bgm/stage4.mp3");
+	se[4] = LoadSoundMem("bgm/boss.mp3");
+	se[5] = LoadSoundMem("bgm/stage5.mp3");
+	for (int i = 0; i < 6; i++) {
+		ChangeVolumeSoundMem(180, se[i]);
+	}
+
+	deathse = LoadSoundMem("bgm/death.mp3");
+	titlese = LoadSoundMem("bgm/title.mp3");
+	gameoverse = LoadSoundMem("bgm/gameover.mp3");
 }
 
 void GameInit(void)
@@ -304,6 +316,8 @@ void GameInit(void)
 void GameTitle(void)
 {
 	GameTitleDraw();
+	PlaySoundMem(titlese, DX_PLAYTYPE_BACK, false);
+	PlaySoundMem(titlese, DX_PLAYTYPE_LOOP, false);
 }
 
 void GameTitleDraw(void)
@@ -318,7 +332,7 @@ void GameTitleDraw(void)
 		}
 	}
 	DrawGraph(titlePos.x, titlePos.y, titleImage, true);
-	//DrawFormatString(SCREEN_SIZE_X / 2-100,450, 0xffffff, "P U S H   S P A C E K E Y", gameCounter);
+
 	startcnt++;
 	if (startcnt / 24 % 3)
 	{
@@ -333,6 +347,7 @@ void GameTitleDraw(void)
 //ステージセレクト
 void GameSelect(void)
 {
+	StopSoundMem(titlese);
 	StageSelect();
 	GameSelectDraw();
 }
@@ -388,6 +403,10 @@ void GameLifeDraw(void)
 //ゲームのメイン処理
 void GameMain(void)
 {
+	auto stagecnt = GetStageCnt();
+	PlaySoundMem(se[stagecnt], DX_PLAYTYPE_BACK, false);
+	PlaySoundMem(se[stagecnt], DX_PLAYTYPE_LOOP, false);
+
 	//ポーズ処理
 	if (trgkey[P1_PAUSE]) {
 		pauseFlag = !pauseFlag;	//0 = 1
@@ -503,6 +522,9 @@ void GameMainDraw(void)
 //ステージクリア
 void GameSClear(void)
 {
+	auto stagecnt = GetStageCnt();
+	StopSoundMem(se[stagecnt]);
+
 	stageDraw();
 
 	stageUpdate();
@@ -537,6 +559,9 @@ void GameSClear(void)
 //クリアー処理
 void GameClear(void)
 {
+	auto stagecnt = GetStageCnt();
+	StopSoundMem(se[stagecnt]);
+
 	StageCntInit();
 	DrawString(SCREEN_SIZE_X / 2, SCREEN_SIZE_Y / 2, "CLEAR", 0xffffff, true);
 }
@@ -544,7 +569,12 @@ void GameClear(void)
 //ゲームオーバー処理
 void GameOver(void)
 {
+	auto stagecnt = GetStageCnt();
+	StopSoundMem(se[stagecnt]);
+
 	GameOverDraw();
+	PlaySoundMem(gameoverse, DX_PLAYTYPE_BACK, false);
+	PlaySoundMem(gameoverse, DX_PLAYTYPE_LOOP, false);
 }
 
 void GameOverDraw(void)
