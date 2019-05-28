@@ -36,6 +36,9 @@ int pauseFlag;
 int startImage;
 int playerstopImage2;
 int playerstopImage3;
+int selectImage;
+int bossselectImage;
+int stageclearImage;
 
 //ゲームオーバー
 int gameoverImage;
@@ -46,6 +49,8 @@ int clearImage;
 
 //ステージセレクト
 int stageselectImage[6];
+int stageselectImage2[6];
+int selectImage2[6];
 
 //プレイヤー
 int pImage;
@@ -266,6 +271,9 @@ int SystemInit(void)
 	startImage = LoadGraph("image/start.png");
 	playerstopImage2 = LoadGraph("image/playerstop2.png");
 	playerstopImage3 = LoadGraph("image/playerstop3.png");
+	selectImage = LoadGraph("image/select.png");
+	stageclearImage = LoadGraph("image/clear2.png");
+	
 
 	//ステージセレクト画像
 	stageselectImage[0] = LoadGraph("image/stage1gazo.png", true);
@@ -274,6 +282,13 @@ int SystemInit(void)
 	stageselectImage[3] = LoadGraph("image/stage4gazo.png", true);
 	stageselectImage[4] = LoadGraph("image/stage5gazo.png", true);
 	stageselectImage[5] = LoadGraph("image/stage6gazo.png", true);
+
+	stageselectImage2[0] = LoadGraph("image/select1.png", true);
+	stageselectImage2[1] = LoadGraph("image/select2.png", true);
+	stageselectImage2[2] = LoadGraph("image/select3.png", true);
+	stageselectImage2[3] = LoadGraph("image/select4.png", true);
+	stageselectImage2[4] = LoadGraph("image/bossselect2.png", true);
+	stageselectImage2[5] = LoadGraph("image/select6.png", true);
 
 	//サウンド
 	se[0] = LoadSoundMem("bgm/stage1.mp3");
@@ -353,31 +368,39 @@ void GameSelect(void)
 
 void GameSelectDraw(void)
 {
+	DrawGraph(0, 0, selectImage, true);
+
 	auto stagecnt = GetStageCnt();
 	switch (stagecnt) {
 	case 0:
-		DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map 1", 0xffffff, true);
+		//DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map 1", 0xffffff, true);
 		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[0], true);
+		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[0], true);
 		break;
 	case 1:
-		DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map 2", 0xffffff, true);
+		//DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map 2", 0xffffff, true);
 		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[1], true);
+		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[1], true);
 		break;
 	case 2:
-		DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map ENEMY", 0xffffff, true);
+		//DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map ENEMY", 0xffffff, true);
 		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[2], true);
+		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[2], true);
 		break;
 	case 3:
-		DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map HARD", 0xffffff, true);
+		//DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map HARD", 0xffffff, true);
 		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[3], true);
+		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[3], true);
 		break;
 	case 4:
-		DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map BOSS", 0xffffff, true);
+		//DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map BOSS", 0xffffff, true);
 		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[4], true);
+		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[4], true);
 		break;
 	case 5:
-		DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map EX STAGE", 0xffffff, true);
+		//DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map EX STAGE", 0xffffff, true);
 		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[5], true);
+		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[5], true);
 		break;
 	}
 	
@@ -568,7 +591,8 @@ void GameClear(void)
 	StopSoundMem(se[stagecnt]);
 
 	StageCntInit();
-	DrawString(SCREEN_SIZE_X / 2, SCREEN_SIZE_Y / 2, "CLEAR", 0xffffff, true);
+	//DrawString(SCREEN_SIZE_X / 2, SCREEN_SIZE_Y / 2, "CLEAR", 0xffffff, true);
+	DrawGraph(0, 0, stageclearImage, true);
 }
 
 //ゲームオーバー処理
