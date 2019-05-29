@@ -345,6 +345,8 @@ void GameTitleDraw(void)
 			DrawGraph(MAP_CHIP_SIZE_X * x + haikeiPos.x, MAP_CHIP_SIZE_Y * y, haikeiImage[haikeiData[y][x]], true);
 		}
 	}
+
+
 	DrawGraph(titlePos.x, titlePos.y, titleImage, true);
 
 	startcnt++;
@@ -373,32 +375,26 @@ void GameSelectDraw(void)
 	auto stagecnt = GetStageCnt();
 	switch (stagecnt) {
 	case 0:
-		//DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map 1", 0xffffff, true);
 		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[0], true);
 		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[0], true);
 		break;
 	case 1:
-		//DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map 2", 0xffffff, true);
 		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[1], true);
 		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[1], true);
 		break;
 	case 2:
-		//DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map ENEMY", 0xffffff, true);
 		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[2], true);
 		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[2], true);
 		break;
 	case 3:
-		//DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map HARD", 0xffffff, true);
 		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[3], true);
 		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[3], true);
 		break;
 	case 4:
-		//DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map BOSS", 0xffffff, true);
 		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[4], true);
 		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[4], true);
 		break;
 	case 5:
-		//DrawString(50, SCREEN_SIZE_Y / 6, "stage  =  map EX STAGE", 0xffffff, true);
 		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[5], true);
 		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[5], true);
 		break;
