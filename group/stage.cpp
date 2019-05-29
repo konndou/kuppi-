@@ -13,6 +13,7 @@
 XY mapPos;
 XY move;
 int stageCnt;
+int selectse;
 
 struct Header {
 	unsigned short w;	//É}ÉbÉvÇÃïù
@@ -31,6 +32,7 @@ int mapH;
 void stageSystemInit(void)
 {
 	stageCnt = 0;
+	selectse = LoadSoundMem("bgm/select.mp3");
 }
 
 void stageInit(void)
@@ -346,9 +348,11 @@ void StageCntInit(void)
 void StageSelect(void) 
 {
 	if (trgkey[P1_RIGHT]) {
+		PlaySoundMem(selectse, DX_PLAYTYPE_BACK, false);
 		stageCnt++;
 	}
 	if (trgkey[P1_LEFT]) {
+		PlaySoundMem(selectse, DX_PLAYTYPE_BACK, false);
 		stageCnt--;
 	}
 

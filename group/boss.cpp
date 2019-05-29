@@ -35,7 +35,6 @@ void BossInit(void)
 	boss.jumpFlag = true;
 	boss.imgLockCnt = 30;
 	boss.movedir = DIR_LEFT;
-	//boss.flag = false;
 	boss.moveSpeed = 2;
 	boss.flagcnt = 0;
 	boss.lifeMax = 100;
