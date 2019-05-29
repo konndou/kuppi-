@@ -90,7 +90,7 @@ int life;
 int se[6];
 int deathse;	//死んだときのサウンド
 int cnt = 0;
-auto cnttime = 30000;
+int cnttime;	//ステージのタイム	
 
 //ﾌﾟﾛﾄﾀｲﾌﾟ宣言
 int SystemInit(void);
@@ -325,6 +325,8 @@ void GameInit(void)
 	ShotInit();
 	ItemInit();
 	EffectInit();
+
+	cnttime = 45000;
 }
 
 //タイトルの処理
@@ -405,6 +407,7 @@ void GameSelectDraw(void)
 //プレイヤーライフ
 void GameLife(void)
 {
+	cnttime = 45000;
 	stageInit();
 	BossInit();
 	GameLifeDraw();
@@ -512,7 +515,45 @@ void GameMain(void)
 			}
 		}
 	}
+
+	//タイムオーバー
+	if (cnttime == 0) {
+		cnttime = 0;
+		cnt++;
+		PlaySoundMem(deathse, DX_PLAYTYPE_BACK, false);
+		if (cnt == 1) {
+			PlayerDEffect();
+		}
+		if (cnt < 100) {
+			PlayerDEffectDraw();
+		}
+		else {
+			life--;
+			cnt = 0;
+			if (life >= 0) {
+				PlayerInit();
+				for (int i = 0; i < ENEMY_MAX; i++)
+				{
+					EnemyInit(i);
+				}
+				stageInit();
+				ItemInit();
+				gameMode = GMODE_LIFE;
+			}
+			else {
+				life = lifeMax;
+				auto stagecnt = GetStageCnt();
+				StopSoundMem(se[stagecnt]);
+				StageCntInit();
+				gameMode = GMODE_OVER;
+			}
+		}
+	}
+	else {
+		cnttime -= 2;
+	}
 	
+	//ボスを倒した後のクリア画面
 	if (BossClear() == true) {
 		gameMode = GMODE_CLEAR;
 	}
@@ -535,8 +576,8 @@ void GameMainDraw(void)
 	auto stagecnt = GetStageCnt();
 	DrawFormatString(0, 0, 0xffffff, "stage  =  %d", stagecnt);
 
-	cnttime -= 2;
-	DrawFormatString(850, 32, 0xff00ff, "time  %d", cnttime / 100);
+	DrawFormatString(850, 0, 0xffffff, "time  %d", cnttime / 100);
+
 }
 
 //ステージクリア
@@ -563,6 +604,7 @@ void GameSClear(void)
 	DrawString(0, 0, "GameSClear", 0xffffff);
 
 	if (PlayerNextStage() == true) {
+		
 		stageInit();
 		PlayerInit();
 		for (int i = 0; i < ENEMY_MAX; i++)
@@ -572,7 +614,14 @@ void GameSClear(void)
 		BossInit();
 		ItemInit();
 		life = 5;
-		gameMode = GMODE_LIFE;
+		auto stageCnt = GetStageCnt();
+		if (stageCnt > 5) {
+			gameMode = GMODE_CLEAR;
+		}
+		else {
+			gameMode = GMODE_LIFE;
+		}
+
 	}
 }
 
@@ -590,6 +639,7 @@ void GameClear(void)
 //ゲームオーバー処理
 void GameOver(void)
 {
+	cnttime = 45000;
 	GameOverDraw();
 	PlaySoundMem(gameoverse, DX_PLAYTYPE_BACK, false);
 	PlaySoundMem(gameoverse, DX_PLAYTYPE_LOOP, false);
