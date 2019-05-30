@@ -371,7 +371,9 @@ void GameTitleDraw(void)
 void GameSelect(void)
 {
 	StopSoundMem(titlese);
-	StageSelect();
+	if (fadeOut == false) {
+		StageSelect();
+	}
 	GameSelectDraw();
 }
 
