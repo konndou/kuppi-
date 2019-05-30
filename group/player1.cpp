@@ -48,7 +48,7 @@ void PlayerSystemInit(void)
 	shotse = LoadSoundMem("bgm/shot.mp3");
 	ChangeVolumeSoundMem(255, shotse);
 	itemse = LoadSoundMem("bgm/item.mp3");
-	
+	ChangeVolumeSoundMem(255, itemse);
 
 	player1Bigflag = false;
 }
