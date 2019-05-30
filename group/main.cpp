@@ -511,6 +511,7 @@ void GameMain(void)
 				{
 					EnemyInit(i);
 				}
+				ShotInit();
 				stageInit();
 				ItemInit();
 				gameMode = GMODE_LIFE;
@@ -547,6 +548,7 @@ void GameMain(void)
 				{
 					EnemyInit(i);
 				}
+				ShotInit();
 				stageInit();
 				ItemInit();
 				gameMode = GMODE_LIFE;
@@ -622,6 +624,7 @@ void GameSClear(void)
 			EnemyInit(i);
 		}
 		BossInit();
+		ShotInit();
 		ItemInit();
 		life = 5;
 		auto stageCnt = GetStageCnt();
