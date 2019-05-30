@@ -328,7 +328,7 @@ void GameInit(void)
 	ItemInit();
 	EffectInit();
 
-	cnttime = 45000;
+	cnttime = 35000;
 }
 
 //タイトルの処理
@@ -409,7 +409,7 @@ void GameSelectDraw(void)
 //プレイヤーライフ
 void GameLife(void)
 {
-	cnttime = 45000;	//タイムの初期化
+	cnttime = 35000;	//タイムの初期化
 	stageInit();
 	BossInit();
 	GameLifeDraw();
