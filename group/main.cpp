@@ -243,11 +243,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 int SystemInit(void)
 {
 	// ---------- ¼½ÃÑˆ— 
-	SetWindowText("Shooting_kadai");
+	SetWindowText("kuppi-nodaiboukenn");
 	// ¼½ÃÑˆ— 
 	SetGraphMode(SCREEN_SIZE_X, SCREEN_SIZE_Y, 16);		// 800~600ÄŞ¯Ä65536FÓ°ÄŞ‚Éİ’è 
-	ChangeWindowMode(true);		// true:window false:ÌÙ½¸Ø°İ
-	//ChangeWindowMode(false); 
+	//ChangeWindowMode(true);		// true:window false:ÌÙ½¸Ø°İ
+	ChangeWindowMode(false); 
 	if (DxLib_Init() == -1) return -1;					// DX×²ÌŞ×Ø‰Šú‰»ˆ— 
 	SetDrawScreen(DX_SCREEN_BACK);					// ‚Ğ‚Æ‚Ü‚¸ÊŞ¯¸ÊŞ¯Ì§‚É•`‰æ 
 
