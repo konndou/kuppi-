@@ -347,6 +347,8 @@ void GameTitleDraw(void)
 			DrawGraph(MAP_CHIP_SIZE_X * x + haikeiPos.x, MAP_CHIP_SIZE_Y * y, haikeiImage[haikeiData[y][x]], true);
 		}
 	}
+
+
 	DrawGraph(titlePos.x, titlePos.y, titleImage, true);
 
 	startcnt++;
