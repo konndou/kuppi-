@@ -15,6 +15,7 @@ bool bossclearFlag;
 
 int bossdiese;
 int effectcnt;
+auto bosscnt = 0;
 
 void BossSystemInit(void)
 {
@@ -172,13 +173,20 @@ void BossUpdate(void)
 	}
 
 	if (boss.life <= 0) {
+		bosscnt++;
 		boss.flag = false;
-		bossclearFlag = true;
-		for (int i = 0; i < BOSS_EFFECT_MAX; i++) {
-			SetBlockBossEffect(boss.pos, i);
+		if (bosscnt == 1) {
+			SetBlockBoss2Effect(boss.pos);
 		}
-		PlaySoundMem(bossdiese, DX_PLAYTYPE_BACK, false);
-		PlaySoundMem(bossdiese, DX_PLAYTYPE_LOOP, false);
+		if(bosscnt > 60){
+			bossclearFlag = true;
+			for (int i = 0; i < BOSS_EFFECT_MAX; i++) {
+				SetBlockBossEffect(boss.pos, i);
+			}
+			PlaySoundMem(bossdiese, DX_PLAYTYPE_BACK, false);
+			PlaySoundMem(bossdiese, DX_PLAYTYPE_LOOP, false);
+		}
+		
 	}
 
 }
@@ -192,7 +200,6 @@ void BossDraw(void)
 	if (boss.flag == false) {
 		image = bossdieImage;
 	}
-
 
 	boss.animCnt++;
 	if (boss.flag == true)
@@ -243,6 +250,7 @@ bool BossClear(void)
 	if (bossclearFlag == true) {
 		effectcnt++;
 		if (effectcnt > 200) {
+			bosscnt = 0;
 			StopSoundMem(bossdiese);
 			return true;
 		}

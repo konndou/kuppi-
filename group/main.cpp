@@ -602,7 +602,6 @@ void GameSClear(void)
 	DrawString(0, 0, "GameSClear", 0xffffff);
 
 	if (PlayerNextStage() == true) {
-		
 		stageInit();
 		PlayerInit();
 		for (int i = 0; i < ENEMY_MAX; i++)
@@ -629,8 +628,9 @@ void GameClear(void)
 	auto stagecnt = GetStageCnt();
 	StopSoundMem(se[stagecnt]);
 
+	PlayerBigFlagInit();
+
 	StageCntInit();
-	//DrawString(SCREEN_SIZE_X / 2, SCREEN_SIZE_Y / 2, "CLEAR", 0xffffff, true);
 	DrawGraph(0, 0, stageclearImage, true);
 }
 

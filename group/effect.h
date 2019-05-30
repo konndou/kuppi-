@@ -17,5 +17,6 @@ void EffectDraw(void);
 
 void SetBlockEffect(XY pos);
 void SetBlockBossEffect(XY pos, int i);
+void SetBlockBoss2Effect(XY pos);
 void SetBlockPlayerEffect(XY pos);
 void SetBlockAboEffect(XY pos);
