@@ -47,6 +47,7 @@ int gameoverse;
 //クリア
 int clearImage;
 int clearse;
+int allclearse;
 
 //ステージセレクト
 int stageselectImage[6];
@@ -306,6 +307,8 @@ int SystemInit(void)
 	titlese = LoadSoundMem("bgm/title.mp3");
 	gameoverse = LoadSoundMem("bgm/gameover.mp3");
 	clearse = LoadSoundMem("bgm/clear.mp3");
+	allclearse = LoadSoundMem("bgm/clearclear.mp3");
+	ChangeVolumeSoundMem(255, allclearse);
 }
 
 void GameInit(void)
@@ -527,6 +530,8 @@ void GameMain(void)
 		PlaySoundMem(deathse, DX_PLAYTYPE_BACK, false);
 		if (cnt == 1) {
 			PlayerDEffect();
+			CHARACTER playerTemp = GetPlayerPos();
+			SetBlockAboEffect(playerTemp.pos);
 		}
 		if (cnt < 100) {
 			PlayerDEffectDraw();
@@ -633,6 +638,8 @@ void GameClear(void)
 {
 	auto stagecnt = GetStageCnt();
 	StopSoundMem(se[stagecnt]);
+
+	PlaySoundMem(allclearse, DX_PLAYTYPE_BACK, false);
 
 	PlayerBigFlagInit();
 
