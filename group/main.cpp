@@ -46,6 +46,7 @@ int gameoverse;
 
 //クリア
 int clearImage;
+int clearse;
 
 //ステージセレクト
 int stageselectImage[6];
@@ -245,9 +246,9 @@ int SystemInit(void)
 	// ---------- ｼｽﾃﾑ処理 
 	SetWindowText("Shooting_kadai");
 	// ｼｽﾃﾑ処理 
-	SetGraphMode(SCREEN_SIZE_X, SCREEN_SIZE_Y, 16);		// 800×600ﾄﾞｯﾄ65536色ﾓｰﾄﾞに設定 
-	ChangeWindowMode(true);		// true:window false:ﾌﾙｽｸﾘｰﾝ
-	//ChangeWindowMode(false); 
+	SetGraphMode(SCREEN_SIZE_X, SCREEN_SIZE_Y, 16);		// 960×640ﾄﾞｯﾄ65536色ﾓｰﾄﾞに設定 
+	//ChangeWindowMode(true);		// true:window false:ﾌﾙｽｸﾘｰﾝ
+	ChangeWindowMode(false); 
 	if (DxLib_Init() == -1) return -1;					// DXﾗｲﾌﾞﾗﾘ初期化処理 
 	SetDrawScreen(DX_SCREEN_BACK);					// ひとまずﾊﾞｯｸﾊﾞｯﾌｧに描画 
 
@@ -304,6 +305,7 @@ int SystemInit(void)
 	deathse = LoadSoundMem("bgm/death.mp3");
 	titlese = LoadSoundMem("bgm/title.mp3");
 	gameoverse = LoadSoundMem("bgm/gameover.mp3");
+	clearse = LoadSoundMem("bgm/clear.mp3");
 }
 
 void GameInit(void)
@@ -407,7 +409,7 @@ void GameSelectDraw(void)
 //プレイヤーライフ
 void GameLife(void)
 {
-	cnttime = 45000;
+	cnttime = 45000;	//タイムの初期化
 	stageInit();
 	BossInit();
 	GameLifeDraw();
@@ -424,6 +426,7 @@ void GameLifeDraw(void)
 //ゲームのメイン処理
 void GameMain(void)
 {
+	//ステージのサウンド
 	auto stagecnt = GetStageCnt();
 	PlaySoundMem(se[stagecnt], DX_PLAYTYPE_BACK, false);
 	PlaySoundMem(se[stagecnt], DX_PLAYTYPE_LOOP, false);
@@ -480,6 +483,7 @@ void GameMain(void)
 
 	//プレイヤーがゴールしたか
 	if (PlayerGoal() == true) {
+		PlaySoundMem(clearse, DX_PLAYTYPE_BACK, false);
 		gameMode = GMODE_SCLEAR;
 	}
 
@@ -516,7 +520,7 @@ void GameMain(void)
 		}
 	}
 
-	//タイムオーバー
+	//タイムアップ
 	if (cnttime == 0) {
 		cnttime = 0;
 		cnt++;

@@ -9,21 +9,26 @@
 #include "effect.h"
 
 CHARACTER boss;
-int bossImage[2];
-int bossdieImage;
-bool bossclearFlag;
+int bossImage[2];	//ボスのイメージ
+int bossdieImage;	//ボスの死んだ時の画像
+bool bossclearFlag;	//ボスを倒したかどうか
 
-int bossdiese;
+int bossdiese;		//爆発音
+int bossdse;		//弾が当たった時
+
 int effectcnt;
-auto bosscnt = 0;
+int bosscnt;
 
 void BossSystemInit(void)
 {
 	LoadDivGraph("image/snakeboss1.png", 2, 2, 1, BOSS_SIZE_X, BOSS_SIZE_Y, bossImage);
 	bossdieImage = LoadGraph("image/snakedie6.png", true);
 	bossdiese = LoadSoundMem("bgm/explosion.mp3");
+	bossdse = LoadSoundMem("bgm/shot2.mp3");
+	ChangeVolumeSoundMem(255, bossdse);
 }
 
+//ボスの処理
 void BossInit(void)
 {
 	boss.pos = { 9200,100 };
@@ -50,9 +55,11 @@ void BossInit(void)
 		break;
 	}
 	effectcnt = 0;
+	bosscnt = 0;
 	bossclearFlag = false;
 }
 
+//ボスの処理
 void BossUpdate(void)
 {
 	if (boss.flag == true)
@@ -166,6 +173,7 @@ void BossUpdate(void)
 
 	//ショットの当たり判定
 	if (shotHitCheck(boss.pos, boss.size) == true) {
+		PlaySoundMem(bossdse, DX_PLAYTYPE_BACK, false);
 		boss.life -= 5;
 		XY shotTemp = GetShotPos();
 		SetBlockEffect(shotTemp);
@@ -191,9 +199,9 @@ void BossUpdate(void)
 
 }
 
+//描画処理
 void BossDraw(void)
 {
-
 	XY mapTemp = GetMapPos();
 
 	int image = bossImage[boss.animCnt / 10 % 2];
@@ -245,6 +253,7 @@ bool BossHitCheck(XY sPos, XY sSize)
 	return false;
 }
 
+//クリア画面まで
 bool BossClear(void)
 {
 	if (bossclearFlag == true) {

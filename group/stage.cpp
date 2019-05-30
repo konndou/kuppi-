@@ -285,6 +285,7 @@ bool IsOverPass(XY pos)
 	return ret;
  }
 
+//“GƒLƒƒƒ‰‚Ì•ûŒü“]Š·
 bool IsEnemyPass(XY pos)
 {
 	bool ret = true;
