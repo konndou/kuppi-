@@ -618,7 +618,7 @@ void GameSClear(void)
 
 	stageDraw();
 
-	stageUpdate();
+	stageScroll();
 	
 	PlayerGoalDraw();
 	

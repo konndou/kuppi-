@@ -12,6 +12,8 @@ void stageInit(void);
 void stageUpdate(void);
 void stageDraw(void);
 
+void stageScroll(void);
+
 void StageCntInit(void);
 void StageSelect(void);
 XY MapPosToIndex(XY pos);

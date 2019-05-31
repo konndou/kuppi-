@@ -12,8 +12,11 @@
 
 XY mapPos;
 XY move;
+XY stagehaikeiPos[2];
 int stageCnt;
 int selectse;
+int stagehaikeiImage[2];
+int stagehaikei2Image[2];
 
 struct Header {
 	unsigned short w;	//マップの幅
@@ -33,6 +36,12 @@ void stageSystemInit(void)
 {
 	stageCnt = 0;
 	selectse = LoadSoundMem("bgm/select.mp3");
+	stagehaikeiImage[0] = LoadGraph("image/haikei3.png");
+	stagehaikeiImage[1] = LoadGraph("image/haikei3.png");
+
+	stagehaikei2Image[0] = LoadGraph("image/haikei6.png");
+	stagehaikei2Image[1] = LoadGraph("image/haikei6.png");
+	
 }
 
 void stageInit(void)
@@ -62,7 +71,7 @@ void stageInit(void)
 	//ファイルを開く
 	FileRead_read(&header, sizeof(header), mapH);
 
-	chipH = LoadGraph("image/mapchip7.png", true);
+	chipH = LoadGraph("image/mapchip8.png", true);
 
 	FileRead_seek(mapH, 16, SEEK_TOP);
 
@@ -73,6 +82,35 @@ void stageInit(void)
 
 	mapPos = { 0,0 };
 	move = { 0,0 };
+	stagehaikeiPos[0] = { 0,0 };
+	stagehaikeiPos[1] = { 950,0 };
+}
+
+void stageScroll(void)
+{
+	//地図の操作
+	CHARACTER playerTemp;
+	playerTemp = GetPlayerPos();
+
+	//マップの移動処理
+	if (playerTemp.pos.x > mapPos.x + SCREEN_SIZE_X / 2) {
+		move.x = playerTemp.pos.x - SCREEN_SIZE_X / 2 - mapPos.x;
+		mapPos.x = mapPos.x + move.x;
+	}
+
+	if (playerTemp.pos.x < mapPos.x + SCREEN_SIZE_X / 6) {
+		move.x = playerTemp.pos.x - SCREEN_SIZE_X / 6 - mapPos.x;
+		mapPos.x = mapPos.x + move.x;
+	}
+
+	//移動制限
+	if (mapPos.x < 0) {
+		mapPos.x = 0;
+	}
+
+	if (mapPos.x > header.w * header.cw - SCREEN_SIZE_X) {
+		mapPos.x = header.w * header.cw - SCREEN_SIZE_X;
+	}
 }
 
 void stageUpdate(void)
@@ -86,11 +124,15 @@ void stageUpdate(void)
 	if (playerTemp.pos.x > mapPos.x + SCREEN_SIZE_X / 2) {
 		move.x = playerTemp.pos.x - SCREEN_SIZE_X / 2 - mapPos.x;
 		mapPos.x = mapPos.x + move.x;
+		stagehaikeiPos[0].x = stagehaikeiPos[0].x - move.x / 2;
+		stagehaikeiPos[1].x = stagehaikeiPos[1].x - move.x / 2;
 	}
 	
 	if (playerTemp.pos.x < mapPos.x + SCREEN_SIZE_X / 6) {
 		move.x = playerTemp.pos.x - SCREEN_SIZE_X / 6 - mapPos.x;
 		mapPos.x = mapPos.x + move.x;
+		stagehaikeiPos[0].x = stagehaikeiPos[0].x - move.x / 2;
+		stagehaikeiPos[1].x = stagehaikeiPos[1].x - move.x / 2;
 	}
 	
 	//移動制限
@@ -101,11 +143,36 @@ void stageUpdate(void)
 	if (mapPos.x > header.w * header.cw - SCREEN_SIZE_X) {
 		mapPos.x = header.w * header.cw - SCREEN_SIZE_X;
 	}
+
+	for (int i = 0; i < 2; i++) {
+		if (stagehaikeiPos[i].x <= -950) {
+			stagehaikeiPos[i].x = 950;
+		}
+	}
 	
 }
 
 void stageDraw(void)
 {
+	//マップデータのファイルを開く
+	switch (stageCnt) {
+	case 0:
+	case 1:
+	case 2:
+	case 3:
+		DrawGraph(stagehaikeiPos[0].x, stagehaikeiPos[0].y, stagehaikeiImage[0], true);
+		DrawGraph(stagehaikeiPos[1].x, stagehaikeiPos[1].y, stagehaikeiImage[1], true);
+		break;
+	case 4:
+		DrawGraph(stagehaikeiPos[0].x, stagehaikeiPos[0].y, stagehaikei2Image[0], true);
+		DrawGraph(stagehaikeiPos[1].x, stagehaikeiPos[1].y, stagehaikei2Image[1], true);
+		break;
+	case 5:
+		DrawGraph(stagehaikeiPos[0].x, stagehaikeiPos[0].y, stagehaikeiImage[0], true);
+		DrawGraph(stagehaikeiPos[1].x, stagehaikeiPos[1].y, stagehaikeiImage[1], true);
+		break;
+	}
+	
 	for (int y = 0; y < header.h; y++) {
 		for (int x = 0; x < header.w; x++) {
 			auto idx = mapData[x + y * header.w];
