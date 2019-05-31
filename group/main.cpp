@@ -40,6 +40,7 @@ int playerstopImage3;
 int selectImage;
 int bossselectImage;
 int stageclearImage;
+int bottanImage;
 
 //ゲームオーバー
 int gameoverImage;
@@ -283,6 +284,7 @@ int SystemInit(void)
 	playerstopImage3 = LoadGraph("image/playerstop3.png");
 	selectImage = LoadGraph("image/select.png");
 	stageclearImage = LoadGraph("image/clear2.png");
+	bottanImage = LoadGraph("image/bottan.png");
 	
 
 	//ステージセレクト画像
@@ -389,32 +391,34 @@ void GameSelect(void)
 void GameSelectDraw(void)
 {
 	DrawGraph(0, 0, selectImage, true);
+	DrawGraph(80, 580, bottanImage, true);
+	
 
 	auto stagecnt = GetStageCnt();
 	switch (stagecnt) {
 	case 0:
-		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[0], true);
-		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[0], true);
+		DrawGraph(200, SCREEN_SIZE_Y / 4-64, stageselectImage[0], true);
+		DrawGraph(200, -20, stageselectImage2[0], true);
 		break;
 	case 1:
-		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[1], true);
-		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[1], true);
+		DrawGraph(200, SCREEN_SIZE_Y / 4-64, stageselectImage[1], true);
+		DrawGraph(200, -20, stageselectImage2[1], true);
 		break;
 	case 2:
-		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[2], true);
-		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[2], true);
+		DrawGraph(200, SCREEN_SIZE_Y / 4-64, stageselectImage[2], true);
+		DrawGraph(200, -20, stageselectImage2[2], true);
 		break;
 	case 3:
-		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[3], true);
-		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[3], true);
+		DrawGraph(200, SCREEN_SIZE_Y / 4-64, stageselectImage[3], true);
+		DrawGraph(200, -20, stageselectImage2[3], true);
 		break;
 	case 4:
-		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[4], true);
-		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[4], true);
+		DrawGraph(200, SCREEN_SIZE_Y / 4-64, stageselectImage[4], true);
+		DrawGraph(200, -20, stageselectImage2[4], true);
 		break;
 	case 5:
-		DrawGraph(200, SCREEN_SIZE_Y / 4, stageselectImage[5], true);
-		DrawGraph(200, SCREEN_SIZE_Y / 10 - 20, stageselectImage2[5], true);
+		DrawGraph(200, SCREEN_SIZE_Y / 4-64, stageselectImage[5], true);
+		DrawGraph(200, -20, stageselectImage2[5], true);
 		break;
 	}
 	
