@@ -12,6 +12,7 @@ CHARACTER boss;
 int bossImage[2];	//ボスのイメージ
 int bossdieImage;	//ボスの死んだ時の画像
 bool bossclearFlag;	//ボスを倒したかどうか
+bool bossdieflag;
 
 int bossdiese;		//爆発音
 int bossdse;		//弾が当たった時
@@ -57,6 +58,7 @@ void BossInit(void)
 	effectcnt = 0;
 	bosscnt = 0;
 	bossclearFlag = false;
+	bossdieflag = false;
 }
 
 //ボスの処理
@@ -172,24 +174,30 @@ void BossUpdate(void)
 	}
 
 	//ショットの当たり判定
-	if (shotHitCheck(boss.pos, boss.size) == true) {
-		PlaySoundMem(bossdse, DX_PLAYTYPE_BACK, false);
-		boss.life -= 5;
-		XY shotTemp = GetShotPos();
-		SetBlockEffect(shotTemp);
-		Deleteshot();
+	if (boss.flag == true) {
+		if (shotHitCheck(boss.pos, boss.size) == true) {
+			PlaySoundMem(bossdse, DX_PLAYTYPE_BACK, false);
+			boss.life -= 5;
+			XY shotTemp = GetShotPos();
+			SetBlockEffect(shotTemp);
+			Deleteshot();
+		}
 	}
 
+	//死んだとき
 	if (boss.life <= 0) {
 		bosscnt++;
 		boss.flag = false;
+		bossdieflag = true;
 		if (bosscnt == 1) {
 			SetBlockBoss2Effect(boss.pos);
 		}
 		if(bosscnt > 60){
 			bossclearFlag = true;
 			for (int i = 0; i < BOSS_EFFECT_MAX; i++) {
-				SetBlockBossEffect(boss.pos, i);
+				if (effectcnt < 200) {
+					SetBlockBossEffect(boss.pos, i);
+				}
 			}
 			PlaySoundMem(bossdiese, DX_PLAYTYPE_BACK, false);
 			PlaySoundMem(bossdiese, DX_PLAYTYPE_LOOP, false);
@@ -223,13 +231,15 @@ void BossDraw(void)
 	auto stagecnt = GetStageCnt();
 	switch (stagecnt) {
 	case 4:
-		if (boss.flag == false)
-		{
-			if (boss.movedir == DIR_RIGHT) {
-				DrawTurnGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
-			}
-			if (boss.movedir == DIR_LEFT) {
-				DrawGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
+		if (bossdieflag == true) {
+			if (boss.flag == false)
+			{
+				if (boss.movedir == DIR_RIGHT) {
+					DrawTurnGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
+				}
+				if (boss.movedir == DIR_LEFT) {
+					DrawGraph(boss.pos.x - boss.sizeOffset.x - mapTemp.x, boss.pos.y - boss.sizeOffset.y, image, true);
+				}
 			}
 		}
 		break;
@@ -259,7 +269,7 @@ bool BossClear(void)
 	if (bossclearFlag == true) {
 		effectcnt++;
 		if (effectcnt > 200) {
-			bosscnt = 0;
+			bossdieflag = false;
 			StopSoundMem(bossdiese);
 			return true;
 		}

@@ -17,6 +17,7 @@ typedef enum {
 	GMODE_LIFE,
 	GMODE_GAME,
 	GMODE_SCLEAR,
+	GMODE_EFFECT,
 	GMODE_CLEAR,
 	GMODE_OVER
 }GAME_MODE;
@@ -48,6 +49,7 @@ int gameoverse;
 int clearImage;
 int clearse;
 int allclearse;
+int bossclearse;
 
 //ステージセレクト
 int stageselectImage[6];
@@ -104,6 +106,7 @@ void GameSelectDraw(void);
 void GameMain(void);
 void GameMainDraw(void);
 void GameClear(void);
+void GameEffect(void);
 void GameOver(void);
 void GameOverDraw(void);
 //void HitCheck(void);
@@ -200,6 +203,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			GameSClear();
 			break;
 
+		case GMODE_EFFECT:
+			GameEffect();
+			break;
+
 		case GMODE_CLEAR:
 			GameClear();
 			if (fadeOut) {
@@ -210,6 +217,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				}
 			}
 			if (trgkey[KEY_START]) {
+				StopSoundMem(allclearse);
 				fadeOut = true;
 			}
 			break;
@@ -248,8 +256,8 @@ int SystemInit(void)
 	SetWindowText("kuppi-nodaiboukenn");
 	// ｼｽﾃﾑ処理 
 	SetGraphMode(SCREEN_SIZE_X, SCREEN_SIZE_Y, 16);		// 960×640ﾄﾞｯﾄ65536色ﾓｰﾄﾞに設定 
-	//ChangeWindowMode(true);		// true:window false:ﾌﾙｽｸﾘｰﾝ
-	ChangeWindowMode(false); 
+	ChangeWindowMode(true);		// true:window false:ﾌﾙｽｸﾘｰﾝ
+	//ChangeWindowMode(false); 
 	if (DxLib_Init() == -1) return -1;					// DXﾗｲﾌﾞﾗﾘ初期化処理 
 	SetDrawScreen(DX_SCREEN_BACK);					// ひとまずﾊﾞｯｸﾊﾞｯﾌｧに描画 
 
@@ -309,6 +317,7 @@ int SystemInit(void)
 	clearse = LoadSoundMem("bgm/clear.mp3");
 	allclearse = LoadSoundMem("bgm/clearclear.mp3");
 	ChangeVolumeSoundMem(255, allclearse);
+	bossclearse = LoadSoundMem("bgm/bossclear.mp3");
 }
 
 void GameInit(void)
@@ -568,7 +577,8 @@ void GameMain(void)
 	
 	//ボスを倒した後のクリア画面
 	if (BossClear() == true) {
-		gameMode = GMODE_CLEAR;
+		//gameMode = GMODE_CLEAR;
+		gameMode = GMODE_EFFECT;
 	}
 
 }
@@ -638,13 +648,28 @@ void GameSClear(void)
 	}
 }
 
+//ボスを倒したときの演出
+void GameEffect(void)
+{
+	auto stagecnt = GetStageCnt();
+	StopSoundMem(se[stagecnt]);
+
+	PlaySoundMem(bossclearse, DX_PLAYTYPE_BACK, false);
+
+	stageUpdate();
+	stageDraw();
+	PlayerDraw();
+	if (PlayerClearEffect() == true) {
+		PlaySoundMem(allclearse, DX_PLAYTYPE_BACK, false);
+		gameMode = GMODE_CLEAR;
+	}
+}
+
 //クリアー処理
 void GameClear(void)
 {
 	auto stagecnt = GetStageCnt();
 	StopSoundMem(se[stagecnt]);
-
-	PlaySoundMem(allclearse, DX_PLAYTYPE_BACK, false);
 
 	PlayerBigFlagInit();
 

@@ -22,3 +22,4 @@ bool PlayerOver(void);
 void PlayerDEffect(void);
 void PlayerDEffectDraw(void);
 void PlayerBigFlagInit(void);
+bool PlayerClearEffect(void);

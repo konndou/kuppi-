@@ -88,7 +88,6 @@ bool shotHitCheck(XY bPos, XY bSize)
 			&& (shot.pos.x + shot.size.x / 2 > bPos.x - bSize.x / 2)
 			&& (shot.pos.y - shot.size.y / 2 < bPos.y + bSize.y / 2)
 			&& (shot.pos.y + shot.size.y / 2 > bPos.y - bSize.y / 2)) {
-			shot.flag = false;
 			return true;
 		}
 	}

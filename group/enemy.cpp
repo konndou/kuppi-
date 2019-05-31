@@ -2,6 +2,7 @@
 #include "enemy.h"
 #include "player1.h"
 #include "keyCheck.h"
+#include "shot.h"
 #include "stage.h"
 #include "boss.h"
 #include "item.h"

@@ -27,8 +27,12 @@ bool playerdamageFlag;
 
 bool flag;	//アイテムで死んだ時用
 
+int pclearImage;
+
 auto anicnt = 0;
 auto damagecnt = 0;
+
+XY pclearPos;
 
 void PlayerSystemInit(void)
 {
@@ -41,6 +45,8 @@ void PlayerSystemInit(void)
 	//playerBigImage = LoadGraph("image/playerBig2.png", true);
 	LoadDivGraph("image/playerBigrun2.png", 2, 2, 1, PLAYER_SIZE_X * 2, PLAYER_SIZE_Y, player1BigrunImage);
 	LoadDivGraph("image/playerBigjump.png", 3, 3, 1, PLAYER_SIZE_X * 2, PLAYER_SIZE_Y, player1BigjumpImage);
+
+	pclearImage = LoadGraph("image/clear.png");
 
 	//サウンド
 	jumpse = LoadSoundMem("bgm/jump2.mp3");
@@ -74,6 +80,8 @@ void PlayerInit(void)
 	player1.xFlag = false;	//ゴール演出用フラグ(横移動)
 	playerdrun = true;
 	flag = false;
+
+	pclearPos = { 330, -300 };
 }
 
 //プレイヤー処理
@@ -335,6 +343,7 @@ void PlayerDraw(void)
 			DrawTurnGraph(player1.pos.x + 16 - player1.sizeOffset.x - mapTemp.x, player1.pos.y - player1.sizeOffset.y, image, true);
 		}
 	}
+
 }
 
 bool PlayerGoal(void)
@@ -584,4 +593,36 @@ CHARACTER GetPlayerPos(void)
 void PlayerBigFlagInit(void)
 {
 	player1Bigflag = false;
+}
+
+bool PlayerClearEffect(void)
+{
+	player1.jumpFlag = true;
+	if (player1Bigflag == false) {	//ヒヨコの時
+		if (player1.jumpFlag == true)image = player1jumpImage[player1.animCnt / 7 % 3];
+	}
+
+	if (player1Bigflag == true) {	//鶏の時
+		if (player1.jumpFlag == true)image = player1BigjumpImage[player1.animCnt / 7 % 3];
+	}
+
+	if (player1.pos.x < MAP_CHIP_X * MAP_CHIP_SIZE_X - SCREEN_SIZE_X / 2) {
+		player1.movedir = DIR_RIGHT;
+		player1.pos.x++;
+	}
+	else if(player1.pos.x > MAP_CHIP_X * MAP_CHIP_SIZE_X - SCREEN_SIZE_X / 2){
+		player1.movedir = DIR_LEFT;
+		player1.pos.x--;
+	}
+
+	if (player1.pos.x == MAP_CHIP_X * MAP_CHIP_SIZE_X - SCREEN_SIZE_X / 2) {
+		DrawGraph(pclearPos.x, pclearPos.y, pclearImage, true);
+		if (pclearPos.y <= 200) {
+			pclearPos.y += 4;
+		}
+		if (pclearPos.y == 200) {
+			return true;
+		}
+	}
+	return false;
 }
