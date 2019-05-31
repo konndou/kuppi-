@@ -58,6 +58,7 @@ int selectImage2[6];
 
 //プレイヤー
 int pImage;
+int lifecnt;
 
 //ステージ
 int haikeiImage[35];
@@ -173,6 +174,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		case GMODE_LIFE:
 			GameLife();
+			lifecnt++;
 			if (fadeIn) {
 				if (!FadeInScreen(5))fadeIn = false;
 			}
@@ -184,7 +186,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				}
 			}
 			else {
-				if (trgkey[KEY_START]) {
+				if (lifecnt > 90) {
+					lifecnt = 0;
 					fadeOut = true;
 				}
 			}
@@ -341,6 +344,7 @@ void GameInit(void)
 	EffectInit();
 
 	cnttime = 35000;
+	lifecnt = 0;
 }
 
 //タイトルの処理
@@ -623,7 +627,7 @@ void GameSClear(void)
 	}
 
 	DrawGraph(clearPos.x, clearPos.y, clearImage, true);
-	DrawString(0, 0, "GameSClear", 0xffffff);
+	//DrawString(0, 0, "GameSClear", 0xffffff);
 
 	if (PlayerNextStage() == true) {
 		stageInit();
@@ -688,7 +692,7 @@ void GameOver(void)
 void GameOverDraw(void)
 {
 	DrawGraph(0, 0, gameoverImage, true);
-	DrawString(0, 0, "GAME OVER", 0xffffff, true);
+	//DrawString(0, 0, "GAME OVER", 0xffffff, true);
 }
 
 

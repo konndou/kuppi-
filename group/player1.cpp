@@ -113,11 +113,11 @@ void PlayerUpdate(void)
 		if (player1.runFlag == false) {	//何もキー入力がない場合は、止まろうとする
 			//段階的に速度を落とす
 			if (player1.Velocity.x < 0) {
-				player1.Velocity.x += ACC_STOP * 2;
+				player1.Velocity.x += ACC_STOP * 3;
 				if (player1.Velocity.x > 0)player1.Velocity.x = 0;
 			}
 			else if (player1.Velocity.x > 0) {
-				player1.Velocity.x -= ACC_STOP * 2;
+				player1.Velocity.x -= ACC_STOP * 3;
 				if (player1.Velocity.x < 0)player1.Velocity.x = 0;
 			}
 		}

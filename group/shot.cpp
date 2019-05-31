@@ -50,7 +50,7 @@ void ShotUpdate(void)
 		}
 	}
 	//ˆê’è”s‚­‚Æ’e‚ªÁ‚¦‚é
-	if (shot.life < 0) {
+	if (shot.life <= 0) {
 		shot.flag = false;
 	}
 
