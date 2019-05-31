@@ -597,8 +597,7 @@ void GameMainDraw(void)
 	EffectDraw();
 	
 	auto stagecnt = GetStageCnt();
-	DrawFormatString(0, 0, 0xffffff, "stage  =  %d", stagecnt);
-
+	
 	DrawFormatString(850, 0, 0xffffff, "time  %d", cnttime / 100);
 
 }

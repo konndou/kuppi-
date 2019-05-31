@@ -246,8 +246,6 @@ void BossDraw(void)
 	default:
 		break;
 	}
-
-	DrawFormatString(32, 96, 0xffff00, "%d", boss.life);
 }
 
 bool BossHitCheck(XY sPos, XY sSize)
