@@ -251,12 +251,17 @@ void BossDraw(void)
 bool BossHitCheck(XY sPos, XY sSize)
 {
 	if (boss.flag == true) {
-		if (   (boss.pos.x - boss.size.x / 2 < sPos.x + sSize.x / 2)
+		auto a = hypot(sPos.x - boss.pos.x, sPos.y - boss.pos.y);
+		if (sSize.x / 2 + boss.size.x / 2 > a)
+		{
+			return true;
+		}
+		/*if (   (boss.pos.x - boss.size.x / 2 < sPos.x + sSize.x / 2)
 			&& (boss.pos.x + boss.size.x / 2 > sPos.x - sSize.x / 2)
 			&& (boss.pos.y - boss.size.y / 2 < sPos.y + sSize.y / 2)
 			&& (boss.pos.y + boss.size.y / 2 > sPos.y - sSize.y / 2)) {
-			return true;
-		}
+			
+		}*/
 	}
 	return false;
 }

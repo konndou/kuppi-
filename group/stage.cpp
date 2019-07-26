@@ -124,15 +124,19 @@ void stageUpdate(void)
 	if (playerTemp.pos.x > mapPos.x + SCREEN_SIZE_X / 2) {
 		move.x = playerTemp.pos.x - SCREEN_SIZE_X / 2 - mapPos.x;
 		mapPos.x = mapPos.x + move.x;
-		stagehaikeiPos[0].x = stagehaikeiPos[0].x - move.x / 2;
-		stagehaikeiPos[1].x = stagehaikeiPos[1].x - move.x / 2;
 	}
 	
 	if (playerTemp.pos.x < mapPos.x + SCREEN_SIZE_X / 6) {
 		move.x = playerTemp.pos.x - SCREEN_SIZE_X / 6 - mapPos.x;
 		mapPos.x = mapPos.x + move.x;
-		stagehaikeiPos[0].x = stagehaikeiPos[0].x - move.x / 2;
-		stagehaikeiPos[1].x = stagehaikeiPos[1].x - move.x / 2;
+	}
+
+	if (mapPos.x < MAP_CHIP_X * MAP_CHIP_SIZE_X - SCREEN_SIZE_X)
+	{
+		if (playerTemp.pos.x > mapPos.x + SCREEN_SIZE_X / 2) {
+			stagehaikeiPos[0].x = stagehaikeiPos[0].x - move.x / 2;
+			stagehaikeiPos[1].x = stagehaikeiPos[1].x - move.x / 2;
+		}
 	}
 	
 	//ˆÚ“®§ŒÀ
@@ -182,6 +186,7 @@ void stageDraw(void)
 						 idxX * header.cw, idxY * header.ch, header.cw, header.ch, chipH, true, false, false);
 		}
 	}
+	DrawFormatString(0, 100, 0x00ffff, "map %d", mapPos.x);
 }
 
 //ƒ}ƒbƒv‚ÌPos‚ğindex‚É•Ï‚¦‚é

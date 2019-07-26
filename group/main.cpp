@@ -260,8 +260,8 @@ int SystemInit(void)
 	SetWindowText("kuppi-nodaiboukenn");
 	// ¼½ÃÑˆ— 
 	SetGraphMode(SCREEN_SIZE_X, SCREEN_SIZE_Y, 16);		// 960~640ÄŞ¯Ä65536FÓ°ÄŞ‚Éİ’è 
-	//ChangeWindowMode(true);		// true:window false:ÌÙ½¸Ø°İ
-	ChangeWindowMode(false); 
+	ChangeWindowMode(true);		// true:window false:ÌÙ½¸Ø°İ
+	//ChangeWindowMode(false); 
 	if (DxLib_Init() == -1) return -1;					// DX×²ÌŞ×Ø‰Šú‰»ˆ— 
 	SetDrawScreen(DX_SCREEN_BACK);					// ‚Ğ‚Æ‚Ü‚¸ÊŞ¯¸ÊŞ¯Ì§‚É•`‰æ 
 
